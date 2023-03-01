@@ -2,10 +2,10 @@ const express = require("express");
 var bodyParser = require("body-parser");
 const path = require("path");
 var nodemailer = require("nodemailer");
-const PDFDocument = require("pdfkit");
+const PdfPrinter = require("pdfmake");
 const logger = require("./logger");
 const e = require("express");
-const pdfMake = require("pdfmake");
+
 const { createClient } = require("@clickhouse/client");
 const Numeral = require("numeral");
 const { Kafka,Partitioners } = require('kafkajs');
@@ -38,7 +38,7 @@ const fonts = {
   },
 };
 
-const PdfPrinter = require("pdfmake");
+
 const printer = new PdfPrinter(fonts);
 const fs = require("fs");
 
