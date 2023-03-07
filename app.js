@@ -8,7 +8,7 @@ const e = require("express");
 
 const { createClient } = require("@clickhouse/client");
 const Numeral = require("numeral");
-const { Kafka,Partitioners } = require('kafkajs');
+const { Kafka, Partitioners } = require("kafkajs");
 const client = new createClient({
   host: "http://192.168.2.49:18123",
   username: "smlchdb",
@@ -16,17 +16,15 @@ const client = new createClient({
   database: "dede001",
 });
 
-
-
 const kafka = new Kafka({
-  clientId: 'my-app2',
-  brokers: ['192.168.2.49:9093']
+  clientId: "my-app2",
+  brokers: ["192.168.2.49:9093"],
 });
 
 const producer = kafka.producer({
-  createPartitioner: Partitioners.LegacyPartitioner
+  createPartitioner: Partitioners.LegacyPartitioner,
 });
-const consumer = kafka.consumer({ groupId: 'my-group' });
+const consumer = kafka.consumer({ groupId: "my-group" });
 
 const app = express();
 const fonts = {
@@ -37,7 +35,6 @@ const fonts = {
     bolditalics: path.join(__dirname, "fonts", "Sarabun-MediumItalic.ttf"),
   },
 };
-
 
 const printer = new PdfPrinter(fonts);
 const fs = require("fs");
@@ -59,51 +56,48 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
-app.post('/messages', async (req, res) => {
+app.post("/messages", async (req, res) => {
   console.log(req.query.email);
   try {
     await producer.connect();
     await producer.send({
-      topic: 'my-topic2',
-      messages: [{ value: req.query.email },]
+      topic: "my-topic2",
+      messages: [{ value: req.query.email }],
     });
     await producer.disconnect();
-    console.log('Send message:', ' From Kafka');
-    res.status(200).json({success:true})
+    console.log("Send message:", " From Kafka");
+    res.status(200).json({ success: true });
   } catch (error) {
     console.error(error);
-    
-    res.status(500).json({success:false})
+
+    res.status(500).json({ success: false });
   }
 });
 
 // Receive messages from a Kafka topic
-app.get('/messages', async (req, res) => {
+app.get("/messages", async (req, res) => {
   try {
     await consumer.connect();
-    await consumer.subscribe({ topic: 'my-topic2', fromBeginning: true });
+    await consumer.subscribe({ topic: "my-topic2", fromBeginning: true });
 
     await consumer.run({
       eachMessage: async ({ message }) => {
-    
-        console.log('Received message:', message.value.toString());
-        sendEmail(req,res,message.value.toString());
-      }
+        console.log("Received message:", message.value.toString());
+        sendEmail(req, res, message.value.toString());
+      },
     });
 
-    res.status(200).send('Listening for messages from Kafka');
+    res.status(200).send("Listening for messages from Kafka");
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error receiving messages from Kafka');
+    res.status(500).send("Error receiving messages from Kafka");
   }
 });
 
-const sendEmail = async (req, res,email) => {
+const sendEmail = async (req, res, email) => {
   const query = `select shopid,ic_code,warehouse,location, ic_name, ic_unit_code
   , qty_in/unitstandard_ratio as qty_in
   , qty_out/unitstandard_ratio as qty_out
@@ -217,59 +211,57 @@ const sendEmail = async (req, res,email) => {
     // ...
   };
 
-      
-        var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
-      
-        pdfDoc.end();
-      
-        let transporter = nodemailer.createTransport({
-          host: "in-v3.mailjet.com",
-          secure: false,
-          port: 587,
-          auth: {
-            user: "b2df5aa9f49e7a5e97ea88036158266d",
-            pass: "f4c4d6b7ea6cf9c311c0fceccc7f935f",
-          },
-        });
-        var i = 0;
-      
-        setTimeout(function () {
-          // var datas = req.body[i].data;
-        
-      
-          var name = "fish";
-      
-          console.log("sending email..." + email + " - " + (i + 1));
-          let HelperOptions = {
-            from: '"DEDEMerchant Sale Report <admin@smldatacenter.com>',
-            to: email,
-            subject: "Sale Report  from DEDEMerchant",
-            html: "Hello " + name + ",<br><br> Here is your PDF ",
-            attachments: [
-              {
-                filename: "Sale2021.pdf",
-                content: pdfDoc,
-                contentType: "application/pdf",
-              },
-            ],
-          };
-          transporter.sendMail(HelperOptions, (error, info) => {
-            console.log(info);
-            if (error) {
-              return console.log("error " + error);
-            }
-            res.json({ output: "The message was sent!", message: info });
-            console.log("The message was sent!");
-            console.log(info);
-          });
-      
-          console.log("sending email done");
-          i++;
-          // if (i < req.body.length) {
-          //   myLoop();
-          // }
-        }, 1500);
-}
+  var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+
+  pdfDoc.end();
+
+  let transporter = nodemailer.createTransport({
+    host: "in-v3.mailjet.com",
+    secure: false,
+    port: 587,
+    auth: {
+      user: "b2df5aa9f49e7a5e97ea88036158266d",
+      pass: "f4c4d6b7ea6cf9c311c0fceccc7f935f",
+    },
+  });
+  var i = 0;
+
+  setTimeout(function () {
+    // var datas = req.body[i].data;
+
+    var name = "fish";
+
+    console.log("sending email..." + email + " - " + (i + 1));
+    let HelperOptions = {
+      from: '"DEDEMerchant Sale Report <admin@smldatacenter.com>',
+      to: email,
+      subject: "Sale Report  from DEDEMerchant",
+      html: "Hello " + name + ",<br><br> Here is your PDF ",
+      attachments: [
+        {
+          filename: "Sale2021.pdf",
+          content: pdfDoc,
+          contentType: "application/pdf",
+        },
+      ],
+    };
+    transporter.sendMail(HelperOptions, (error, info) => {
+      console.log(info);
+      if (error) {
+        return console.log("error " + error);
+      }
+      res.json({ output: "The message was sent!", message: info });
+      console.log("The message was sent!");
+      console.log(info);
+    });
+
+    console.log("sending email done");
+    i++;
+    // if (i < req.body.length) {
+    //   myLoop();
+    // }
+  }, 1500);
+};
 
 app.get("/getBalanceReport", async (req, res) => {
   const query = `select shopid,ic_code,warehouse,location, ic_name, ic_unit_code
@@ -308,7 +300,7 @@ app.get("/getBalanceReport", async (req, res) => {
   const dataset = await resultSet.json();
   console.log(dataset);
 
-  let ret = {success: true,data: dataset};
+  let ret = { success: true, data: dataset };
   res.json(ret);
 });
 
@@ -719,11 +711,9 @@ app.get("/healthcheck", (req, res) => {
   res.status(200).send("OK");
 });
 
-
 const sendMail = (param1, param2) => {
   // Function body goes here
 };
-
 
 app.listen(app.get("port"), function () {
   console.log("run at port", app.get("port"));
