@@ -7,6 +7,8 @@ const { Kafka, Partitioners } = require("kafkajs");
 const dotenv = require("dotenv");
 const balance = require("./routes/api/balance/data");
 dotenv.config();
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
 
 const kafka = new Kafka({
   clientId: "my-app2",
@@ -40,20 +42,19 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.post("/sendPDFEmail", async (req, res) => {
-  console.log(req.query.email);
+  console.log(req.body);
   try {
     await producer.connect();
     await producer.send({
       topic: "send-report",
-      messages: [{ value: JSON.stringify({
-        email: ["fishphatuna@gmail.com","fishduyapath@gmail.com"],
-        report: "balance",
-      })}],
+      messages: [{ value: JSON.stringify(req.body)}],
     });
     await producer.disconnect();
     console.log("Send message:", " From Kafka");

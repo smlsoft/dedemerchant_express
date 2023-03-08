@@ -23,6 +23,8 @@
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.13.0",
     "pdfmake": "^0.2.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
