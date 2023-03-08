@@ -1,10 +1,7 @@
 const express = require("express");
 var bodyParser = require("body-parser");
 const path = require("path");
-
-const PdfPrinter = require("pdfmake");
 const logger = require("./logger");
-const e = require("express");
 const utils = require("./utils");
 const { Kafka, Partitioners } = require("kafkajs");
 const dotenv = require("dotenv");
@@ -23,16 +20,7 @@ const producer = kafka.producer({
 const consumer = kafka.consumer({ groupId: "dedemerchant" });
 
 const app = express();
-const fonts = {
-  Sarabun: {
-    normal: path.join(__dirname, "fonts", "Sarabun-Regular.ttf"),
-    bold: path.join(__dirname, "fonts", "Sarabun-Medium.ttf"),
-    italics: path.join(__dirname, "fonts", "Sarabun-Italic.ttf"),
-    bolditalics: path.join(__dirname, "fonts", "Sarabun-MediumItalic.ttf"),
-  },
-};
 
-const printer = new PdfPrinter(fonts);
 const fs = require("fs");
 
 app.use(express.static(path.join(__dirname, "public")));
