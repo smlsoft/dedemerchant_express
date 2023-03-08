@@ -24,9 +24,9 @@ left join dede001.product p on p.code = td.itemcode
 where td.laststatus = 0 and td.itemtype <> 3  `;
 
 const dataresult = async (where) => {
-  console.log(query + where + " order by td.docdatetime ,td.docno limit 100");
+  //console.log(query + where + " order by td.docdatetime ,td.docno limit 100");
   const resultSet = await client.query({
-    query: query + where + " order by td.docdatetime ,td.docno limit 1000",
+    query: query + where + " order by td.docdatetime ,td.docno limit 2000",
     format: "JSONEachRow",
   });
 
