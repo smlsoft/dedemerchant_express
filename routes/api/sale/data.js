@@ -2,6 +2,7 @@ const utils = require("../../../utils");
 const { createClient } = require("@clickhouse/client");
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
+const axios = require("axios");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -10,30 +11,88 @@ const client = new createClient({
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB,
-  connect_timeout:60_000,
-  request_timeout:60_000
+  connect_timeout: 60_000,
+  request_timeout: 60_000,
 });
 
-const query = `select td.shopid ,td.docdatetime ,td.docno ,td.doctype , t.custcode ,td.inquirytype ,td.vattype ,td.ispos 
-,td.itemcode , arrayFirst(x -> x != '', p.names)  as itemname ,p.unitstandard  ,p.taxtype ,td.whcode ,td.shelfcode 
-,(td.qty*td.standvalue )/td.dividevalue  as qty ,(td.qty*td.price)-td.sumamount as discount_amount ,td.sumamount ,td.sumofcost 
-,td.itemtype ,t.salecode 
-from dede001.transdetail td 
-left join dede001.trans t on t.docdatetime = td.docdatetime and t.docno = td.docno and t.doctype = td.doctype 
-left join dede001.product p on p.code = td.itemcode 
-where td.laststatus = 0 and td.itemtype <> 3  `;
+const supersetUrl = "http://192.168.2.209:8088";
+const username = "admin";
+const password = "admin";
 
-const dataresult = async (where) => {
-  //console.log(query + where + " order by td.docdatetime ,td.docno limit 100");
+const dataresult = async (where, mode) => {
+  var query = "";
+  if (mode == "item") {
+    query += "SELECT `itemcode` AS `itemcode`,";
+    query += "sum(`qty`) AS `qty`,";
+    query += "sum(`discountamount`) AS `discountamount`,";
+    query += "sum(`sumofcost`) AS `sumofcost`,";
+    query += "sum(`sumamount`) AS `sumamount`,";
+    query += "(sumamount-sumofcost) AS `profit`";
+    query += "FROM `dede001`.`reportsummarysale`";
+    query += "WHERE  1=1 " + where;
+    query += "GROUP BY `itemcode`";
+    query += "ORDER BY itemcode ASC ";
+  }else if (mode == "custcode") {
+    query += " SELECT `custcode` AS `custcode`, ";
+    query += " sum(`sumamount`) AS `sumamount` ";
+    query += " FROM `dede001`.`reportsummarysale`";
+    query += " WHERE 1=1 " + where;
+    query += " GROUP BY `custcode`";
+    query += " ORDER BY `custcode` ASC";
+  }else if (mode == "warehouse") {
+    query += "SELECT `whcode` AS `whcode`, ";
+    query += "sum(`sumamount`) AS `sumamount` ";
+    query += "FROM `dede001`.`reportsummarysale` ";
+    query += "WHERE 1=1 " + where;
+    query += "GROUP BY `whcode`";
+    query += "ORDER BY `sumamount` DESC";
+  }else if (mode == "doctype") {
+    query += "SELECT `doctype` AS `doctype`, ";
+    query += "sum(`sumamount`) AS `sumamount` ";
+    query += "FROM `dede001`.`reportsummarysale` ";
+    query += "WHERE 1=1 " + where;
+    query += "GROUP BY `doctype`";
+    query += "ORDER BY `sumamount` DESC";
+  }else if (mode == "warehouseshelf") {
+    query += "SELECT `whcode` AS `whcode`,";
+    query += "`shelfcode` AS `shelfcode`,";
+    query += "sum(`sumamount`) AS `sumamount`";
+    query += "FROM `dede001`.`reportsummarysale`";
+    query += "WHERE 1=1 " + where;
+    query += "GROUP BY `whcode`,";
+    query += "  `shelfcode`";
+    query += "ORDER BY `sumamount` DESC";
+  }
+
+  console.log(query);
   const resultSet = await client.query({
-    query: query + where + " order by td.docdatetime ,td.docno limit 2000",
+    query: query,
     format: "JSONEachRow",
   });
-
   const dataset = await resultSet.json();
-  console.log('done');
+
   return dataset;
 };
+
+// const getToken = async () => {
+//   var token = "";
+//   await axios
+//     .post(`${supersetUrl}/api/v1/security/login`, {
+//       password: password,
+//       provider: "db",
+//       refresh: true,
+//       username: username,
+//     })
+//     .then((response) => {
+//       token = response.data.access_token;
+//       console.log("Access token:", token);
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+
+//   return token;
+// };
 
 const genPDF = async (body) => {
   var docDefinition = {
@@ -117,7 +176,7 @@ const genBodyPDF = async (dataset) => {
   return body;
 };
 
-const pdfPreview = async (res,where) => {
+const pdfPreview = async (res, where) => {
   var dataset = await dataresult(where);
   var body = await genBodyPDF(dataset);
   var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
@@ -126,7 +185,7 @@ const pdfPreview = async (res,where) => {
   pdfDoc.end();
 };
 
-const pdfDownload = async (res,where) => {
+const pdfDownload = async (res, where) => {
   var dataset = await dataresult(where);
   var body = await genBodyPDF(dataset);
   var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
@@ -151,7 +210,7 @@ const sendEmail = async (emails) => {
         pass: process.env.MAIL_PASS,
       },
     });
-    emails.forEach( (email, index) => {
+    emails.forEach((email, index) => {
       setTimeout(async () => {
         var name = "fish";
         console.log("sending email..." + email);
@@ -175,13 +234,10 @@ const sendEmail = async (emails) => {
           }
 
           console.log("The message was sent!");
-       
         });
 
         console.log("sending email done");
       }, index * 1000);
-
-     
     });
   } catch (err) {
     console.log(err.message);
