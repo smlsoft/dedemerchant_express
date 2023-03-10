@@ -21,6 +21,11 @@
  *         schema:
  *           type: string
  *       - in: query
+ *         name: mode
+ *         description: mode
+ *         schema:
+ *           type: string
+ *       - in: query
  *         name: doctype
  *         description: doctype
  *         schema:
