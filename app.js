@@ -88,7 +88,8 @@ app.get("/sendPDFEmail", async (req, res) => {
 
 app.use("/api/balance", require("./routes/api/balance"));
 app.use("/api/sale", require("./routes/api/sale"));
-
+app.use("/api/productdetail", require("./routes/api/productdetail"));
+app.use("/api/productbarcode", require("./routes/api/productbarcode"));
 
 app.get("/healthcheck", (req, res) => {
   res.status(200).send("OK");
