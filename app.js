@@ -26,7 +26,7 @@ const app = express();
 const fs = require("fs");
 
 app.use(express.static(path.join(__dirname, "public")));
-app.set("port", process.env.PORT || 3333);
+app.set("port", process.env.PORT || 3345);
 app.use(bodyParser.json({ limit: "200mb" }));
 app.use(bodyParser.urlencoded({ limit: "200mb", extended: true }));
 app.use(function (req, res, next) {
@@ -86,6 +86,7 @@ app.get("/sendPDFEmail", async (req, res) => {
   }
 });
 
+app.use("/api/product", require("./routes/api/product"));
 app.use("/api/balance", require("./routes/api/balance"));
 app.use("/api/sale", require("./routes/api/sale"));
 
