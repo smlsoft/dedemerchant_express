@@ -10,9 +10,9 @@ dotenv.config();
 
 const dataresult = async (token,search) => {
 var resultSet ={success: false, data:null} ;
-  await service.getProductBarcode(token,search)
+  await service.getDebtorReport(token,search)
   .then((res) => {
-    //console.log(res);
+    console.log(res);
     if (res.success) {
      console.log(res.data)
      resultSet.success = true;
@@ -32,20 +32,19 @@ const genPDF = async (body) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานสินค้า ",
+        text: "รายงานลูกหนี้ ",
         style: "header",
         alignment: "center",
       },
       {
         style: "tableExample",
         table: {
-          widths: ["25%", "25%", "25%", "25%"],
+          widths: ["25%", "25%"],
           body: [
             [
-              { text: "บาร์โค้ด", alignment: "center" },
-              { text: "รหัสสินค้า", alignment: "center" },
-              { text: "ชื่อสินค้า", alignment: "center" },
-              { text: "หน่วยนับ", alignment: "center" },
+              { text: "รหัส", alignment: "center" },
+              { text: "ชื่อ", alignment: "center" },
+            
             ],
           ],
         },
@@ -54,7 +53,7 @@ const genPDF = async (body) => {
       {
         style: "tableExample",
         table: {
-          widths: ["25%", "25%", "25%", "25%"],
+          widths: ["25%", "25%"],
           body: body,
         },
         layout: "noBorders",
@@ -94,10 +93,8 @@ const genBodyPDF = async (dataset) => {
 
   dataset.forEach((ele) => {
     body.push([
-      { text: ele.barcode },
-      { text: ele.itemcode },
+      { text: ele.code },
       { text: packName(ele.names) },
-      { text: ele.itemunitcode, alignment: "center" },
     ]);
   });
   return body;

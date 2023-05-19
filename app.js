@@ -88,9 +88,20 @@ app.get("/sendPDFEmail", async (req, res) => {
 
 app.use("/api/product", require("./routes/api/product"));
 app.use("/api/balance", require("./routes/api/balance"));
-app.use("/api/sale", require("./routes/api/sale"));
+app.use("/api/saleinvoice", require("./routes/api/sale"));
 app.use("/api/productdetail", require("./routes/api/productdetail"));
-app.use("/api/productbarcode", require("./routes/api/productbarcode"));
+app.use("/api/productbarcode", require("./routes/api/productbarcode_clickhouse"));
+app.use("/api/debtor", require("./routes/api/debtor"));
+app.use("/api/creditor", require("./routes/api/creditor"));
+app.use("/api/bookbank", require("./routes/api/bookbank"));
+app.use("/api/purchase", require("./routes/api/purchase"));
+app.use("/api/purchasereturn", require("./routes/api/purchase_return"));
+app.use("/api/saleinvoicereturn", require("./routes/api/sale_return"));
+app.use("/api/transfer", require("./routes/api/transfer"));
+app.use("/api/receive", require("./routes/api/receive"));
+app.use("/api/pickup", require("./routes/api/pickup"));
+app.use("/api/returnproduct", require("./routes/api/stock_return_product"));
+app.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
 
 app.get("/healthcheck", (req, res) => {
   res.status(200).send("OK");
