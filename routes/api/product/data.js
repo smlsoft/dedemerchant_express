@@ -9,7 +9,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const dataresult = async (token,search) => {
-var resultSet ={success: false, data:null} ;
+var resultSet ={success: false, data:[]} ;
   await service.getProductBarcode(token,search)
   .then((res) => {
     //console.log(res);
@@ -51,14 +51,6 @@ const genPDF = async (body) => {
         },
         layout: "noBorders",
       },
-      {
-        style: "tableExample",
-        table: {
-          widths: ["25%", "25%", "25%", "25%"],
-          body: body,
-        },
-        layout: "noBorders",
-      },
     ],
     pageOrientation: "landscape",
     pageMargins: [40, 8, 40, 8],
@@ -86,6 +78,18 @@ const genPDF = async (body) => {
       },
     },
   };
+  if(body.length>0){
+    docDefinition.content.push(
+    {
+      style: "tableExample",
+      table: {
+        widths: ["25%", "25%", "25%", "25%"],
+        body: body,
+      },
+      layout: "noBorders",
+    },
+    )
+  }
   return docDefinition;
 };
 
