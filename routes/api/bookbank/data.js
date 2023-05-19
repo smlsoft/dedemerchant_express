@@ -4,28 +4,28 @@ const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
 const service = require("./service");
 
-
 const dotenv = require("dotenv");
 dotenv.config();
 
-const dataresult = async (token,search) => {
-var resultSet ={success: false, data:null} ;
-  await service.getBookbankReport(token,search)
-  .then((res) => {
-    console.log(res);
-    if (res.success) {
-     console.log(res.data)
-     resultSet.success = true;
-     resultSet.data = res.data;
-    }
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+const dataresult = async (token, search) => {
+  var resultSet = { success: false, data: null };
+  await service
+    .getBookbankReport(token, search)
+    .then((res) => {
+      console.log(res);
+      if (res.success) {
+        console.log(res.data);
+        resultSet.success = true;
+        resultSet.data = res.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-   const dataset = await resultSet;
-   console.log(dataset);
-   return dataset;
+  const dataset = await resultSet;
+  console.log(dataset);
+  return dataset;
 };
 
 const genPDF = async (body) => {
@@ -39,22 +39,15 @@ const genPDF = async (body) => {
       {
         style: "tableExample",
         table: {
-          widths: ["25%", "25%"],
+          widths: ["25%", "25%", "25%", "25%"],
           body: [
             [
-              { text: "รหัส", alignment: "center" },
-              { text: "ชื่อ", alignment: "center" },
-            
+              { text: "รหัสสมุดบัญชี", alignment: "" },
+              { text: "ธนาคาร", alignment: "" },
+              { text: "หมายเลขสมุดบัญชี", alignment: "" },
+              { text: "ชื่อเจ้าของบัญชี", alignment: "" },
             ],
           ],
-        },
-        layout: "noBorders",
-      },
-      {
-        style: "tableExample",
-        table: {
-          widths: ["25%", "25%"],
-          body: body,
         },
         layout: "noBorders",
       },
@@ -85,6 +78,16 @@ const genPDF = async (body) => {
       },
     },
   };
+  if (body.length > 0) {
+    docDefinition.content.push({
+      style: "tableExample",
+      table: {
+        widths: ["25%", "25%", "25%", "25%"],
+        body: body,
+      },
+      layout: "noBorders",
+    });
+  }
   return docDefinition;
 };
 
@@ -94,16 +97,18 @@ const genBodyPDF = async (dataset) => {
   dataset.forEach((ele) => {
     body.push([
       { text: ele.bookcode },
+      { text: pacbankkName(ele.banknames) },
+      { text: ele.bookcode },
       { text: packName(ele.names) },
     ]);
   });
   return body;
 };
 
-const packName = (names)=>{
+const packName = (names) => {
   var result = "";
   for (var i = 0; i < names.length; i++) {
-    if (names[i].name != '') {
+    if (names[i].name != "") {
       result += names[i].name;
       if (i < names.length - 1) {
         result += ",";
@@ -111,12 +116,23 @@ const packName = (names)=>{
     }
   }
   return result;
-}
+};
+const pacbankkName = (banknames) => {
+  var result = "";
+  for (var i = 0; i < banknames.length; i++) {
+    if (banknames[i].name != "") {
+      result += banknames[i].name;
+      if (i < banknames.length - 1) {
+        result += ",";
+      }
+    }
+  }
+  return result;
+};
+const pdfPreview = async (token, search, res) => {
+  var dataset = await dataresult(token, search);
 
-const pdfPreview = async (token,search,res) => {
-  var dataset = await dataresult(token,search);
-  
-  if(dataset.success){
+  if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
     var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
     res.setHeader("Content-Type", "application/pdf");
@@ -125,8 +141,8 @@ const pdfPreview = async (token,search,res) => {
   }
 };
 
-const pdfDownload = async (token,search,res) => {
-  var dataset = await dataresult(token,search);
+const pdfDownload = async (token, search, res) => {
+  var dataset = await dataresult(token, search);
   var body = await genBodyPDF(dataset.data);
   var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
   res.setHeader("Content-Type", "application/pdf");
@@ -135,7 +151,7 @@ const pdfDownload = async (token,search,res) => {
   pdfDoc.end();
 };
 
-const sendEmail = async (token,emails) => {
+const sendEmail = async (token, emails) => {
   try {
     var dataset = await dataresult(token);
     var body = await genBodyPDF(dataset.data);
@@ -150,7 +166,7 @@ const sendEmail = async (token,emails) => {
         pass: process.env.MAIL_PASS,
       },
     });
-    emails.forEach( (email, index) => {
+    emails.forEach((email, index) => {
       setTimeout(async () => {
         var name = "fish";
         console.log("sending email..." + email);
@@ -174,13 +190,10 @@ const sendEmail = async (token,emails) => {
           }
 
           console.log("The message was sent!");
-       
         });
 
         console.log("sending email done");
       }, index * 1000);
-
-     
     });
   } catch (err) {
     console.log(err.message);
