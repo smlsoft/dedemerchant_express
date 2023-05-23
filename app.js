@@ -26,7 +26,7 @@ const app = express();
 const fs = require("fs");
 
 app.use(express.static(path.join(__dirname, "public")));
-app.set("port", process.env.PORT || 3345);
+app.set("port", process.env.PORT || 8080);
 app.use(bodyParser.json({ limit: "200mb" }));
 app.use(bodyParser.urlencoded({ limit: "200mb", extended: true }));
 app.use(function (req, res, next) {
@@ -42,13 +42,21 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+const router = express.Router();
 
-app.get("/", (req, res) => {
+// middleware that is specific to this router
+// router.use((req, res, next) => {
+//   console.log('Time: ', Date.now())
+//   next()
+// })
+router.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.post("/sendPDFEmail", async (req, res) => {
+
+router.post("/sendPDFEmail", async (req, res) => {
   console.log(req.body);
   try {
     await producer.connect();
@@ -67,7 +75,7 @@ app.post("/sendPDFEmail", async (req, res) => {
 });
 
 // Receive messages from a Kafka topic
-app.get("/sendPDFEmail", async (req, res) => {
+router.get("/sendPDFEmail", async (req, res) => {
   try {
     await consumer.connect();
     await consumer.subscribe({ topic: "send-report", fromBeginning: true });
@@ -86,29 +94,31 @@ app.get("/sendPDFEmail", async (req, res) => {
   }
 });
 
-app.use("/api/product", require("./routes/api/product"));
-app.use("/api/balance", require("./routes/api/balance"));
-app.use("/api/saleinvoice", require("./routes/api/sale"));
-app.use("/api/productdetail", require("./routes/api/productdetail"));
-app.use("/api/productbarcode", require("./routes/api/productbarcode_clickhouse"));
-app.use("/api/debtor", require("./routes/api/debtor"));
-app.use("/api/creditor", require("./routes/api/creditor"));
-app.use("/api/bookbank", require("./routes/api/bookbank"));
-app.use("/api/purchase", require("./routes/api/purchase"));
-app.use("/api/purchasereturn", require("./routes/api/purchase_return"));
-app.use("/api/saleinvoicereturn", require("./routes/api/sale_return"));
-app.use("/api/transfer", require("./routes/api/transfer"));
-app.use("/api/receive", require("./routes/api/receive"));
-app.use("/api/pickup", require("./routes/api/pickup"));
-app.use("/api/returnproduct", require("./routes/api/stock_return_product"));
-app.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
-app.use("/api/paid", require("./routes/api/paid"));
-app.use("/api/pay", require("./routes/api/pay"));
+router.use("/api/product", require("./routes/api/product"));
+router.use("/api/balance", require("./routes/api/balance"));
+router.use("/api/saleinvoice", require("./routes/api/sale"));
+router.use("/api/productdetail", require("./routes/api/productdetail"));
+router.use("/api/productbarcode", require("./routes/api/productbarcode_clickhouse"));
+router.use("/api/debtor", require("./routes/api/debtor"));
+router.use("/api/creditor", require("./routes/api/creditor"));
+router.use("/api/bookbank", require("./routes/api/bookbank"));
+router.use("/api/purchase", require("./routes/api/purchase"));
+router.use("/api/purchasereturn", require("./routes/api/purchase_return"));
+router.use("/api/saleinvoicereturn", require("./routes/api/sale_return"));
+router.use("/api/transfer", require("./routes/api/transfer"));
+router.use("/api/receive", require("./routes/api/receive"));
+router.use("/api/pickup", require("./routes/api/pickup"));
+router.use("/api/returnproduct", require("./routes/api/stock_return_product"));
+router.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
+router.use("/api/paid", require("./routes/api/paid"));
+router.use("/api/pay", require("./routes/api/pay"));
 
 app.get("/healthcheck", (req, res) => {
   res.status(200).send("OK");
 });
 
+
+app.use("/apireport", router);
 
 const sendReportCheck = async (data) => {
   if(data.report != undefined){
