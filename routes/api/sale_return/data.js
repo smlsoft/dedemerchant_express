@@ -137,7 +137,7 @@ const genBodyPDF = async (dataset) => {
       { text: utils.packName(ele.custnames),style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4'},
       { text: utils.formatNumber(ele.totalvalue) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
       { text: utils.formatNumber(ele.totaldiscount) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: utils.formatNumber(ele.totalaftervat) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: utils.formatNumber(ele.totalbeforevat) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
       { text: utils.formatNumber(ele.totalexceptvat) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
       { text: utils.formatNumber(ele.totalvatvalue),style: 'tableCell',alignment: "right"  ,fillColor: '#f5e8c4'},
       { text: utils.formatNumber(ele.totalamount),style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4' },
