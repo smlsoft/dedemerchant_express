@@ -7,6 +7,27 @@ const service = require("./service");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const dataShop = async (token) => {
+  var resultSet = { success: false, data: [] };
+  await service
+    .getProfileshop(token)
+    .then((res) => {
+      //console.log(res);
+      if (res.success) {
+        // console.log(res.data);
+        resultSet.success = true;
+        resultSet.data = res.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  const dataprofile = await resultSet;
+  // console.log(dataprofile);
+  return dataprofile;
+};
+
 const dataresult = async (token, search) => {
   var resultSet = { success: false, data: [] };
   await service
@@ -14,7 +35,7 @@ const dataresult = async (token, search) => {
     .then((res) => {
       //console.log(res);
       if (res.success) {
-        console.log(res.data);
+        // console.log(res.data);
         resultSet.success = true;
         resultSet.data = res.data;
       }
@@ -28,7 +49,9 @@ const dataresult = async (token, search) => {
   return dataset;
 };
 
-const genPDF = async (body) => {
+
+
+const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
@@ -37,38 +60,13 @@ const genPDF = async (body) => {
         alignment: "center",
       },
       {
-        style: "tableExample",
-        table: {
-          widths: [
-            "11.1%",
-            "11.1%",
-            "11.1%",
-            "11.1%",
-            "11.1%",
-            "11.1%",
-            "11.1%",
-            "11.1%",
-            "11.1%",
-          ],
-          body: [
-            [
-              { text: "บาร์โค้ด", alignment: "center" },
-              { text: "ชื่อสินค้า", alignment: "center" },
-              { text: "หน่วยนับ", alignment: "center" },
-              { text: "รหัสสินค้า", alignment: "center" },
-              { text: "ประเภทสินค้า", alignment: "center" },
-              { text: "ประเภทภาษี", alignment: "center" },
-              { text: "ราคาขายปลีก", alignment: "center" },
-              { text: "ราคาสมาชิค", alignment: "center" },
-              { text: "ราคาขายลู่", alignment: "center" },
-            ],
-          ],
-        },
-        layout: "noBorders",
+        text: dataprofile.data.name1,
+        style: "header",
+        alignment: "center",
       },
     ],
     pageOrientation: "landscape",
-    pageMargins: [40, 8, 40, 8],
+    pageMargins: [10, 10, 30, 10], // [left, top, right, bottom]
     defaultStyle: {
       font: "Sarabun",
       fontSize: 12,
@@ -77,40 +75,21 @@ const genPDF = async (body) => {
     },
     styles: {
       header: {
+        fontSize: 14,
         bold: true,
-      },
-      textdecoration: {
-        italics: true,
-        alignment: "right",
-        decoration: "underline",
-        decorationStyle: "double",
-      },
-      margindetail: {
-        margin: [20, 0, 0, 0],
-      },
-      margintotal: {
-        margin: [50, 0, 0, 0],
-      },
+        margin: [0, 0, 0, 5]
+      }
     },
   };
   if (body.length > 0) {
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        widths: [
-          "11.1%",
-          "11.1%",
-          "11.1%",
-          "11.1%",
-          "11.1%",
-          "11.1%",
-          "11.1%",
-          "11.1%",
-          "11.1%",
-        ],
-        body: body,
+        headerRows: 1,
+        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+        body: body
       },
-      layout: "noBorders",
+      layout: "lightHorizontalLines",
     });
   }
   return docDefinition;
@@ -118,20 +97,31 @@ const genPDF = async (body) => {
 
 const genBodyPDF = async (dataset) => {
   let body = [];
+  body.push([
+    { text: "บาร์โค้ด", alignment: "center" },
+    { text: "ชื่อสินค้า", alignment: "center" },
+    { text: "หน่วยนับ", alignment: "center" },
+    { text: "รหัสสินค้า", alignment: "center" },
+    { text: "ประเภทสินค้า", alignment: "center" },
+    { text: "ประเภทภาษี", alignment: "center" },
+    { text: "ราคาขายปลีก", alignment: "right" },
+    { text: "ราคาสมาชิค", alignment: "right" },
+    { text: "ราคาขายลู่", alignment: "right" },
+  ]),
+    dataset.forEach((ele) => {
 
-  dataset.forEach((ele) => {
-    body.push([
-      { text: ele.barcode },
-      { text: packName(ele.names) },
-      { text: ele.itemunitcode, alignment: "center" },
-      { text: ele.itemcode, alignment: "center" },
-      { text: ele.itemtype, alignment: "center" },
-      { text: ele.vattype, alignment: "center" },
-      { text: prices(ele.prices), alignment: "center" },
-      { text: prices2(ele.prices), alignment: "center" },
-      { text: prices(ele.prices), alignment: "center" },
-    ]);
-  });
+      body.push([
+        { text: ele.barcode },
+        { text: packName(ele.names) },
+        { text: ele.itemunitcode, alignment: "center" },
+        { text: ele.itemcode, alignment: "center" },
+        { text: ele.itemtype, alignment: "center" },
+        { text: ele.vattype, alignment: "center" },
+        { text: prices(ele.prices), alignment: "right" },
+        { text: prices2(ele.prices), alignment: "right" },
+        { text: prices(ele.prices), alignment: "right" },
+      ]);
+    });
   return body;
 };
 
@@ -173,10 +163,11 @@ const prices2 = (prices) => {
 };
 const pdfPreview = async (token, search, res) => {
   var dataset = await dataresult(token, search);
+  var dataprofile = await dataShop(token);
 
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -186,7 +177,7 @@ const pdfPreview = async (token, search, res) => {
 const pdfDownload = async (token, search, res) => {
   var dataset = await dataresult(token, search);
   var body = await genBodyPDF(dataset.data);
-  var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
+  var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", 'attachment; filename="balance.pdf"');
   pdfDoc.pipe(res);
@@ -197,7 +188,7 @@ const sendEmail = async (token, emails) => {
   try {
     var dataset = await dataresult(token);
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     pdfDoc.end();
     let transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
