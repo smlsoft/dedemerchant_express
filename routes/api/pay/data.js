@@ -2,14 +2,13 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
-const service = require("./service");
-
+const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
 
 const dataShop = async (token) => {
   var resultSet = { success: false, data: [] };
-  await service
+  await globalservice
     .getProfileshop(token)
     .then((res) => {
       //console.log(res);
@@ -28,14 +27,14 @@ const dataShop = async (token) => {
   return dataprofile;
 };
 
-const dataresult = async (token, search) => {
-  var resultSet = { success: false, data: [] };
-  await service
-    .getProductBarcode(token, search)
+const dataresult = async (token, search,fromdate,todate) => {
+  var resultSet = { success: false, data: null };
+  await globalservice
+    .getReport('/transaction/pay',token, search,fromdate,todate)
     .then((res) => {
-      //console.log(res);
+      console.log(res);
       if (res.success) {
-        // console.log(res.data);
+        console.log(res.data);
         resultSet.success = true;
         resultSet.data = res.data;
       }
@@ -49,24 +48,22 @@ const dataresult = async (token, search) => {
   return dataset;
 };
 
-
-
-const genPDF = async (body, dataprofile) => {
+const genPDF = async (body,dataprofile) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานสินค้า ",
+        text: "รายงานการจ่ายเงิน",
         style: "header",
         alignment: "center",
       },
       {
         text: dataprofile.data.name1,
-        style: "header",
+        style: "subheader",
         alignment: "center",
       },
     ],
     pageOrientation: "landscape",
-    pageMargins: [10, 10, 30, 10], // [left, top, right, bottom]
+    pageMargins: [10, 10, 10, 10], // [left, top, right, bottom]
     defaultStyle: {
       font: "Sarabun",
       fontSize: 12,
@@ -78,7 +75,15 @@ const genPDF = async (body, dataprofile) => {
         fontSize: 13,
         bold: true,
         margin: [0, 0, 0, 5]
-      }
+      },
+      subheader: {
+        fontSize: 13,
+        bold: true,
+        margin: [0, 0, 0, 10]
+      },
+      tableCell: {
+        fontSize: 9
+    }
     },
   };
   if (body.length > 0) {
@@ -86,7 +91,7 @@ const genPDF = async (body, dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+        widths: ['15%', '20%', '15%', '15%' ,'15%' , '10%' , '10%' , '10%' ],
         body: body
       },
       layout: "lightHorizontalLines",
@@ -97,65 +102,51 @@ const genPDF = async (body, dataprofile) => {
 
 const genBodyPDF = async (dataset) => {
   let body = [];
-  body.push([
-    { text: "บาร์โค้ด", alignment: "center" },
-    { text: "ชื่อสินค้า", alignment: "center" },
-    { text: "หน่วยนับ", alignment: "center" },
-    { text: "รหัสสินค้า", alignment: "center" },
-    { text: "ประเภทสินค้า", alignment: "center" },
-    { text: "ประเภทภาษี", alignment: "center" },
-    { text: "ราคาขายปลีก", alignment: "right" },
-    { text: "ราคาสมาชิค", alignment: "right" },
-    { text: "ราคาขายลู่", alignment: "right" },
-  ]),
-    dataset.forEach((ele) => {
 
-      body.push([
-        { text: ele.barcode },
-        { text: utils.packName(ele.names) },
-        { text: ele.itemunitcode, alignment: "center" },
-        { text: ele.itemcode, alignment: "center" },
-        { text: ele.itemtype, alignment: "center" },
-        { text: ele.vattype, alignment: "center" },
-        { text: prices(ele.prices), alignment: "right" },
-        { text: prices2(ele.prices), alignment: "right" },
-        { text: prices(ele.prices), alignment: "right" },
-      ]);
-    });
+  body.push([
+    { text: "เอกสารวันที่", style: 'tableCell',alignment: "center" },
+    { text: "เอกสารเลขที่", style: 'tableCell',alignment: "center" },
+    { text: "ลูกหนี้", style: 'tableCell',alignment: "center" },
+    { text: "มูลค่าสุทธิ", style: 'tableCell',alignment: "center" },
+    { text: "เงินสด", style: 'tableCell',alignment: "center" },
+    { text: "เงินโอน", style: 'tableCell',alignment: "center" },
+    { text: "บัตรเครดิต", style: 'tableCell',alignment: "center" },
+  ]),
+  dataset.forEach((ele) => {
+    console.log(ele)
+    var creditAmount = 0;
+    var transferAmount = 0;
+    if(ele.paymentdetail.paymentcreditcards != null){
+      ele.paymentdetail.paymentcreditcards.forEach(ele => {
+        creditAmount += ele.amount ;
+      });
+    }
+    if(ele.paymentdetail.paymenttransfers != null){
+      ele.paymentdetail.paymenttransfers.forEach(ele => {
+        transferAmount += ele.amount ;
+      });
+    }
+    body.push([
+      { text: utils.formateDate(ele.docdatetime) ,style: 'tableCell',alignment: "center"  },
+      { text: ele.docno ,style: 'tableCell' },
+      { text: ele.custcode+"|"+utils.packName(ele.custnames) ,style: 'tableCell',alignment: "left" },
+      { text: utils.formatNumber(ele.totalamount) ,style: 'tableCell',alignment: "right"},
+      { text: utils.formatNumber(ele.paymentdetail.cashamount) ,style: 'tableCell',alignment: "right" },
+      { text: utils.formatNumber(transferAmount) ,style: 'tableCell',alignment: "right"  },
+      { text: utils.formatNumber(creditAmount) ,style: 'tableCell',alignment: "right"  },
+    ]);
+  });
   return body;
 };
 
-const prices = (prices) => {
-  var result = "";
-  for (var i = 0; i < prices.length; i++) {
-    if (prices[i].price != "") {
-      result += prices[i].price;
-      if (i < prices.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
-const prices2 = (prices) => {
-  var result = "";
-  for (var i = 2; i < prices.length; i++) {
-    if (prices[i].price != "") {
-      result += prices[i].price;
-      if (i < prices.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
-const pdfPreview = async (token, search, res) => {
-  var dataset = await dataresult(token, search);
-  var dataprofile = await dataShop(token);
 
+
+const pdfPreview = async (token, search,fromdate,todate, res) => {
+  var dataset = await dataresult(token, search,fromdate,todate);
+  var dataprofile = await dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -165,7 +156,7 @@ const pdfPreview = async (token, search, res) => {
 const pdfDownload = async (token, search, res) => {
   var dataset = await dataresult(token, search);
   var body = await genBodyPDF(dataset.data);
-  var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+  var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", 'attachment; filename="balance.pdf"');
   pdfDoc.pipe(res);
@@ -176,7 +167,7 @@ const sendEmail = async (token, emails) => {
   try {
     var dataset = await dataresult(token);
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
     pdfDoc.end();
     let transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,

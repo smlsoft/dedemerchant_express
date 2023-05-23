@@ -2,16 +2,35 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
-const service = require("./service");
-let moment = require("moment");
-
+const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const dataresult = async (token, search) => {
+const dataShop = async (token) => {
+  var resultSet = { success: false, data: [] };
+  await globalservice
+    .getProfileshop(token)
+    .then((res) => {
+      //console.log(res);
+      if (res.success) {
+        // console.log(res.data);
+        resultSet.success = true;
+        resultSet.data = res.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  const dataprofile = await resultSet;
+  // console.log(dataprofile);
+  return dataprofile;
+};
+
+const dataresult = async (token, search,fromdate,todate) => {
   var resultSet = { success: false, data: null };
-  await service
-    .getPurchaseReport(token, search)
+  await globalservice
+    .getReport('/transaction/purchase',token, search,fromdate,todate)
     .then((res) => {
       console.log(res);
       if (res.success) {
@@ -29,52 +48,22 @@ const dataresult = async (token, search) => {
   return dataset;
 };
 
-const genPDF = async (body) => {
+const genPDF = async (body,dataprofile) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานซื้อสินค้า ",
+        text: "รายงานซื้อ",
         style: "header",
         alignment: "center",
       },
       {
-        style: "tableExample",
-        table: {
-          widths: [
-            "10%",
-            "10%",
-            "10%",
-            "10%",
-            "10%",
-            "10%",
-            "10%",
-            "10%",
-            "10%",
-            "10%",
-          ],
-          body: [
-            [
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-              { text: "", alignment: "center" },
-            ],
-            // [
-
-            // ],
-          ],
-        },
-        layout: "noBorders",
+        text: dataprofile.data.name1,
+        style: "subheader",
+        alignment: "center",
       },
     ],
     pageOrientation: "landscape",
-    pageMargins: [40, 8, 40, 8],
+    pageMargins: [10, 10, 10, 10], // [left, top, right, bottom]
     defaultStyle: {
       font: "Sarabun",
       fontSize: 12,
@@ -83,39 +72,27 @@ const genPDF = async (body) => {
     },
     styles: {
       header: {
+        fontSize: 13,
         bold: true,
+        margin: [0, 0, 0, 5]
       },
-      textdecoration: {
-        italics: true,
-        alignment: "right",
-        decoration: "underline",
-        decorationStyle: "double",
+      subheader: {
+        fontSize: 13,
+        bold: true,
+        margin: [0, 0, 0, 10]
       },
-      margindetail: {
-        margin: [20, 0, 0, 0],
-      },
-      margintotal: {
-        margin: [50, 0, 0, 0],
-      },
+      tableCell: {
+        fontSize: 9
+    }
     },
   };
   if (body.length > 0) {
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        widths: [
-          "10%",
-          "10%",
-          "10%",
-          "10%",
-          "10%",
-          "10%",
-          "10%",
-          "10%",
-          "10%",
-          "10%",
-        ],
-        body: body,
+        headerRows: 2,
+        widths: ['15%', '20%', '10%', '10%' , '9%' , '9%' , '9%' , '9%' , '9%' , '10%' ],
+        body: body
       },
       layout: "lightHorizontalLines",
     });
@@ -126,91 +103,67 @@ const genPDF = async (body) => {
 const genBodyPDF = async (dataset) => {
   let body = [];
 
+  body.push([
+    { text: "เอกสารวันที่", style: 'tableCell',alignment: "left" },
+    { text: "เอกสารเลขที่", style: 'tableCell',alignment: "left" },
+    { text: "เจ้าหนี้", style: 'tableCell',alignment: "left" },
+    { text: "มูลค่าสินค้า", style: 'tableCell',alignment: "left" },
+    { text: "มูลค่าส่วนลด", style: 'tableCell',alignment: "left" },
+    { text: "หลังหักส่วนลด", style: 'tableCell',alignment: "left" },
+    { text: "ยกเว้นภาษี", style: 'tableCell',alignment: "left" },
+    { text: "ภาษีมูลค่าเพิ่ม", style: 'tableCell',alignment: "left" },
+    { text: "มูลค่าสุทธิ", style: 'tableCell',alignment: "left" },
+  ],[
+    { text: "บาร์โค้ด", style: 'tableCell',alignment: "center" },
+    { text: "ชื่อสินค้า", style: 'tableCell',alignment: "center" },
+    { text: "คลัง", style: 'tableCell',alignment: "center" },
+    { text: "พื้นที่เก็บ", style: 'tableCell',alignment: "center" },
+    { text: "หน่วยนับ", style: 'tableCell',alignment: "center" },
+    { text: "จำนวน", style: 'tableCell',alignment: "center" },
+    { text: "ราคา", style: 'tableCell',alignment: "center" },
+    { text: "ส่วนลด", style: 'tableCell',alignment: "center" },
+    { text: "รวมมูลค่า", style: 'tableCell',alignment: "center" },
+  ]),
   dataset.forEach((ele) => {
-    ele.details.forEach((details) => {
-      body.push([
-        { text: "เอกสารวันที่", alignment: "center", fillColor: "#81d4fa" },
-        { text: "เอกสารเลขที่", alignment: "center", fillColor: "#81d4fa" },
-        { text: "รหัสเจ้าหนี้", alignment: "center", fillColor: "#81d4fa" },
-        { text: "ชื่อเจ้าหนี้", alignment: "center", fillColor: "#81d4fa" },
-        { text: "มูลค่าสินค้า", alignment: "center", fillColor: "#81d4fa" },
-        {
-          text: "มูลค่าส่วนลด",
-          alignment: "center",
-          fillColor: "#81d4fa",
-        },
-        {
-          text: "มูลค่าหลังหักส่วนลด",
-          alignment: "center",
-          fillColor: "#81d4fa",
-        },
-        { text: "มูลค่ายกเว้นภาษี", alignment: "center", fillColor: "#81d4fa" },
-        { text: "ภาษีมูลค่าเพิ่ม", alignment: "center", fillColor: "#81d4fa" },
-        { text: "มูลค่าสุทธิ", alignment: "center", fillColor: "#81d4fa" },
-      ]);
-      body.push([
-        { text: utils.formateDate(ele.docdatetime) },
-        { text: ele.docno },
-        { text: ele.custcode },
-        { text: ele.custcode },
-        { text: ele.docno },
-        { text: ele.discountamount },
-        { text: ele.discountamount },
-        { text: ele.totalvatvalue },
-        { text: ele.vatrate },
-        { text: ele.totalamount },
-      ]);
-      body.push([
-        { text: "รหัสสินค้า", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "ชื่อสินค้า", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "คลัง", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "พื้นที่เก็บ", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "หน่วยนับ", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "จำนวน", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "ราคา", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "ส่วนลด", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "รวมมูลค่า", alignment: "center", fillColor: "#d8eaf2" },
-        { text: "", alignment: "center", fillColor: "#d8eaf2" },
-      ]);
-
-      body.push([
-        { text: details.sumamount },
-        { text: details.itemcode },
-        { text: details.sumamount },
-        { text: details.itemcode },
-        { text: details.sumamount },
-        { text: details.itemcode },
-        { text: details.sumamount },
-        { text: details.itemcode },
-        { text: details.sumamount },
-        { text: details.itemcode },
-      ]);
+    body.push([
+      { text: utils.formateDate(ele.docdatetime) ,style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4' },
+      { text: ele.docno ,style: 'tableCell',fillColor: '#f5e8c4' },
+      { text: utils.packName(ele.custnames),style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4'},
+      { text: utils.formatNumber(ele.totalvalue) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: utils.formatNumber(ele.totaldiscount) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: utils.formatNumber(ele.totalaftervat) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: utils.formatNumber(ele.totalexceptvat) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: utils.formatNumber(ele.totalvatvalue),style: 'tableCell',alignment: "right"  ,fillColor: '#f5e8c4'},
+      { text: utils.formatNumber(ele.totalamount),style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4' },
+    ]);
+    ele.details.forEach((detail) => {
+      console.log(detail);
+      body.push(
+        [
+          { text: detail.barcode ,style: 'tableCell'},
+          { text: utils.packName(detail.itemnames),style: 'tableCell' },
+          { text: utils.packName(detail.whnames),style: 'tableCell',alignment: "center" },
+          { text: utils.packName(detail.locationnames) ,style: 'tableCell',alignment: "center"},
+          { text: utils.packName(detail.unitnames) ,style: 'tableCell',alignment: "center"},
+          { text: utils.formatNumber(detail.qty) ,style: 'tableCell',alignment: "right"},
+          { text: utils.formatNumber(detail.price) ,style: 'tableCell',alignment: "right"},
+          { text: utils.formatNumber(detail.discountamount) ,style: 'tableCell',alignment: "right"},
+          { text: utils.formatNumber(detail.sumamount),style: 'tableCell',alignment: "right" },
+        ]
+      );
     });
-    //   body.push([{  }]);
   });
-
   return body;
 };
 
-const packName = (names) => {
-  var result = "";
-  for (var i = 0; i < names.length; i++) {
-    if (names[i].name != "") {
-      result += names[i].name;
-      if (i < names.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
 
-const pdfPreview = async (token, search, res) => {
-  var dataset = await dataresult(token, search);
 
+const pdfPreview = async (token, search,fromdate,todate, res) => {
+  var dataset = await dataresult(token, search,fromdate,todate);
+  var dataprofile = await dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();

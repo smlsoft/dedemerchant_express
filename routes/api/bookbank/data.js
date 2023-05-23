@@ -3,14 +3,35 @@ const utils = require("../../../utils");
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
 const service = require("./service");
-
+const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
+
+const dataShop = async (token) => {
+  var resultSet = { success: false, data: [] };
+  await globalservice
+    .getProfileshop(token)
+    .then((res) => {
+      //console.log(res);
+      if (res.success) {
+        // console.log(res.data);
+        resultSet.success = true;
+        resultSet.data = res.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  const dataprofile = await resultSet;
+  // console.log(dataprofile);
+  return dataprofile;
+};
 
 const dataresult = async (token, search) => {
   var resultSet = { success: false, data: null };
   await service
-    .getBookbankReport(token, search)
+    .getReport(token, search)
     .then((res) => {
       console.log(res);
       if (res.success) {
@@ -28,32 +49,22 @@ const dataresult = async (token, search) => {
   return dataset;
 };
 
-const genPDF = async (body) => {
+const genPDF = async (body,dataprofile) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานสมุดบัญชี ",
+        text: "รายงานสมุดบัญชี",
         style: "header",
         alignment: "center",
       },
       {
-        style: "tableExample",
-        table: {
-          widths: ["25%", "25%", "25%", "25%"],
-          body: [
-            [
-              { text: "รหัสสมุดบัญชี", alignment: "" },
-              { text: "ธนาคาร", alignment: "" },
-              { text: "หมายเลขสมุดบัญชี", alignment: "" },
-              { text: "ชื่อเจ้าของบัญชี", alignment: "" },
-            ],
-          ],
-        },
-        layout: "noBorders",
+        text: dataprofile.data.name1,
+        style: "header",
+        alignment: "center",
       },
     ],
     pageOrientation: "landscape",
-    pageMargins: [40, 8, 40, 8],
+    pageMargins: [10, 10, 10, 10], // [left, top, right, bottom]
     defaultStyle: {
       font: "Sarabun",
       fontSize: 12,
@@ -62,30 +73,21 @@ const genPDF = async (body) => {
     },
     styles: {
       header: {
+        fontSize: 13,
         bold: true,
-      },
-      textdecoration: {
-        italics: true,
-        alignment: "right",
-        decoration: "underline",
-        decorationStyle: "double",
-      },
-      margindetail: {
-        margin: [20, 0, 0, 0],
-      },
-      margintotal: {
-        margin: [50, 0, 0, 0],
-      },
+        margin: [0, 0, 0, 5]
+      }
     },
   };
   if (body.length > 0) {
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        widths: ["25%", "25%", "25%", "25%"],
-        body: body,
+        headerRows: 1,
+        widths: ['20%', '35%', '20%', '25%' ],
+        body: body
       },
-      layout: "noBorders",
+      layout: "lightHorizontalLines",
     });
   }
   return docDefinition;
@@ -94,47 +96,31 @@ const genPDF = async (body) => {
 const genBodyPDF = async (dataset) => {
   let body = [];
 
+  body.push([
+    { text: "รหัส", alignment: "center" },
+    { text: "ธนาคาร", alignment: "center" },
+    { text: "หมายเลขสมุดบัญชี", alignment: "center" },
+    { text: "ชื่อเจ้าของบัญชี", alignment: "center" },
+  ]),
   dataset.forEach((ele) => {
     body.push([
-      { text: ele.bookcode },
-      { text: pacbankkName(ele.banknames) },
-      { text: ele.bookcode },
-      { text: packName(ele.names) },
+      { text: ele.passbook,alignment: "center"  },
+      { text: utils.packName(ele.banknames) },
+      { text: ele.bookcode, alignment: "center" },
+      { text: utils.packName(ele.names) }
     ]);
   });
   return body;
 };
 
-const packName = (names) => {
-  var result = "";
-  for (var i = 0; i < names.length; i++) {
-    if (names[i].name != "") {
-      result += names[i].name;
-      if (i < names.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
-const pacbankkName = (banknames) => {
-  var result = "";
-  for (var i = 0; i < banknames.length; i++) {
-    if (banknames[i].name != "") {
-      result += banknames[i].name;
-      if (i < banknames.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
+
+
 const pdfPreview = async (token, search, res) => {
   var dataset = await dataresult(token, search);
-
+  var dataprofile = await dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
