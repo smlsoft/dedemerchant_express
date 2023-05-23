@@ -3,14 +3,35 @@ const utils = require("../../../utils");
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
 const service = require("./service");
-
+const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
+
+const dataShop = async (token) => {
+  var resultSet = { success: false, data: [] };
+  await globalservice
+    .getProfileshop(token)
+    .then((res) => {
+      //console.log(res);
+      if (res.success) {
+        // console.log(res.data);
+        resultSet.success = true;
+        resultSet.data = res.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  const dataprofile = await resultSet;
+  // console.log(dataprofile);
+  return dataprofile;
+};
 
 const dataresult = async (token, search) => {
   var resultSet = { success: false, data: null };
   await service
-    .getCreditorReport(token, search)
+    .getReport(token, search)
     .then((res) => {
       console.log(res);
       if (res.success) {
@@ -28,35 +49,22 @@ const dataresult = async (token, search) => {
   return dataset;
 };
 
-const genPDF = async (body) => {
+const genPDF = async (body,dataprofile) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานเจ้าหนี้ ",
+        text: "รายงานเจ้าหนี้",
         style: "header",
         alignment: "center",
       },
       {
-        style: "tableExample",
-        table: {
-          widths: ["16%", "16%", "16%", "16%", "16%", "16%"],
-          body: [
-            [
-              { text: "รหัส" },
-              { text: "ชื่อ" },
-              { text: "หมายเลขโทรศัพท์" },
-              { text: "ที่อยุ่" },
-
-              { text: "เบอร์โทร" },
-              { text: "ประเภททเจ้าหนี้" },
-            ],
-          ],
-        },
-        layout: "noBorders",
+        text: dataprofile.data.name1,
+        style: "header",
+        alignment: "center",
       },
     ],
     pageOrientation: "landscape",
-    pageMargins: [40, 8, 40, 8],
+    pageMargins: [10, 10, 10, 10], // [left, top, right, bottom]
     defaultStyle: {
       font: "Sarabun",
       fontSize: 12,
@@ -65,30 +73,21 @@ const genPDF = async (body) => {
     },
     styles: {
       header: {
+        fontSize: 13,
         bold: true,
-      },
-      textdecoration: {
-        italics: true,
-        alignment: "right",
-        decoration: "underline",
-        decorationStyle: "double",
-      },
-      margindetail: {
-        margin: [20, 0, 0, 0],
-      },
-      margintotal: {
-        margin: [50, 0, 0, 0],
-      },
+        margin: [0, 0, 0, 5]
+      }
     },
   };
   if (body.length > 0) {
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        widths: ["16%", "16%", "16%", "16%", "16%", "16%"],
-        body: body,
+        headerRows: 1,
+        widths: ['10%', '20%', '20%', '30%', '10%', '10%' ],
+        body: body
       },
-      layout: "noBorders",
+      layout: "lightHorizontalLines",
     });
   }
   return docDefinition;
@@ -97,47 +96,40 @@ const genPDF = async (body) => {
 const genBodyPDF = async (dataset) => {
   let body = [];
 
+  body.push([
+    { text: "รหัส", alignment: "center" },
+    { text: "ชื่อลูกหนีั้", alignment: "center" },
+    { text: "เลขบัตรประชาชน", alignment: "center" },
+    { text: "ที่อยู่", alignment: "center" },
+    { text: "โทรศัพท์", alignment: "center" },
+    { text: "ประเภท", alignment: "center" },
+  ]),
   dataset.forEach((ele) => {
+    console.log(ele.addressforbilling)
+    var address = "";
+    if(ele.addressforbilling.address.length>0){
+      address=ele.addressforbilling.address[0];
+    }
     body.push([
       { text: ele.code },
-      { text: packName(ele.names) },
+      { text: utils.packName(ele.names) },
       { text: ele.taxid },
-      {
-        text:
-          ele.addressforbilling.countrycode +
-          ele.addressforbilling.provincecode +
-          ele.addressforbilling.districtcode +
-          ele.addressforbilling.subdistrictcode +
-          ele.addressforbilling.zipcode +
-          ele.addressforbilling.phoneprimary +
-          ele.addressforbilling.phonesecondary,
-      },
+      { text:address },
       { text: ele.addressforbilling.phoneprimary },
-      { text: ele.addressforbilling.phoneprimary },
+      { text: (ele.personaltype==1)?'บุคคลธรรมดา':'นิติบุคคล',alignment: "center" },
     ]);
   });
   return body;
 };
 
-const packName = (names) => {
-  var result = "";
-  for (var i = 0; i < names.length; i++) {
-    if (names[i].name != "") {
-      result += names[i].name;
-      if (i < names.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
+
 
 const pdfPreview = async (token, search, res) => {
   var dataset = await dataresult(token, search);
-
+  var dataprofile = await dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();

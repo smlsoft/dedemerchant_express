@@ -2,16 +2,35 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
-const service = require("./service");
-let moment = require("moment");
-
+const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const dataresult = async (token, search) => {
+const dataShop = async (token) => {
+  var resultSet = { success: false, data: [] };
+  await globalservice
+    .getProfileshop(token)
+    .then((res) => {
+      //console.log(res);
+      if (res.success) {
+        // console.log(res.data);
+        resultSet.success = true;
+        resultSet.data = res.data;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  const dataprofile = await resultSet;
+  // console.log(dataprofile);
+  return dataprofile;
+};
+
+const dataresult = async (token, search,fromdate,todate) => {
   var resultSet = { success: false, data: null };
-  await service
-    .getReport(token, search)
+  await globalservice
+    .getReport('/transaction/stock-prickup-product',token, search,fromdate,todate)
     .then((res) => {
       console.log(res);
       if (res.success) {
@@ -29,30 +48,22 @@ const dataresult = async (token, search) => {
   return dataset;
 };
 
-const genPDF = async (body) => {
+const genPDF = async (body,dataprofile) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานเบิกสินค้า ",
+        text: "รายงานการเบิกสินค้า",
         style: "header",
         alignment: "center",
       },
       {
-        style: "tableExample",
-        table: {
-          widths: ["25%", "25%"],
-          body: [
-            [
-              { text: "เอกสารวันที่", alignment: "center" },
-              { text: "เอกสารเลขที่", alignment: "center" },
-            ],
-          ],
-        },
-        layout: "noBorders",
+        text: dataprofile.data.name1,
+        style: "subheader",
+        alignment: "center",
       },
     ],
     pageOrientation: "landscape",
-    pageMargins: [40, 8, 40, 8],
+    pageMargins: [10, 10, 10, 10], // [left, top, right, bottom]
     defaultStyle: {
       font: "Sarabun",
       fontSize: 12,
@@ -61,30 +72,29 @@ const genPDF = async (body) => {
     },
     styles: {
       header: {
+        fontSize: 13,
         bold: true,
+        margin: [0, 0, 0, 5]
       },
-      textdecoration: {
-        italics: true,
-        alignment: "right",
-        decoration: "underline",
-        decorationStyle: "double",
+      subheader: {
+        fontSize: 13,
+        bold: true,
+        margin: [0, 0, 0, 10]
       },
-      margindetail: {
-        margin: [20, 0, 0, 0],
-      },
-      margintotal: {
-        margin: [50, 0, 0, 0],
-      },
+      tableCell: {
+        fontSize: 9
+    }
     },
   };
-  if (body.lenght > 0) {
+  if (body.length > 0) {
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        widths: ["25%", "25%"],
-        body: body,
+        headerRows: 2,
+        widths: ['15%', '19%', '13%', '13%' ,'10%' , '10%' , '10%' , '10%' ],
+        body: body
       },
-      layout: "noBorders",
+      layout: "lightHorizontalLines",
     });
   }
   return docDefinition;
@@ -93,34 +103,65 @@ const genPDF = async (body) => {
 const genBodyPDF = async (dataset) => {
   let body = [];
 
+  body.push([
+    { text: "เอกสารวันที่", style: 'tableCell',alignment: "left" },
+    { text: "เอกสารเลขที่", style: 'tableCell',alignment: "left" },
+    { text: "", style: 'tableCell',alignment: "left" },
+    { text: "", style: 'tableCell',alignment: "left" },
+    { text: "", style: 'tableCell',alignment: "left" },
+    { text: "", style: 'tableCell',alignment: "left" },
+    { text: "", style: 'tableCell',alignment: "left" },
+    { text: "", style: 'tableCell',alignment: "left" },
+  ],[
+    { text: "บาร์โค้ด", style: 'tableCell',alignment: "center" },
+    { text: "ชื่อสินค้า", style: 'tableCell',alignment: "center" },
+    { text: "คลัง", style: 'tableCell',alignment: "center" },
+    { text: "ที่เก็บ", style: 'tableCell',alignment: "center" },
+    { text: "หน่วยนับ", style: 'tableCell',alignment: "center" },
+    { text: "จำนวน", style: 'tableCell',alignment: "center" },
+    { text: "ต้นทุน", style: 'tableCell',alignment: "center" },
+    { text: "รวมมูลค่า", style: 'tableCell',alignment: "center" },
+  ]),
   dataset.forEach((ele) => {
     body.push([
-      { text: utils.formateDate(ele.docdatetime) },
-      { text: ele.docno },
+      { text: utils.formateDate(ele.docdatetime) ,style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4' },
+      { text: ele.docno ,style: 'tableCell',fillColor: '#f5e8c4' },
+      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
+      { text: "" ,style: 'tableCell',alignment: "right"  ,fillColor: '#f5e8c4'},
+      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4' },
+      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4' },
     ]);
+    ele.details.forEach((detail) => {
+      console.log(detail);
+     
+        body.push(
+          [
+            { text: detail.barcode ,style: 'tableCell'},
+            { text: utils.packName(detail.itemnames),style: 'tableCell' },
+            { text: utils.packName(detail.whnames),style: 'tableCell',alignment: "center" },
+            { text: utils.packName(detail.locationnames) ,style: 'tableCell',alignment: "center"},
+            { text: utils.packName(detail.unitnames) ,style: 'tableCell',alignment: "center"},
+            { text: utils.formatNumber(detail.qty) ,style: 'tableCell',alignment: "right"},
+            { text: utils.formatNumber(detail.price) ,style: 'tableCell',alignment: "right"},
+            { text: utils.formatNumber(detail.sumamount),style: 'tableCell',alignment: "right" },
+          ]
+        );
+      
+    });
   });
   return body;
 };
 
-const packName = (names) => {
-  var result = "";
-  for (var i = 0; i < names.length; i++) {
-    if (names[i].name != "") {
-      result += names[i].name;
-      if (i < names.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
 
-const pdfPreview = async (token, search, res) => {
-  var dataset = await dataresult(token, search);
 
+const pdfPreview = async (token, search,fromdate,todate, res) => {
+  var dataset = await dataresult(token, search,fromdate,todate);
+  var dataprofile = await dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();

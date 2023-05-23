@@ -23,4 +23,21 @@ const formatNumber = (val, digit = 0) => {
     return formattedDate;
   };
 
-  module.exports = {formatNumber,formateDate}
+  const packName = (names) => {
+    var result = "";
+    if(names != null){
+      for (var i = 0; i < names.length; i++) {
+        if (names[i].name != "") {
+          // if (i > 0 ) {
+          //   result += ",";
+          // }
+          if(names[i].code=='th'){
+            result += names[i].name;
+          }
+        }
+      }
+    }
+    return result;
+  };
+
+  module.exports = {formatNumber,formateDate,packName}

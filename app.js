@@ -102,6 +102,8 @@ app.use("/api/receive", require("./routes/api/receive"));
 app.use("/api/pickup", require("./routes/api/pickup"));
 app.use("/api/returnproduct", require("./routes/api/stock_return_product"));
 app.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
+app.use("/api/paid", require("./routes/api/paid"));
+app.use("/api/pay", require("./routes/api/pay"));
 
 app.get("/healthcheck", (req, res) => {
   res.status(200).send("OK");

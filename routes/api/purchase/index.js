@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 
 router.get("/pdfview", async (req, res) => {
   console.log("pdfview");
-  data.pdfPreview(req.query.auth,req.query.search,res);
+  data.pdfPreview(req.query.auth,req.query.search,req.query.fromdate,req.query.todate,res);
 });
 
 router.get("/pdfdownload", async (req, res) => {
