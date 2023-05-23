@@ -115,8 +115,18 @@ const genBodyPDF = async (dataset) => {
         { text: utils.packName(ele.names) },
         { text: ele.itemunitcode, alignment: "center" },
         { text: ele.itemcode, alignment: "center" },
-        { text: ele.itemtype, alignment: "center" },
-        { text: ele.vattype, alignment: "center" },
+        { text:  (ele.itemtype == 0
+          ? 'สต๊อก'
+          : ele.itemtype == 1
+              ? 'สินค้าบริการ'
+              : ele.itemtype == 2
+                  ? 'สินค้าชุด'
+                  : ''), alignment: "center" },
+        { text: (ele.vattype == 0
+          ? 'ภาษีมูลค่าเพิ่ม'
+          : ele.vattype == 1
+              ? 'ยกเว้นภาษี'
+              : ''), alignment: "center" },
         { text: prices(ele.prices,1), alignment: "right" },
         { text: prices(ele.prices,2), alignment: "right" },
         { text: prices(ele.prices,3), alignment: "right" },
