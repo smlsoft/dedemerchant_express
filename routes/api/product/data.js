@@ -117,38 +117,24 @@ const genBodyPDF = async (dataset) => {
         { text: ele.itemcode, alignment: "center" },
         { text: ele.itemtype, alignment: "center" },
         { text: ele.vattype, alignment: "center" },
-        { text: prices(ele.prices), alignment: "right" },
-        { text: prices2(ele.prices), alignment: "right" },
-        { text: prices(ele.prices), alignment: "right" },
+        { text: prices(ele.prices,1), alignment: "right" },
+        { text: prices(ele.prices,2), alignment: "right" },
+        { text: prices(ele.prices,3), alignment: "right" },
       ]);
     });
   return body;
 };
 
-const prices = (prices) => {
+const prices = (prices,key) => {
   var result = "";
-  for (var i = 0; i < prices.length; i++) {
-    if (prices[i].price != "") {
-      result += prices[i].price;
-      if (i < prices.length - 1) {
-        result += ",";
-      }
+  prices.forEach(ele => {
+    if(ele.keynumber == key){
+      result = ele.price;
     }
-  }
+  });
   return result;
 };
-const prices2 = (prices) => {
-  var result = "";
-  for (var i = 2; i < prices.length; i++) {
-    if (prices[i].price != "") {
-      result += prices[i].price;
-      if (i < prices.length - 1) {
-        result += ",";
-      }
-    }
-  }
-  return result;
-};
+
 const pdfPreview = async (token, search, res) => {
   var dataset = await dataresult(token, search);
   var dataprofile = await dataShop(token);
