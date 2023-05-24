@@ -10,6 +10,7 @@ dotenv.config();
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 
+
 const kafka = new Kafka({
   clientId: "my-app2",
   brokers: [process.env.BROKERS],
@@ -23,7 +24,35 @@ const consumer = kafka.consumer({ groupId: "dedemerchant" });
 
 const app = express();
 
+const server = require('http').createServer(app);
+
 const fs = require("fs");
+
+
+const gracefulShutdown = () => {
+  console.log('Starting graceful shutdown...');
+  
+  // Close server to stop accepting new connections
+  server.close((err) => {
+    if (err) {
+      console.error('Error during server close:', err);
+      process.exit(1);
+    }
+    
+    console.log('Server closed. Exiting process.');
+    process.exit(0);
+  });
+  
+  // Forcefully terminate process after 10 seconds
+  setTimeout(() => {
+    console.error('Could not close connections in time. Forcefully terminating process.');
+    process.exit(1);
+  }, 10 * 1000);
+};
+
+// Handle SIGINT (Ctrl+C) and SIGTERM signals
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
 
 app.use(express.static(path.join(__dirname, "public")));
 app.set("port", process.env.PORT || 8080);
