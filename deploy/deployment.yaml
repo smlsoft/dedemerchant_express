@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apireport
+  namespace: dedepos-dev
+  labels:
+    app: apireport
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apireport
+  template:
+    metadata:
+      labels:
+        app: apireport
+    spec:
+      # volumes:
+      #   - name: certificate-configmap-volume
+      #     configMap: 
+      #       name: dedepos-api-dev-certificate-configmap
+      imagePullSecrets:
+        - name: dockerconfigjson-github-com
+      containers:
+      - name: apireport
+        image: ghcr.io/smlsoft/dedemerchantapireport:develop
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: web-port
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        # volumeMounts:
+        #   - name: certificate-configmap-volume
+        #     mountPath: /cert
+        # env:
+        #   - name: ENV_NAME
+        #     value: "ENV_VALUE"
+        #   - name: ENV_NAME_SECRET
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: dedepos-dev-mongodb-secret
+        #         key: mongodb-passwords
