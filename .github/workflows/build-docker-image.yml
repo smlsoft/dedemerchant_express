@@ -3,7 +3,7 @@ name: Build Docker Image
 on:
   push:
     branches:
-      - develop
+      - releases
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: smlsoft/dedemerchantapireport

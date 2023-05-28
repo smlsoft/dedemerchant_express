@@ -141,9 +141,12 @@ router.use("/api/returnproduct", require("./routes/api/stock_return_product"));
 router.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
 router.use("/api/paid", require("./routes/api/paid"));
 router.use("/api/pay", require("./routes/api/pay"));
+
+
 router.use("/health", require("./routes"));
-
-
+app.get("/healthcheck", (req, res) => {
+  res.status(200).send("OK");
+});
 app.use("/apireport", router);
 
 const sendReportCheck = async (data) => {
