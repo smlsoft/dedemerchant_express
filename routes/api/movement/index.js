@@ -12,7 +12,6 @@ router.get("/", async (req, res) => {
 
   try {
     var dataset = await data.dataresult(req.query.shopid, req.query.barcode, req.query.fromdate, req.query.todate);
-  
     res.status(200).json({ success: true, data: dataset });
   } catch (err) {
     res.status(500).json({ success: false, data: [], msg: err.message });
