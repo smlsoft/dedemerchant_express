@@ -44,6 +44,25 @@ const connectToMongoDB = async () => {
   }
 };
 
+const connectToPostgres = async () => {
+  const pg = new Client({
+    host: process.env.POSTGRES_HOST,
+    port: process.env.POSTGRES_PORT,
+    database: process.env.POSTGRES_DB_NAME,
+    user: process.env.POSTGRES_USERNAME,
+    password: process.env.POSTGRES_PASSWORD,
+  });
+  try {
+    await pg.connect();
+    const query = "SELECT shopid FROM chartofaccounts where shopid != '' limit 1";
+    const result = await pg.query(query);
+    return result.rows;
+  } catch (error) {
+    throw error;
+  } finally {
+    await pg.end();
+  }
+};
 
 const producer = kafka.producer({
   createPartitioner: Partitioners.LegacyPartitioner,
@@ -180,6 +199,7 @@ router.use("/api/returnproduct", require("./routes/api/stock_return_product"));
 router.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
 router.use("/api/paid", require("./routes/api/paid"));
 router.use("/api/pay", require("./routes/api/pay"));
+router.use("/api/movement", require("./routes/api/movement"));
 
 router.use("/health", require("./routes"));
 app.get("/healthcheck", (req, res) => {
