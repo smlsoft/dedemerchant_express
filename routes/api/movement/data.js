@@ -23,7 +23,7 @@ const dataresult = async (shopid, barcode, fromdate, todate) => {
   where stk.shopid = '${shopid}' ${where} `;
   try {
     await pg.connect();
-    console.log(query);
+ 
     const result = await pg.query(query);
     return result.rows;
   } catch (error) {
