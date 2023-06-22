@@ -24,7 +24,7 @@ const dataresult = async (shopid, barcode, fromdate, todate) => {
   try {
     console.log(query)
     await pg.connect();
- 
+
     const result = await pg.query(query);
     return result.rows;
   } catch (error) {
