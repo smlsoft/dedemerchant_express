@@ -1,6 +1,6 @@
 const axios = require("axios");
 const { Client } = require("pg");
-
+const { MongoClient } = require("mongodb");
 // import source from '@/store/modules/endpoint'
 // import { useAuthen } from '@/stores/authen'
 
@@ -27,4 +27,24 @@ const connectPG = async () => {
   return pg;
 };
 
-module.exports = { instanceApi, connectPG };
+const connectToMongoDB = async () => {
+  try {
+    const uri = process.env.MONGO_URI;
+    var options = {};
+   // console.log(process.env.MONGO_TLS);
+    if (process.env.MONGO_TLS == "true") {
+      options = {
+        tls: true,
+        tlsCAFile: process.env.MONGO_CA_FILENAME,
+      };
+    }
+   // console.log(options);
+    const client = new MongoClient(uri, options);
+    await client.connect();
+
+    return client;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  }
+};
+module.exports = { instanceApi, connectPG, connectToMongoDB };

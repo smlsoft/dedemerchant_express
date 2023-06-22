@@ -58,7 +58,6 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
         },
       });
     }
-    
 
     if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
       filters.push({
@@ -73,9 +72,9 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
       });
     }
 
-    const transactionPaid = db.collection("transactionPaid");
+    const transactionPay = db.collection("transactionPay");
 
-    const result = await transactionPaid
+    const result = await transactionPay
       .aggregate([
         {
           $match: {
@@ -101,7 +100,7 @@ const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานการรับเงิน",
+        text: "รายงานการจ่ายชำระหนี้",
         style: "header",
         alignment: "center",
       },
@@ -140,7 +139,7 @@ const genPDF = async (body, dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["15%", "20%", "15%", "15%", "15%", "10%", "10%", "10%"],
+        widths: ["15%", "20%", "15%", "10%", "10%", "15%", "15%"],
         body: body,
       },
       layout: "lightHorizontalLines",
@@ -156,42 +155,27 @@ const genBodyPDF = async (dataset) => {
     { text: "เอกสารวันที่", style: "tableCell", alignment: "center" },
     { text: "เอกสารเลขที่", style: "tableCell", alignment: "center" },
     { text: "ลูกหนี้", style: "tableCell", alignment: "center" },
-    { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "center" },
-    { text: "เงินสด", style: "tableCell", alignment: "center" },
-    { text: "เงินโอน", style: "tableCell", alignment: "center" },
-    { text: "บัตรเครดิต", style: "tableCell", alignment: "center" },
-  ]),
-    dataset.forEach((ele) => {
-      console.log(ele);
+    { text: "จำนวนเงิน", style: "tableCell", alignment: "center" },
+    { text: "เอกสารรับชำระวันที่", style: "tableCell", alignment: "center" },
+    { text: "เอกสารรับชำระเลขที่", style: "tableCell", alignment: "center" },
+    { text: "ยอดชำระ", style: "tableCell", alignment: "center" },
 
-      var creditAmount = 0;
-      var transferAmount = 0;
+  ]);
+  dataset.forEach((ele) => {
+    console.log(ele);
 
-      var cash = 0;
-      if (ele.paymentdetail != undefined && ele.paymentdetail != "undefined" && ele.paymentdetail != null) {
-        cash = ele.paymentdetail.cashamount;
-
-        if (ele.paymentdetail.paymentcreditcards != null) {
-          ele.paymentdetail.paymentcreditcards.forEach((ele) => {
-            creditAmount += ele.amount;
-          });
-        }
-        if (ele.paymentdetail.paymenttransfers != null) {
-          ele.paymentdetail.paymenttransfers.forEach((ele) => {
-            transferAmount += ele.amount;
-          });
-        }
-      }
+    ele.details.forEach((detail) => {
       body.push([
-        { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "center" },
-        { text: ele.docno, style: "tableCell" },
+        { text: utils.formateDate(detail.docdatetime), style: "tableCell", alignment: "center" },
+        { text: detail.docno, style: "tableCell" },
         { text: ele.custcode + "|" + utils.packName(ele.custnames), style: "tableCell", alignment: "left" },
-        { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(cash), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(transferAmount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(creditAmount), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(detail.value), style: "tableCell", alignment: "right" },
+        { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "center" },
+        { text: ele.docno, style: "tableCell", alignment: "left" },
+        { text: utils.formatNumber(detail.paymentamount), style: "tableCell", alignment: "right" },
       ]);
     });
+  });
   return body;
 };
 
