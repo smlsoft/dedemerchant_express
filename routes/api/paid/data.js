@@ -7,31 +7,6 @@ const provider = require("../../../provider");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const dataShop = async (token) => {
-  const client = await provider.connectToMongoDB();
-  var resultSet = { success: false, data: null };
-  try {
-    let db;
-    db = client.db(process.env.MONGO_DB_NAME);
-    const shops = db.collection("shops");
-    const data = await shops.find({ guidfixed: token }).toArray();
-
-    if (data.length > 0) {
-      resultSet.success = true;
-      resultSet.data = data[0];
-    } else {
-      resultSet.success = false;
-      resultSet.data = null;
-    }
-
-    // console.log(data);
-    return resultSet;
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-  } finally {
-    await client.close();
-  }
-};
 
 const dataresult = async (token, fromuser, touser, fromdate, todate) => {
   const client = await provider.connectToMongoDB();
@@ -197,7 +172,7 @@ const genBodyPDF = async (dataset) => {
 
 const pdfPreview = async (token, fromuser, touser, fromdate, todate, res) => {
   var dataset = await dataresult(token, fromuser, touser, fromdate, todate);
-  var dataprofile = await dataShop(token);
+  var dataprofile = await globalservice.dataShop(token);
   // console.log(dataset);
   // console.log(dataprofile);
   if (dataset.success && dataprofile.success) {
@@ -219,53 +194,5 @@ const pdfDownload = async (token, search, res) => {
   pdfDoc.end();
 };
 
-const sendEmail = async (token, emails) => {
-  try {
-    var dataset = await dataresult(token);
-    var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
-    pdfDoc.end();
-    let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      secure: false,
-      port: process.env.MAIL_PORT,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      },
-    });
-    emails.forEach((email, index) => {
-      setTimeout(async () => {
-        var name = "fish";
-        console.log("sending email..." + email);
-        let HelperOptions = {
-          from: '"DEDEMerchant Sale Report <admin@smldatacenter.com>',
-          to: email,
-          subject: "Sale Report  from DEDEMerchant",
-          html: "Hello " + name + ",<br><br> Here is your PDF ",
-          attachments: [
-            {
-              filename: "Sale2021.pdf",
-              content: pdfDoc,
-              contentType: "application/pdf",
-            },
-          ],
-        };
-        await transporter.sendMail(HelperOptions, (error, info) => {
-          console.log(info);
-          if (error) {
-            return console.log("error " + error);
-          }
 
-          console.log("The message was sent!");
-        });
-
-        console.log("sending email done");
-      }, index * 1000);
-    });
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-
-module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail };
+module.exports = { dataresult, genPDF, pdfPreview, pdfDownload };
