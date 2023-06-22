@@ -10,9 +10,10 @@ const formatNumber = (val, digit = 0) => {
 };
 
 const formateDate = (datetime) => {
-  let utcDate = new Date(datetime);
-  let date = new Date(utcDate.toLocaleString());
-
+  let date = new Date(datetime);
+  // console.log("utcDate",utcDate)
+  // let date = new Date(utcDate.toLocaleString());
+  // console.log("date",date)
   let day = String(date.getDate()).padStart(2, "0");
   let month = String(date.getMonth() + 1).padStart(2, "0"); // January is 0
   let year = date.getFullYear();

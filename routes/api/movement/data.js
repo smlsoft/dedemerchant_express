@@ -22,6 +22,7 @@ const dataresult = async (shopid, barcode, fromdate, todate) => {
   join stock_transaction_detail AS stkd on stk.docno = stkd.docno and  stk.shopid = stkd.shopid 
   where stk.shopid = '${shopid}' ${where} `;
   try {
+    console.log(query)
     await pg.connect();
  
     const result = await pg.query(query);

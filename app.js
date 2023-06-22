@@ -18,13 +18,13 @@ const kafka = new Kafka({
   brokers: [process.env.BROKERS],
 });
 
-const uri = "mongodb://" + process.env.MONGO_URI + "/" + process.env.MONGO_DB_NAME; // Replace with your MongoDB connection string
+const uri = process.env.MONGO_URI + "/?ssl=true";
 
 const connectToMongoDB = async () => {
   try {
     var options = {};
     console.log(process.env.MONGO_TLS);
-    if (process.env.MONGO_TLS == true) {
+    if (process.env.MONGO_TLS == "true") {
       options = {
         tls: true,
         tlsCAFile: process.env.MONGO_CA_FILENAME,
@@ -33,11 +33,85 @@ const connectToMongoDB = async () => {
     console.log(options);
     const client = new MongoClient(uri, options);
     await client.connect();
+    let db;
     console.log("Connected to MongoDB successfully");
 
-    // Perform database operations
+    db = client.db(process.env.MONGO_DB_NAME);
+
+    const transactionPaid = db.collection("transactionPaid");
+    const transactionPurchaseReturn = db.collection("transactionPurchaseReturn");
+    const transactionSaleInvoice = db.collection("transactionSaleInvoice");
+
+    const result = await transactionPaid
+      .aggregate([
+        {
+          $unionWith: {
+            coll: "transactionPurchaseReturn",
+            pipeline: [
+              {
+                $match: {
+                  inquirytype: {
+                    $in: [2, 3],
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {
+          $unionWith: {
+            coll: "transactionSaleInvoice",
+            pipeline: [
+              {
+                $match: {
+                  inquirytype: 1,
+                },
+              },
+            ],
+          },
+        },
+        {
+          $match: {
+            $and: [
+              {
+                docdatetime: {
+                  $gte: new Date('2023-06-13T00:00:00Z')
+                },
+              },
+              {
+                docdatetime: {
+                  $lt: new Date('2023-06-13T23:59:59Z')
+                },
+              },
+              {
+                custcode: {
+                  $gte: "AR001",
+                },
+              },
+              {
+                custcode: {
+                  $lte: "AR002",
+                },
+              },
+              {
+                shopid: {
+                  $lte: "2QxLk9hpoJ0CiIMqiqroqkqw628",
+                },
+              },
+            ],
+          },
+        },
+      ])
+      .toArray();
+
+    const data = await transactionPaid.find({}).toArray();
+    const data2 = await transactionPurchaseReturn.find({}).toArray();
+    const data3 = await transactionSaleInvoice.find({}).toArray();
 
     await client.close();
+
+    console.log(result);
+    return result;
     console.log("Disconnected from MongoDB");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
@@ -125,9 +199,9 @@ router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-router.get("/mongo", (req, res) => {
-  connectToMongoDB();
-  res.status(200).send("ok");
+router.get("/mongo", async (req, res) => {
+  let result = await connectToMongoDB();
+  res.status(200).json(result);
 });
 
 router.get("/pg", async (req, res) => {
@@ -200,6 +274,8 @@ router.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
 router.use("/api/paid", require("./routes/api/paid"));
 router.use("/api/pay", require("./routes/api/pay"));
 router.use("/api/movement", require("./routes/api/movement"));
+router.use("/api/getpaid", require("./routes/api/getpaid"));
+router.use("/api/getpay", require("./routes/api/getpay"));
 
 router.use("/health", require("./routes"));
 app.get("/healthcheck", (req, res) => {
