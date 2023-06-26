@@ -26,7 +26,7 @@ const dataShop = async (token) => {
     var resultSet = { success: false, data: null };
     try {
       let db;
-      db = client.db(process.env.MONGO_DB_NAME);
+      db = client.db(process.env.MONGODB_DB);
       const shops = db.collection("shops");
       const data = await shops.find({ guidfixed: token }).toArray();
   

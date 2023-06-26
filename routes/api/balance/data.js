@@ -6,10 +6,10 @@ var nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
 const client = new createClient({
-  host: process.env.CH_DB_HOST,
-  username: process.env.CH_DB_USER,
-  password: process.env.CH_DB_PASS,
-  database: process.env.CH_DB_NAME,
+  host: process.env.CH_SERVER_ADDRESS,
+  username: process.env.CH_USERNAME,
+  password: process.env.CH_PASSWORD,
+  database: process.env.CH_DATABASE_NAME,
 });
 
 const query = `select shopid,ic_code,warehouse,location, ic_name, ic_unit_code

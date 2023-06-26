@@ -13,7 +13,7 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
   var resultSet = { success: false, data: [] };
   try {
     let db;
-    db = client.db(process.env.MONGO_DB_NAME);
+    db = client.db(process.env.MONGODB_DB);
     let filters = [];
 
     filters.push({

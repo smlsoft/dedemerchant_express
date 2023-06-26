@@ -29,13 +29,13 @@ const connectPG = async () => {
 
 const connectToMongoDB = async () => {
   try {
-    const uri = process.env.MONGO_URI;
+    const uri = process.env.MONGODB_URI;
     var options = {};
-   // console.log(process.env.MONGO_TLS);
-    if (process.env.MONGO_TLS == "true") {
+   // console.log(process.env.MONGODB_SSL);
+    if (process.env.MONGODB_SSL == "true") {
       options = {
         tls: true,
-        tlsCAFile: process.env.MONGO_CA_FILENAME,
+        tlsCAFile: process.env.MONGODB_TLS_CA_FILE,
       };
     }
    // console.log(options);

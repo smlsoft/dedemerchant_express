@@ -18,16 +18,16 @@ const kafka = new Kafka({
   brokers: [process.env.BROKERS],
 });
 
-const uri = process.env.MONGO_URI + "/?ssl=true";
+const uri = process.env.MONGODB_URI + "/?ssl=true";
 
 const connectToMongoDB = async () => {
   try {
     var options = {};
-    console.log(process.env.MONGO_TLS);
-    if (process.env.MONGO_TLS == "true") {
+    console.log(process.env.MONGODB_SSL);
+    if (process.env.MONGODB_SSL == "true") {
       options = {
         tls: true,
-        tlsCAFile: process.env.MONGO_CA_FILENAME,
+        tlsCAFile: process.env.MONGODB_TLS_CA_FILE,
       };
     }
     console.log(options);
@@ -36,7 +36,7 @@ const connectToMongoDB = async () => {
     let db;
     console.log("Connected to MongoDB successfully");
 
-    db = client.db(process.env.MONGO_DB_NAME);
+    db = client.db(process.env.MONGODB_DB);
 
     const transactionPaid = db.collection("transactionPaid");
     const transactionPurchaseReturn = db.collection("transactionPurchaseReturn");
