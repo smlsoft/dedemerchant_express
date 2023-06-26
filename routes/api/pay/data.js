@@ -53,6 +53,33 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
     const result = await transactionPay
       .aggregate([
         {
+          '$unionWith': {
+            'coll': 'transactionSaleInvoiceReturn', 
+            'pipeline': [
+              {
+                '$match': {
+                  'inquirytype': {
+                    '$in': [
+                      2, 3
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }, {
+          '$unionWith': {
+            'coll': 'transactionPurchase', 
+            'pipeline': [
+              {
+                '$match': {
+                  'inquirytype': 1
+                }
+              }
+            ]
+          }
+        },
+        {
           $match: {
             $and: filters,
           },
