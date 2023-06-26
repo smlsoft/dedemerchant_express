@@ -7,8 +7,6 @@ const provider = require("../../../provider");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
-
 const dataresult = async (token, fromuser, touser, fromdate, todate) => {
   const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
@@ -18,9 +16,7 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
     let filters = [];
 
     filters.push({
-      shopid: {
-        $lte: token,
-      },
+      shopid: token,
     });
     if (utils.isNotEmpty(fromuser) && utils.isNotEmpty(touser)) {
       filters.push({
@@ -135,7 +131,6 @@ const genBodyPDF = async (dataset) => {
     { text: "เอกสารรับชำระวันที่", style: "tableCell", alignment: "center" },
     { text: "เอกสารรับชำระเลขที่", style: "tableCell", alignment: "center" },
     { text: "ยอดชำระ", style: "tableCell", alignment: "center" },
-
   ]);
   dataset.forEach((ele) => {
     console.log(ele);
@@ -178,6 +173,5 @@ const pdfDownload = async (token, search, res) => {
   pdfDoc.pipe(res);
   pdfDoc.end();
 };
-
 
 module.exports = { dataresult, genPDF, pdfPreview, pdfDownload };

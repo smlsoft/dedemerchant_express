@@ -12,32 +12,14 @@ const swaggerSpec = require("./swagger");
 const fs = require("fs");
 const { MongoClient } = require("mongodb");
 const { Client } = require("pg");
-const snoowrap = require('snoowrap');
-const axios = require('axios');
-const redis = require('redis');
-const client = redis.createClient(); // Create a Redis client
-
-client.on('connect', () => {
-  console.log('Connected to Redis');
-});
-
-client.on('error', (err) => {
-  console.error('Redis connection error:', err);
-});
+const snoowrap = require("snoowrap");
+const axios = require("axios");
+const redis = require("redis");
 
 const kafka = new Kafka({
   clientId: "my-app2",
   brokers: [process.env.BROKERS],
 });
-
-
-const reddit = new snoowrap({
-  userAgent: 'MyApp (by /u/YourRedditUsername)',
-  clientId: 'YOUR_CLIENT_ID',
-  clientSecret: 'YOUR_CLIENT_SECRET',
-  refreshToken: 'YOUR_REFRESH_TOKEN'
-});
-
 
 const uri = process.env.MONGODB_URI + "/?ssl=true";
 
@@ -96,12 +78,12 @@ const connectToMongoDB = async () => {
             $and: [
               {
                 docdatetime: {
-                  $gte: new Date('2023-06-13T00:00:00Z')
+                  $gte: new Date("2023-06-13T00:00:00Z"),
                 },
               },
               {
                 docdatetime: {
-                  $lt: new Date('2023-06-13T23:59:59Z')
+                  $lt: new Date("2023-06-13T23:59:59Z"),
                 },
               },
               {
@@ -158,8 +140,6 @@ const connectToPostgres = async () => {
     await pg.end();
   }
 };
-
-
 
 const producer = kafka.producer({
   createPartitioner: Partitioners.LegacyPartitioner,
@@ -226,28 +206,6 @@ router.get("/mongo", async (req, res) => {
   let result = await connectToMongoDB();
   res.status(200).json(result);
 });
-
-
-
-router.get('/reddit/posts', async (req, res) => {
-  try {
-    // Send a GET request to Reddit API with the API key included in the headers
-    const response = await axios.get('192.168.2.49:6379', {
-      headers: {
-        Authorization: `Bearer 314377b795e7827ef92aa7527689baa5ce932057eb7565853bc835dbc68bb9f0`,
-        // Any other required headers
-      },
-      // Any other request parameters
-    });
-
-    // Process the response from Reddit API
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error accessing Reddit API:', error);
-    res.status(500).send('Error accessing Reddit API');
-  }
-});
-
 
 router.get("/pg", async (req, res) => {
   var resultSet = { success: false, data: null };
@@ -323,6 +281,44 @@ router.use("/api/getpaid", require("./routes/api/getpaid"));
 router.use("/api/getpay", require("./routes/api/getpay"));
 
 router.use("/health", require("./routes"));
+
+router.get("/set", (req, res) => {
+  redisClient.set("myKey", "myValue", (err) => {
+    if (err) {
+      console.error("Error setting value in Redis:", err);
+      res.status(500).send("Error setting value in Redis");
+    } else {
+      res.send("Value set in Redis");
+    }
+  });
+});
+
+router.get("/getredis", (req, res) => {
+  const redisClient = redis.createClient({
+    host: "192.168.2.49",
+    port: "6379",
+  });
+  redisClient.on("connect", () => {
+    console.log("Connected to Redis");
+  });
+
+  if (redisClient.connected) {
+    redisClient.get("auth-314377b795e7827ef92aa7527689baa5ce932057eb7565853bc835dbc68bb9f0", (err, value) => {
+      if (err) {
+        console.error("Error getting value from Redis:", err);
+        res.status(500).send("Error getting value from Redis");
+      } else {
+        redisClient.on("error", (err) => {
+          console.error("Redis connection error:", err);
+        });
+        res.send(`Value from Redis: ${value}`);
+      }
+    });
+  } else {
+    res.send(`not connect`);
+  }
+});
+
 app.get("/healthcheck", (req, res) => {
   res.status(200).send("OK");
 });
@@ -337,28 +333,6 @@ const sendReportCheck = async (data) => {
     res.status(500).send("command not found");
   }
 };
-
-app.get('/set', (req, res) => {
-  client.set('myKey', 'myValue', (err) => {
-    if (err) {
-      console.error('Error setting value in Redis:', err);
-      res.status(500).send('Error setting value in Redis');
-    } else {
-      res.send('Value set in Redis');
-    }
-  });
-});
-
-app.get('/get', (req, res) => {
-  client.get('myKey', (err, value) => {
-    if (err) {
-      console.error('Error getting value from Redis:', err);
-      res.status(500).send('Error getting value from Redis');
-    } else {
-      res.send(`Value from Redis: ${value}`);
-    }
-  });
-});
 
 app.listen(app.get("port"), function () {
   console.log("run at port", app.get("port"));

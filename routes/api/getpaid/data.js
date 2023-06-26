@@ -16,9 +16,7 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
     let filters = [];
 
     filters.push({
-      shopid: {
-        $lte: token,
-      },
+      shopid: token,
     });
     if (utils.isNotEmpty(fromuser) && utils.isNotEmpty(touser)) {
       filters.push({
@@ -177,7 +175,5 @@ const pdfDownload = async (token, search, res) => {
   pdfDoc.pipe(res);
   pdfDoc.end();
 };
-
-
 
 module.exports = { dataresult, genPDF, pdfPreview, pdfDownload };
