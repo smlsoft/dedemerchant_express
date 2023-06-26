@@ -7,8 +7,6 @@ const provider = require("../../../provider");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
-
 const dataresult = async (token, fromuser, touser, fromdate, todate) => {
   const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
@@ -18,9 +16,7 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
     let filters = [];
 
     filters.push({
-      shopid: {
-        $lte: token,
-      },
+      shopid: token,
     });
     if (utils.isNotEmpty(fromuser) && utils.isNotEmpty(touser)) {
       filters.push({
@@ -53,31 +49,30 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
     const result = await transactionPay
       .aggregate([
         {
-          '$unionWith': {
-            'coll': 'transactionSaleInvoiceReturn', 
-            'pipeline': [
+          $unionWith: {
+            coll: "transactionSaleInvoiceReturn",
+            pipeline: [
               {
-                '$match': {
-                  'inquirytype': {
-                    '$in': [
-                      2, 3
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        }, {
-          '$unionWith': {
-            'coll': 'transactionPurchase', 
-            'pipeline': [
+                $match: {
+                  inquirytype: {
+                    $in: [2, 3],
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {
+          $unionWith: {
+            coll: "transactionPurchase",
+            pipeline: [
               {
-                '$match': {
-                  'inquirytype': 1
-                }
-              }
-            ]
-          }
+                $match: {
+                  inquirytype: 1,
+                },
+              },
+            ],
+          },
         },
         {
           $match: {
@@ -219,6 +214,5 @@ const pdfDownload = async (token, search, res) => {
   pdfDoc.pipe(res);
   pdfDoc.end();
 };
-
 
 module.exports = { dataresult, genPDF, pdfPreview, pdfDownload };
