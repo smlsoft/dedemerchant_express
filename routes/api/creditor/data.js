@@ -2,54 +2,75 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
-const service = require("./service");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
+const provider = require("../../../provider");
 dotenv.config();
 
-const dataShop = async (token) => {
-  var resultSet = { success: false, data: [] };
-  await globalservice
-    .getProfileshop(token)
-    .then((res) => {
-      //console.log(res);
-      if (res.success) {
-        // console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  const dataprofile = await resultSet;
-  // console.log(dataprofile);
-  return dataprofile;
-};
-
 const dataresult = async (token, search) => {
-  var resultSet = { success: false, data: null };
-  await service
-    .getReport(token, search)
-    .then((res) => {
-      console.log(res);
-      if (res.success) {
-        console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
+  const client = await provider.connectToMongoDB();
+  var resultSet = { success: false, data: [] };
+  try {
+    let db;
+    db = client.db(process.env.MONGODB_DB);
+    let filters = [];
+
+    if (utils.isNotEmpty(search)) {
+      filters = [];
+      const pattern = new RegExp(search, "i");
+      filters.push({
+        $or: [
+          {
+            code: { $regex: pattern },
+          },
+          {
+            taxid: { $regex: pattern },
+          },
+          {
+            email: { $regex: pattern },
+          },
+          {
+            branchnumber: { $regex: pattern },
+          },
+          {
+            names: {
+              $elemMatch: {
+                name: { $regex: pattern },
+              },
+            },
+          },
+        ],
+      });
+    }
+
+    filters.push({
+      shopid: token,
     });
 
-  const dataset = await resultSet;
-  console.log(dataset);
-  return dataset;
+    const data = db.collection("creditors");
+
+    const result = await data
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+    resultSet.success = true;
+    resultSet.data = result;
+    const dataset = resultSet;
+    //console.log(dataset);
+    return dataset;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  } finally {
+    await client.close();
+  }
 };
 
-const genPDF = async (body,dataprofile) => {
+const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
@@ -75,8 +96,8 @@ const genPDF = async (body,dataprofile) => {
       header: {
         fontSize: 13,
         bold: true,
-        margin: [0, 0, 0, 5]
-      }
+        margin: [0, 0, 0, 5],
+      },
     },
   };
   if (body.length > 0) {
@@ -84,8 +105,8 @@ const genPDF = async (body,dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ['10%', '20%', '20%', '30%', '10%', '10%' ],
-        body: body
+        widths: ["10%", "20%", "20%", "30%", "10%", "10%"],
+        body: body,
       },
       layout: "lightHorizontalLines",
     });
@@ -104,35 +125,35 @@ const genBodyPDF = async (dataset) => {
     { text: "โทรศัพท์", alignment: "center" },
     { text: "ประเภท", alignment: "center" },
   ]),
-  dataset.forEach((ele) => {
-    console.log(ele.addressforbilling)
-    var address = "";
-    if(ele.addressforbilling.address.length>0){
-      address=ele.addressforbilling.address[0];
-    }
-    body.push([
-      { text: ele.code },
-      { text: utils.packName(ele.names) },
-      { text: ele.taxid },
-      { text:address },
-      { text: ele.addressforbilling.phoneprimary },
-      { text: (ele.personaltype==1)?'บุคคลธรรมดา':'นิติบุคคล',alignment: "center" },
-    ]);
-  });
+    dataset.forEach((ele) => {
+      
+      var address = "";
+      if (ele.addressforbilling.address.length > 0) {
+        address = ele.addressforbilling.address[0];
+      }
+      body.push([
+        { text: ele.code },
+        { text: utils.packName(ele.names) },
+        { text: ele.taxid },
+        { text: address },
+        { text: ele.addressforbilling.phoneprimary },
+        { text: ele.personaltype == 1 ? "บุคคลธรรมดา" : "นิติบุคคล", alignment: "center" },
+      ]);
+    });
   return body;
 };
 
-
-
 const pdfPreview = async (token, search, res) => {
   var dataset = await dataresult(token, search);
-  var dataprofile = await dataShop(token);
+  var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
 

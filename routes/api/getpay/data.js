@@ -153,14 +153,16 @@ const genBodyPDF = async (dataset) => {
 const pdfPreview = async (token, fromuser, touser, fromdate, todate, res) => {
   var dataset = await dataresult(token, fromuser, touser, fromdate, todate);
   var dataprofile = await globalservice.dataShop(token);
-  // console.log(dataset);
-  // console.log(dataprofile);
+  //  console.log(dataset);
+  //  console.log(dataprofile);
   if (dataset.success && dataprofile.success) {
     var body = await genBodyPDF(dataset.data);
     var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
 
