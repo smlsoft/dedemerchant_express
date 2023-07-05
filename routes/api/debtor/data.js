@@ -2,51 +2,73 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
-const service = require("./service");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
+const provider = require("../../../provider");
 dotenv.config();
 
-const dataShop = async (token) => {
-  var resultSet = { success: false, data: [] };
-  await globalservice
-    .getProfileshop(token)
-    .then((res) => {
-      //console.log(res);
-      if (res.success) {
-        // console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  const dataprofile = await resultSet;
-  // console.log(dataprofile);
-  return dataprofile;
-};
 
 const dataresult = async (token, search) => {
-  var resultSet = { success: false, data: null };
-  await service
-    .getDebtorReport(token, search)
-    .then((res) => {
-      console.log(res);
-      if (res.success) {
-        console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
+  const client = await provider.connectToMongoDB();
+  var resultSet = { success: false, data: [] };
+  try {
+    let db;
+    db = client.db(process.env.MONGODB_DB);
+    let filters = [];
+
+    if (utils.isNotEmpty(search)) {
+      filters = [];
+      const pattern = new RegExp(search, "i");
+      filters.push({
+        $or: [
+          {
+            code: { $regex: pattern },
+          },
+          {
+            taxid: { $regex: pattern },
+          },
+          {
+            email: { $regex: pattern },
+          },
+          {
+            branchnumber: { $regex: pattern },
+          },
+          {
+            names: {
+              $elemMatch: {
+                name: { $regex: pattern },
+              },
+            },
+          },
+        ],
+      });
+    }
+
+    filters.push({
+      shopid: token,
     });
 
-  const dataset = await resultSet;
-  console.log(dataset);
-  return dataset;
+    const data = db.collection("debtors");
+
+    const result = await data
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+    resultSet.success = true;
+    resultSet.data = result;
+    const dataset = resultSet;
+    //console.log(dataset);
+    return dataset;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  } finally {
+    await client.close();
+  }
 };
 
 const genPDF = async (body,dataprofile) => {
@@ -127,13 +149,15 @@ const genBodyPDF = async (dataset) => {
 
 const pdfPreview = async (token, search, res) => {
   var dataset = await dataresult(token, search);
-  var dataprofile = await dataShop(token);
+  var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
     var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
+  }else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
 

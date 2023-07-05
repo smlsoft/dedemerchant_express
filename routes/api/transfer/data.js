@@ -2,50 +2,69 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
+const provider = require("../../../provider");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const dataShop = async (token) => {
+const dataresult = async (token, search, fromdate, todate) => {
+  const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
-  await globalservice
-    .getProfileshop(token)
-    .then((res) => {
-      //console.log(res);
-      if (res.success) {
-        // console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
+  try {
+    let db;
+    db = client.db(process.env.MONGODB_DB);
+    let filters = [];
+
+    if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
+      filters.push({
+        docdatetime: {
+          $gte: new Date(fromdate + "T00:00:00Z"),
+        },
+      });
+      filters.push({
+        docdatetime: {
+          $lt: new Date(todate + "T23:59:59Z"),
+        },
+      });
+    }
+
+    if (utils.isNotEmpty(search)) {
+      filters = [];
+      const pattern = new RegExp(search, "i");
+      filters.push({
+        $or: [
+          {
+            docno: { $regex: pattern },
+          },
+        ],
+      });
+    }
+
+    filters.push({
+      shopid: token,
     });
 
-  const dataprofile = await resultSet;
-  // console.log(dataprofile);
-  return dataprofile;
-};
+    const data = db.collection("transactionStockTransfer");
 
-const dataresult = async (token, search,fromdate,todate) => {
-  var resultSet = { success: false, data: null };
-  await globalservice
-    .getReport('/transaction/stock-transfer',token, search,fromdate,todate)
-    .then((res) => {
-      console.log(res);
-      if (res.success) {
-        console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  const dataset = await resultSet;
-  console.log(dataset);
-  return dataset;
+    const result = await data
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+    resultSet.success = true;
+    resultSet.data = result;
+    const dataset = resultSet;
+    //console.log(dataset);
+    return dataset;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  } finally {
+    await client.close();
+  }
 };
 
 const genPDF = async (body,dataprofile) => {
@@ -166,13 +185,15 @@ const genBodyPDF = async (dataset) => {
 
 const pdfPreview = async (token, search,fromdate,todate, res) => {
   var dataset = await dataresult(token, search,fromdate,todate);
-  var dataprofile = await dataShop(token);
+  var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
     var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
 

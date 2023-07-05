@@ -202,6 +202,8 @@ const pdfPreview = async (token, fromuser, touser, fromdate, todate, res) => {
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
 

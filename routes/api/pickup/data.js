@@ -4,51 +4,85 @@ const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
+const provider = require("../../../provider");
 dotenv.config();
 
-const dataShop = async (token) => {
+const dataresult = async (token, search, fromdate, todate) => {
+  const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
-  await globalservice
-    .getProfileshop(token)
-    .then((res) => {
-      //console.log(res);
-      if (res.success) {
-        // console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  try {
+    let db;
+    db = client.db(process.env.MONGODB_DB);
+    let filters = [];
 
-  const dataprofile = await resultSet;
-  // console.log(dataprofile);
-  return dataprofile;
+    if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
+      filters.push({
+        docdatetime: {
+          $gte: new Date(fromdate + "T00:00:00Z"),
+        },
+      });
+      filters.push({
+        docdatetime: {
+          $lt: new Date(todate + "T23:59:59Z"),
+        },
+      });
+    }
+    if (utils.isNotEmpty(search)) {
+      filters = [];
+      const pattern = new RegExp(search, "i");
+      filters.push({
+        $or: [
+          {
+            docno: { $regex: pattern },
+          },
+          {
+            salecode: { $regex: pattern },
+          },
+          {
+            salename: { $regex: pattern },
+          },
+          {
+            docrefno: { $regex: pattern },
+          },
+          {
+            custnames: {
+              $elemMatch: {
+                name: { $regex: pattern },
+              },
+            },
+          },
+        ],
+      });
+    }
+
+    filters.push({
+      shopid: token,
+    });
+ 
+    const trans = db.collection("transactionStockPickupProduct");
+
+    const result = await trans
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+    resultSet.success = true;
+    resultSet.data = result;
+    const dataset = resultSet;
+    //console.log(dataset);
+    return dataset;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  } finally {
+    await client.close();
+  }
 };
 
-const dataresult = async (token, search,fromdate,todate) => {
-  var resultSet = { success: false, data: null };
-  await globalservice
-    .getReport('/transaction/stock-prickup-product',token, search,fromdate,todate)
-    .then((res) => {
-      console.log(res);
-      if (res.success) {
-        console.log(res.data);
-        resultSet.success = true;
-        resultSet.data = res.data;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  const dataset = await resultSet;
-  console.log(dataset);
-  return dataset;
-};
-
-const genPDF = async (body,dataprofile) => {
+const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
@@ -74,16 +108,16 @@ const genPDF = async (body,dataprofile) => {
       header: {
         fontSize: 13,
         bold: true,
-        margin: [0, 0, 0, 5]
+        margin: [0, 0, 0, 5],
       },
       subheader: {
         fontSize: 13,
         bold: true,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 10],
       },
       tableCell: {
-        fontSize: 9
-    }
+        fontSize: 9,
+      },
     },
   };
   if (body.length > 0) {
@@ -91,8 +125,8 @@ const genPDF = async (body,dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 2,
-        widths: ['15%', '19%', '13%', '13%' ,'10%' , '10%' , '10%' , '10%' ],
-        body: body
+        widths: ["15%", "19%", "13%", "13%", "10%", "10%", "10%", "10%"],
+        body: body,
       },
       layout: "lightHorizontalLines",
     });
@@ -103,68 +137,68 @@ const genPDF = async (body,dataprofile) => {
 const genBodyPDF = async (dataset) => {
   let body = [];
 
-  body.push([
-    { text: "เอกสารวันที่", style: 'tableCell',alignment: "left" },
-    { text: "เอกสารเลขที่", style: 'tableCell',alignment: "left" },
-    { text: "", style: 'tableCell',alignment: "left" },
-    { text: "", style: 'tableCell',alignment: "left" },
-    { text: "", style: 'tableCell',alignment: "left" },
-    { text: "", style: 'tableCell',alignment: "left" },
-    { text: "", style: 'tableCell',alignment: "left" },
-    { text: "", style: 'tableCell',alignment: "left" },
-  ],[
-    { text: "บาร์โค้ด", style: 'tableCell',alignment: "center" },
-    { text: "ชื่อสินค้า", style: 'tableCell',alignment: "center" },
-    { text: "คลัง", style: 'tableCell',alignment: "center" },
-    { text: "ที่เก็บ", style: 'tableCell',alignment: "center" },
-    { text: "หน่วยนับ", style: 'tableCell',alignment: "center" },
-    { text: "จำนวน", style: 'tableCell',alignment: "center" },
-    { text: "ต้นทุน", style: 'tableCell',alignment: "center" },
-    { text: "รวมมูลค่า", style: 'tableCell',alignment: "center" },
-  ]),
-  dataset.forEach((ele) => {
-    body.push([
-      { text: utils.formateDate(ele.docdatetime) ,style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4' },
-      { text: ele.docno ,style: 'tableCell',fillColor: '#f5e8c4' },
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: "" ,style: 'tableCell',alignment: "right"  ,fillColor: '#f5e8c4'},
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4' },
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4' },
-    ]);
-    ele.details.forEach((detail) => {
-      console.log(detail);
-     
-        body.push(
-          [
-            { text: detail.barcode ,style: 'tableCell'},
-            { text: utils.packName(detail.itemnames),style: 'tableCell' },
-            { text: utils.packName(detail.whnames),style: 'tableCell',alignment: "center" },
-            { text: utils.packName(detail.locationnames) ,style: 'tableCell',alignment: "center"},
-            { text: utils.packName(detail.unitnames) ,style: 'tableCell',alignment: "center"},
-            { text: utils.formatNumber(detail.qty) ,style: 'tableCell',alignment: "right"},
-            { text: utils.formatNumber(detail.price) ,style: 'tableCell',alignment: "right"},
-            { text: utils.formatNumber(detail.sumamount),style: 'tableCell',alignment: "right" },
-          ]
-        );
-      
+  body.push(
+    [
+      { text: "เอกสารวันที่", style: "tableCell", alignment: "left" },
+      { text: "เอกสารเลขที่", style: "tableCell", alignment: "left" },
+      { text: "", style: "tableCell", alignment: "left" },
+      { text: "", style: "tableCell", alignment: "left" },
+      { text: "", style: "tableCell", alignment: "left" },
+      { text: "", style: "tableCell", alignment: "left" },
+      { text: "", style: "tableCell", alignment: "left" },
+      { text: "", style: "tableCell", alignment: "left" },
+    ],
+    [
+      { text: "บาร์โค้ด", style: "tableCell", alignment: "center" },
+      { text: "ชื่อสินค้า", style: "tableCell", alignment: "center" },
+      { text: "คลัง", style: "tableCell", alignment: "center" },
+      { text: "ที่เก็บ", style: "tableCell", alignment: "center" },
+      { text: "หน่วยนับ", style: "tableCell", alignment: "center" },
+      { text: "จำนวน", style: "tableCell", alignment: "center" },
+      { text: "ต้นทุน", style: "tableCell", alignment: "center" },
+      { text: "รวมมูลค่า", style: "tableCell", alignment: "center" },
+    ]
+  ),
+    dataset.forEach((ele) => {
+      body.push([
+        { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "left", fillColor: "#f5e8c4" },
+        { text: ele.docno, style: "tableCell", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+      ]);
+      ele.details.forEach((detail) => {
+        console.log(detail);
+
+        body.push([
+          { text: detail.barcode, style: "tableCell" },
+          { text: utils.packName(detail.itemnames), style: "tableCell" },
+          { text: utils.packName(detail.whnames), style: "tableCell", alignment: "center" },
+          { text: utils.packName(detail.locationnames), style: "tableCell", alignment: "center" },
+          { text: utils.packName(detail.unitnames), style: "tableCell", alignment: "center" },
+          { text: utils.formatNumber(detail.qty), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(detail.price), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(detail.sumamount), style: "tableCell", alignment: "right" },
+        ]);
+      });
     });
-  });
   return body;
 };
 
-
-
-const pdfPreview = async (token, search,fromdate,todate, res) => {
-  var dataset = await dataresult(token, search,fromdate,todate);
-  var dataprofile = await dataShop(token);
+const pdfPreview = async (token, search, fromdate, todate, res) => {
+  var dataset = await dataresult(token, search, fromdate, todate);
+  var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
 

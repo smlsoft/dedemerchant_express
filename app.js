@@ -14,7 +14,7 @@ const { MongoClient } = require("mongodb");
 const { Client } = require("pg");
 const snoowrap = require("snoowrap");
 const axios = require("axios");
-const redis = require("redis");
+const globalservice = require("./globalservice");
 
 const kafka = new Kafka({
   clientId: "my-app2",
@@ -42,7 +42,9 @@ const connectToMongoDB = async () => {
     db = client.db(process.env.MONGODB_DB);
 
     const transactionPaid = db.collection("transactionPaid");
-    const transactionPurchaseReturn = db.collection("transactionPurchaseReturn");
+    const transactionPurchaseReturn = db.collection(
+      "transactionPurchaseReturn"
+    );
     const transactionSaleInvoice = db.collection("transactionSaleInvoice");
 
     const result = await transactionPaid
@@ -131,7 +133,8 @@ const connectToPostgres = async () => {
   });
   try {
     await pg.connect();
-    const query = "SELECT shopid FROM chartofaccounts where shopid != '' limit 1";
+    const query =
+      "SELECT shopid FROM chartofaccounts where shopid != '' limit 1";
     const result = await pg.query(query);
     return result.rows;
   } catch (error) {
@@ -166,7 +169,9 @@ const gracefulShutdown = () => {
 
   // Forcefully terminate process after 10 seconds
   setTimeout(() => {
-    console.error("Could not close connections in time. Forcefully terminating process.");
+    console.error(
+      "Could not close connections in time. Forcefully terminating process."
+    );
     process.exit(1);
   }, 10 * 1000);
 };
@@ -181,7 +186,10 @@ app.use(bodyParser.json({ limit: "200mb" }));
 app.use(bodyParser.urlencoded({ limit: "200mb", extended: true }));
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
@@ -262,7 +270,10 @@ router.use("/api/product", require("./routes/api/product"));
 router.use("/api/balance", require("./routes/api/balance"));
 router.use("/api/saleinvoice", require("./routes/api/sale"));
 router.use("/api/productdetail", require("./routes/api/productdetail"));
-router.use("/api/productbarcode", require("./routes/api/productbarcode_clickhouse"));
+router.use(
+  "/api/productbarcode",
+  require("./routes/api/productbarcode_clickhouse")
+);
 router.use("/api/debtor", require("./routes/api/debtor"));
 router.use("/api/creditor", require("./routes/api/creditor"));
 router.use("/api/bookbank", require("./routes/api/bookbank"));
@@ -282,40 +293,19 @@ router.use("/api/getpay", require("./routes/api/getpay"));
 
 router.use("/health", require("./routes"));
 
-router.get("/set", (req, res) => {
-  redisClient.set("myKey", "myValue", (err) => {
-    if (err) {
-      console.error("Error setting value in Redis:", err);
-      res.status(500).send("Error setting value in Redis");
+router.get("/getUserShop", async (req, res) => {
+  //8be917f9e93923fb18a7a1b74716c4c506cc4e97d982840cd26f0d37c60b11d2
+  //3e1a8e2e1f37054603176b88c1be8e4b4f33024a01fb91422059e33d0c8e65b7
+  try {
+    var result = await globalservice.getUserShop(req.query.token);
+    
+    if (result.success) {
+      res.status(200).send({ success: true, data: result.data });
     } else {
-      res.send("Value set in Redis");
+      res.status(200).send({ success: false, msg: result.msg });
     }
-  });
-});
-
-router.get("/getredis", (req, res) => {
-  const redisClient = redis.createClient({
-    host: "192.168.2.49",
-    port: "6379",
-  });
-  redisClient.on("connect", () => {
-    console.log("Connected to Redis");
-  });
-
-  if (redisClient.connected) {
-    redisClient.get("auth-314377b795e7827ef92aa7527689baa5ce932057eb7565853bc835dbc68bb9f0", (err, value) => {
-      if (err) {
-        console.error("Error getting value from Redis:", err);
-        res.status(500).send("Error getting value from Redis");
-      } else {
-        redisClient.on("error", (err) => {
-          console.error("Redis connection error:", err);
-        });
-        res.send(`Value from Redis: ${value}`);
-      }
-    });
-  } else {
-    res.send(`not connect`);
+  } catch (error) {
+    res.status(500).send("Error getting value from Redis");
   }
 });
 
