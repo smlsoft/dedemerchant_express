@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 
 router.get("/active", async (req, res) => {
   try {
-    var dataset = await data.setActivePos(req.query.pin, req.query.shopid,req.query.token,req.query.deviceid);
+    var dataset = await data.setActivePos(req.query.pin, req.query.shopid,req.query.token,req.query.deviceid,req.query.actoken);
     if (dataset.success) {
       res.status(200).json(dataset);
     } else {
@@ -31,31 +31,5 @@ router.get("/active", async (req, res) => {
   }
 });
 
-const _whereLike = async (strKeyWord) => {
-  var __where = "";
-  if (strKeyWord.trim().length > 0) {
-    var __fieldList = ["p.code", "itemname", "unitcost", "unitstandard"];
-    var __keyword = strKeyWord.trim().split(" ");
-    __fieldList.forEach((__fieldList1) => {
-      if (__keyword.length > 0) {
-        if (__where.length > 0) {
-          __where += " OR ";
-        } else {
-          __where += " and ";
-        }
-        __where += "(";
-        for (var __loop = 0; __loop < __keyword.length; __loop++) {
-          if (__loop > 0) {
-            __where += " AND ";
-          }
-          __where += `UPPER(${__fieldList1}) LIKE '%${__keyword[__loop].toUpperCase()}%' `;
-        }
-        __where += ")";
-      }
-    });
-  }
-
-  return __where;
-};
 
 module.exports = router;
