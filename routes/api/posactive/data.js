@@ -13,7 +13,7 @@ const client = new createClient({
 });
 
 const dataresult = async (pin) => {
-  const query = `select pinnumber,isactive,shopid from dede001.posterminal  where pinnumber = '${pin}'`;
+  const query = `select pincode,status,shipid from poscenter.pinlist  where pincode = '${pin}'`;
 
   const resultSet = await client.query({
     query: query,
@@ -24,8 +24,8 @@ const dataresult = async (pin) => {
   return dataset;
 };
 
-const setActivePos = async (pin, shopid) => {
-  const query = `select pinnumber,isactive,shopid from dede001.posterminal  where pinnumber = '${pin}'`;
+const setActivePos = async (pin, shopid,token) => {
+  const query = `select pincode,status,shipid,token from poscenter.pinlist  where pincode = '${pin}'`;
   var result = { success: false, msg: "" };
   try {
     const resultSet = await client.query({
@@ -35,7 +35,7 @@ const setActivePos = async (pin, shopid) => {
     const dataset = await resultSet.json();
 
     if (dataset.length > 0) {
-      const activeQuery = `ALTER TABLE dede001.posterminal UPDATE isactive=1,shopid='${shopid}' where pinnumber = '${pin}'`;
+      const activeQuery = `ALTER TABLE poscenter.pinlist UPDATE status=1,shipid='${shopid}',token='${token}' where pincode = '${pin}'`;
 
       await client.exec({ query: activeQuery});
 

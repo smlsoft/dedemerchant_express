@@ -270,7 +270,7 @@ router.use("/api/product", require("./routes/api/product"));
 router.use("/api/balance", require("./routes/api/balance"));
 router.use("/api/saleinvoice", require("./routes/api/sale"));
 router.use("/api/productdetail", require("./routes/api/productdetail"));
-router.use("/api/posactive", require("./routes/api/posactive"));
+router.use("/api/poscenter", require("./routes/api/posactive"));
 router.use(
   "/api/productbarcode",
   require("./routes/api/productbarcode_clickhouse")
@@ -291,7 +291,7 @@ router.use("/api/pay", require("./routes/api/pay"));
 router.use("/api/movement", require("./routes/api/movement"));
 router.use("/api/getpaid", require("./routes/api/getpaid"));
 router.use("/api/getpay", require("./routes/api/getpay"));
-
+router.use("/api/salesumary", require("./routes/api/salesumary"));
 router.use("/health", require("./routes"));
 
 router.get("/getUserShop", async (req, res) => {
