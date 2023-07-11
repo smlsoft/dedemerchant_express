@@ -9,6 +9,11 @@ const formatNumber = (val, digit = 0) => {
   }
 };
 
+const catchAsync = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch((err) => next(err));
+};
+
+
 const formateDate = (datetime) => {
   let date = new Date(datetime);
   // console.log("utcDate",utcDate)
@@ -48,4 +53,4 @@ const isNotEmpty = (data) => {
   return result;
 };
 
-module.exports = { formatNumber, formateDate, packName,isNotEmpty };
+module.exports = { formatNumber, formateDate, packName,isNotEmpty, catchAsync };

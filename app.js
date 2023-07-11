@@ -16,6 +16,7 @@ const snoowrap = require("snoowrap");
 const axios = require("axios");
 const globalservice = require("./globalservice");
 
+
 const kafka = new Kafka({
   clientId: "my-app2",
   brokers: [process.env.BROKERS],
@@ -193,17 +194,33 @@ app.use(function (req, res, next) {
   next();
 });
 
-//app.use(logger);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const router = express.Router();
-
 // middleware that is specific to this router
 // router.use((req, res, next) => {
 //   console.log('Time: ', Date.now())
 //   next()
 // })
+
+const logRequest = (req, res, next) => {
+
+  const startTime = Date.now();
+
+  res.on('finish', () => {
+  const duration = Date.now() - startTime;
+  const { method, url } = req;
+  const status = res.statusCode;
+  const contentLength = res.get('Content-Length');
+
+  logger.info(`${method} ${url}`, { method, url, status, contentLength, duration });
+});
+
+return next();
+};
+app.use(logRequest);
 router.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 router.get("/", (req, res) => {
