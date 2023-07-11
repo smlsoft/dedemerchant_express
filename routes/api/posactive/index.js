@@ -7,7 +7,7 @@ const data = require("./data");
 const printer = require("../../../pdfprinter");
 var bodyParser = require("body-parser");
 
-router.get("/", async (req, res) => {
+router.get("/", utils.catchAsync(async (req, res) => {
   try {
     var where = "";
 
@@ -16,9 +16,9 @@ router.get("/", async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, data: [], msg: err.message });
   }
-});
+}));
 
-router.get("/active", async (req, res) => {
+router.get("/active", utils.catchAsync(async (req, res) => {
   try {
     var dataset = await data.setActivePos(req.query.pin, req.query.shopid,req.query.token,req.query.deviceid,req.query.actoken);
     if (dataset.success) {
@@ -29,7 +29,7 @@ router.get("/active", async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, data: [], msg: err.message });
   }
-});
+}));
 
 
 module.exports = router;

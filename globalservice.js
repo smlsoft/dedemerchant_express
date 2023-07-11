@@ -4,6 +4,9 @@ dotenv.config();
 const redis = require("redis");
 
 const redisClient = redis.createClient({
+  socket: {
+    tls: true,
+  },
   url: process.env.REDIS_CACHE_URI,
 });
 
@@ -20,13 +23,7 @@ const getProfileshop = async (token) => {
     .then((res) => res.data);
 };
 
-const getReport = async (
-  mode,
-  token,
-  search = "",
-  fromdate = "",
-  todate = ""
-) => {
+const getReport = async (mode, token, search = "", fromdate = "", todate = "") => {
   var from_date = "";
   var to_date = "";
   if (fromdate != "") {
@@ -66,32 +63,35 @@ const dataShop = async (token) => {
     await client.close();
   }
 };
+redisClient.on("error", (err) => console.log("Redis Client Error", err));
 
 const getUserShop = async (token) => {
-  redisClient.connect();
+  await redisClient.connect();
+  var results = { success: false, data: null, msg: "" };
   try {
-    var results = { success: false, data: null, msg: "" };
-    var cacheResults = await redisClient.HGETALL(`auth-${token}`);
-   
-    if (
-      cacheResults.shopid != undefined &&
-      cacheResults.shopid != null &&
-      cacheResults.shopid != "undefined"
-    ) {
-      isCached = true;
-      results.success = true;
-      results.data = cacheResults;
-    } else {
-      results.success = false;
-      results.data = null;
-      results.msg = "Invalid Shop";
+    if (redisClient.isReady) {
+      var cacheResults = await redisClient.HGETALL(`auth-${token}`);
+      console.log(cacheResults);
+      if (cacheResults.shopid != undefined && cacheResults.shopid != null && cacheResults.shopid != "undefined") {
+        isCached = true;
+        results.success = true;
+        results.data = cacheResults;
+      } else {
+        results.success = false;
+        results.data = null;
+        results.msg = "Invalid Shop";
+      }
+    }else{
+      results.msg = "redis not ready"
+      redisClient.quit();
+      return results;
     }
   } catch (error) {
+    redisClient.quit();
     throw new Error(error);
   }
   redisClient.quit();
   return results;
-
 };
 
-module.exports = { getProfileshop, getReport, dataShop,getUserShop };
+module.exports = { getProfileshop, getReport, dataShop, getUserShop };
