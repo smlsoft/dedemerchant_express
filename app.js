@@ -291,7 +291,7 @@ router.use("/api/pay", require("./routes/api/pay"));
 router.use("/api/movement", require("./routes/api/movement"));
 router.use("/api/getpaid", require("./routes/api/getpaid"));
 router.use("/api/getpay", require("./routes/api/getpay"));
-
+router.use("/api/salesumary", require("./routes/api/salesumary"));
 router.use("/health", require("./routes"));
 
 router.get("/getUserShop", async (req, res) => {
