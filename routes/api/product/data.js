@@ -24,7 +24,7 @@ const dataresult = async (token, search) => {
             itemcode: { $regex: pattern },
           },
           {
-            unitcost: { $regex: pattern },
+            barcode: { $regex: pattern },
           },
           {
             names: {
@@ -41,7 +41,7 @@ const dataresult = async (token, search) => {
       shopid: token,
     });
 
-    const data = db.collection("products");
+    const data = db.collection("productBarcodes");
 
     const result = await data
       .aggregate([
