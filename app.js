@@ -270,7 +270,7 @@ router.use("/api/product", require("./routes/api/product"));
 router.use("/api/balance", require("./routes/api/balance"));
 router.use("/api/saleinvoice", require("./routes/api/sale"));
 router.use("/api/productdetail", require("./routes/api/productdetail"));
-router.use("/api/posactive", require("./routes/api/posactive"));
+router.use("/api/poscenter", require("./routes/api/posactive"));
 router.use(
   "/api/productbarcode",
   require("./routes/api/productbarcode_clickhouse")
