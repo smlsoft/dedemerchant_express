@@ -3,9 +3,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 const redis = require("redis");
 
+var tlsEnables = false;
+if(process.env.REDIS_CACHE_TLS_ENABLE == "true"){
+  tlsEnables = true
+}
 const redisClient = redis.createClient({
   socket: {
-    tls: true,
+    tls: tlsEnables,
   },
   url: process.env.REDIS_CACHE_URI,
 });
