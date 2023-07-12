@@ -283,32 +283,32 @@ router.get("/sendPDFEmail", async (req, res) => {
   }
 });
 
-router.use("/api/product", require("./routes/api/product"));
-router.use("/api/balance", require("./routes/api/balance"));
-router.use("/api/saleinvoice", require("./routes/api/sale"));
-router.use("/api/productdetail", require("./routes/api/productdetail"));
-router.use("/api/poscenter", require("./routes/api/posactive"));
+router.use("/product", require("./routes/api/product"));
+router.use("/balance", require("./routes/api/balance"));
+router.use("/saleinvoice", require("./routes/api/sale"));
+router.use("/productdetail", require("./routes/api/productdetail"));
+router.use("/poscenter", require("./routes/api/posactive"));
 router.use(
-  "/api/productbarcode",
+  "/productbarcode",
   require("./routes/api/productbarcode_clickhouse")
 );
-router.use("/api/debtor", require("./routes/api/debtor"));
-router.use("/api/creditor", require("./routes/api/creditor"));
-router.use("/api/bookbank", require("./routes/api/bookbank"));
-router.use("/api/purchase", require("./routes/api/purchase"));
-router.use("/api/purchasereturn", require("./routes/api/purchase_return"));
-router.use("/api/saleinvoicereturn", require("./routes/api/sale_return"));
-router.use("/api/transfer", require("./routes/api/transfer"));
-router.use("/api/receive", require("./routes/api/receive"));
-router.use("/api/pickup", require("./routes/api/pickup"));
-router.use("/api/returnproduct", require("./routes/api/stock_return_product"));
-router.use("/api/stockadjustment", require("./routes/api/stock_adjustment"));
-router.use("/api/paid", require("./routes/api/paid"));
-router.use("/api/pay", require("./routes/api/pay"));
-router.use("/api/movement", require("./routes/api/movement"));
-router.use("/api/getpaid", require("./routes/api/getpaid"));
-router.use("/api/getpay", require("./routes/api/getpay"));
-router.use("/api/salesumary", require("./routes/api/salesumary"));
+router.use("/debtor", require("./routes/api/debtor"));
+router.use("/creditor", require("./routes/api/creditor"));
+router.use("/bookbank", require("./routes/api/bookbank"));
+router.use("/purchase", require("./routes/api/purchase"));
+router.use("/purchasereturn", require("./routes/api/purchase_return"));
+router.use("/saleinvoicereturn", require("./routes/api/sale_return"));
+router.use("/transfer", require("./routes/api/transfer"));
+router.use("/receive", require("./routes/api/receive"));
+router.use("/pickup", require("./routes/api/pickup"));
+router.use("/returnproduct", require("./routes/api/stock_return_product"));
+router.use("/stockadjustment", require("./routes/api/stock_adjustment"));
+router.use("/paid", require("./routes/api/paid"));
+router.use("/pay", require("./routes/api/pay"));
+router.use("/movement", require("./routes/api/movement"));
+router.use("/getpaid", require("./routes/api/getpaid"));
+router.use("/getpay", require("./routes/api/getpay"));
+router.use("/salesumary", require("./routes/api/salesumary"));
 router.use("/health", require("./routes"));
 
 router.get("/getUserShop", async (req, res) => {
