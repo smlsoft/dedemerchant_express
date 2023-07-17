@@ -20,7 +20,7 @@ router.get("/", utils.catchAsync(async (req, res) => {
 
 router.get("/active", utils.catchAsync(async (req, res) => {
   try {
-    var dataset = await data.setActivePos(req.query.pin, req.query.shopid,req.query.token,req.query.deviceid,req.query.actoken);
+    var dataset = await data.setActivePos(req.query.pin, req.query.shopid,req.query.token,req.query.deviceid,req.query.actoken,req.query.isdev);
     if (dataset.success) {
       res.status(200).json(dataset);
     } else {

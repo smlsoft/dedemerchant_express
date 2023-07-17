@@ -24,8 +24,8 @@ const dataresult = async (pin) => {
   return dataset;
 };
 
-const setActivePos = async (pin, shopid,token,deviceid,actoken) => {
-  const query = `select pincode,status,shipid,token,deviceid,access_token from poscenter.pinlist  where pincode = '${pin}'`;
+const setActivePos = async (pin, shopid,token,deviceid,actoken,isdev) => {
+  const query = `select pincode,status,shipid,token,deviceid,access_token,isdev from poscenter.pinlist  where pincode = '${pin}'`;
   var result = { success: false, msg: "" };
   try {
     const resultSet = await client.query({
@@ -35,7 +35,7 @@ const setActivePos = async (pin, shopid,token,deviceid,actoken) => {
     const dataset = await resultSet.json();
 
     if (dataset.length > 0) {
-      const activeQuery = `ALTER TABLE poscenter.pinlist UPDATE status=1,shipid='${shopid}',token='${token}',access_token='${actoken}',deviceid='${deviceid}' where pincode = '${pin}'`;
+      const activeQuery = `ALTER TABLE poscenter.pinlist UPDATE status=1,shipid='${shopid}',token='${token}',access_token='${actoken}',deviceid='${deviceid}',isdev='${isdev}' where pincode = '${pin}'`;
 
       await client.exec({ query: activeQuery});
 
