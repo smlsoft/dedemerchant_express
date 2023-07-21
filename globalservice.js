@@ -14,10 +14,6 @@ const redisClient = redis.createClient({
   url: process.env.REDIS_CACHE_URI,
 });
 
-redisClient.on("error", (err) => console.log("Redis Client Error", err));
-redisClient.on("connect", () => {
-  console.log("Connected to Redis");
-});
 
 const getProfileshop = async (token) => {
   console.log(`/profileshop`);
@@ -67,10 +63,9 @@ const dataShop = async (token) => {
     await client.close();
   }
 };
-redisClient.on("error", (err) => console.log("Redis Client Error", err));
 
 const getUserShop = async (token) => {
-  await redisClient.connect();
+
   var results = { success: false, data: null, msg: "" };
   try {
     if (redisClient.isReady) {
@@ -87,15 +82,15 @@ const getUserShop = async (token) => {
       }
     }else{
       results.msg = "redis not ready"
-      redisClient.quit();
+     
       return results;
     }
   } catch (error) {
-    redisClient.quit();
+
     throw new Error(error);
   }
-  redisClient.quit();
+
   return results;
 };
 
-module.exports = { getProfileshop, getReport, dataShop, getUserShop };
+module.exports = { getProfileshop, getReport, dataShop, getUserShop ,redisClient};

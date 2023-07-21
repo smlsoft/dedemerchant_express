@@ -7,6 +7,7 @@ const data = require("./data");
 const printer = require("../../../pdfprinter");
 var bodyParser = require("body-parser");
 
+
 router.get("/", utils.catchAsync(async (req, res) => {
   try {
     var where = "";

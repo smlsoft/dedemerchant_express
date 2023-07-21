@@ -156,6 +156,7 @@ const server = require("http").createServer(app);
 
 const gracefulShutdown = () => {
   console.log("Starting graceful shutdown...");
+   globalservice.redisClient.quit();
 
   // Close server to stop accepting new connections
   server.close((err) => {
@@ -221,6 +222,15 @@ const logRequest = (req, res, next) => {
 return next();
 };
 app.use(logRequest);
+
+globalservice.redisClient.connect();
+
+globalservice.redisClient.on("error", (err) => console.log("Redis Client Error", err));
+globalservice.redisClient.on("connect", () => {
+  console.log("Connected to Redis");
+});
+
+
 router.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 router.get("/", (req, res) => {
@@ -308,7 +318,9 @@ router.use("/pay", require("./routes/api/pay"));
 router.use("/movement", require("./routes/api/movement"));
 router.use("/getpaid", require("./routes/api/getpaid"));
 router.use("/getpay", require("./routes/api/getpay"));
-router.use("/salesumary", require("./routes/api/salesumary"));
+router.use("/salesummary", require("./routes/api/salesummary"));
+router.use("/salesummarypg", require("./routes/api/salesummarypg"));
+router.use("/salesummarymg", require("./routes/api/salesummarymg"));
 router.use("/health", require("./routes"));
 
 router.get("/getUserShop", async (req, res) => {
