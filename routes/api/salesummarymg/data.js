@@ -32,7 +32,7 @@ const dataresult = async (token, fromdate, todate) => {
         },
       });
     }
-console.log(filters);
+//console.log(filters);
     const trans = db.collection("transactionSaleInvoice");
 
     const result = await trans
