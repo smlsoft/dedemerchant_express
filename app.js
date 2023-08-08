@@ -161,7 +161,8 @@ const gracefulShutdown = () => {
   // Close server to stop accepting new connections
   server.close((err) => {
     if (err) {
-      console.error("Error during server close:", err);
+      //console.error("Error during server close:", err);
+      logger.error("Error during server close:", err);
       process.exit(1);
     }
 
@@ -338,6 +339,7 @@ router.get("/getUserShop", async (req, res) => {
       res.status(200).send({ success: false, msg: result.msg });
     }
   } catch (error) {
+
     res.status(500).send("Error getting value from Redis");
   }
 });
