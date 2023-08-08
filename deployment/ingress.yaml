@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: dedepos-dev-cert-issuer-manager
+    nginx.ingress.kubernetes.io/rewrite-target: /apireport/$2
+  name: apireport
+  namespace: dedepos-dev
+spec:
+  #ingressClassName: nginx
+  tls:
+    - hosts:
+        - api2.dev.dedepos.com
+      secretName: dedepos-dev-tls-secret
+  rules:
+    - host: api2.dev.dedepos.com
+      http:
+        paths:
+          - path: /apireport(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: apireport
+                port:
+                  number: 8080
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.22.21
+    - ip: 192.168.22.22
+    - ip: 192.168.22.23
