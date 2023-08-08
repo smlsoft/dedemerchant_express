@@ -1,12 +1,12 @@
 const express = require("express");
 var bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+dotenv.config();
 const path = require("path");
 const logger = require("./logger");
 const utils = require("./utils");
 const { Kafka, Partitioners } = require("kafkajs");
-const dotenv = require("dotenv");
 const balance = require("./routes/api/balance/data");
-dotenv.config();
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
 const fs = require("fs");
@@ -38,8 +38,8 @@ const connectToMongoDB = async () => {
     const client = new MongoClient(uri, options);
     await client.connect();
     let db;
-    console.log("Connected to MongoDB successfully");
-
+    //console.log("Connected to MongoDB successfully");
+    logger.info("Connected to MongoDB successfully");
     db = client.db(process.env.MONGODB_DB);
 
     const transactionPaid = db.collection("transactionPaid");
@@ -120,7 +120,7 @@ const connectToMongoDB = async () => {
     return result;
     console.log("Disconnected from MongoDB");
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    logger.error("Error connecting to MongoDB:", error);
   }
 };
 
@@ -225,9 +225,12 @@ app.use(logRequest);
 
 globalservice.redisClient.connect();
 
-globalservice.redisClient.on("error", (err) => console.log("Redis Client Error", err));
+globalservice.redisClient.on("error", (err) => { 
+  console.log("Redis Client Error", err) 
+  logger.error("Redis Client Error", err);
+});
 globalservice.redisClient.on("connect", () => {
-  console.log("Connected to Redis");
+  logger.debug("Connected to Redis");
 });
 
 
@@ -355,5 +358,6 @@ const sendReportCheck = async (data) => {
 };
 
 app.listen(app.get("port"), function () {
-  console.log("run at port", app.get("port"));
+  logger.info("Node app is running on port " + app.get("port"));
+  //console.log("run at port", app.get("port"));
 });
