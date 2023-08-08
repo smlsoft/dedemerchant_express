@@ -374,3 +374,5 @@
 {"level":"error","message":"Redis Client Error","timestamp":"2023-08-08 12:44:38"}
 {"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-08 12:49:01"}
 {"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-08 12:49:26"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-08 12:50:05"}
+{"level":"error","message":"Error during server close:","timestamp":"2023-08-08 12:50:46"}
