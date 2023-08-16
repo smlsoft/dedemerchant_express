@@ -3,7 +3,7 @@ const { Client } = require("pg");
 const { MongoClient } = require("mongodb");
 // import source from '@/store/modules/endpoint'
 // import { useAuthen } from '@/stores/authen'
-
+const fs = require("fs");
 const instanceApi = (authentication) => {
   //console.log("API URL : ", process.env.VUE_APP_API);
   console.log(authentication);
@@ -17,13 +17,35 @@ const instanceApi = (authentication) => {
 };
 
 const connectPG = async () => {
-  const pg = new Client({
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT,
-    database: process.env.POSTGRES_DB_NAME,
-    user: process.env.POSTGRES_USERNAME,
-    password: process.env.POSTGRES_PASSWORD,
-  });
+
+//   pgConnectionOptions = {
+//       host: process.env.POSTGRES_HOST,
+//       port: process.env.POSTGRES_PORT,
+//       database: process.env.POSTGRES_DB_NAME,
+//       user: process.env.POSTGRES_USERNAME,
+//       password: process.env.POSTGRES_PASSWORD
+//   }
+
+  let sslConnectionOption = ``;
+if (process.env.POSTGRES_SSL_MODE) {
+//   // pgConnectionOptions.ssl = {
+//   //   rejectUnauthorized: false,
+//   //   ca: process.env.POSTGRES_TLS_CA_FILE,
+//   // };
+  //  pgConnectionOptions.ssl = {
+  //   sslmode: process.env.POSTGRES_SSL_MODE
+  //  }
+  sslConnectionOption = `?sslmode=${process.env.POSTGRES_SSL_MODE}`
+}
+
+  const pgConnectionOptions = {
+    connectionString: `postgresql://${process.env.POSTGRES_USERNAME}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB_NAME}${sslConnectionOption}`,
+    // ssl: {
+    //   rejectUnauthorized: false,
+    //   // ca: fs.readFileSync('/Users/sutee/DEV/CA/db-postgresql-sgp1-pos-do-user-11230406-0-ca-certificate.crt').toString(),
+    // },
+  }
+  const pg = new Client(pgConnectionOptions);
   return pg;
 };
 
