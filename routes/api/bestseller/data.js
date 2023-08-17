@@ -13,7 +13,7 @@ const dataresult = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `SELECT shopid, sum(totaldiscount) as discount,sum(totalamount) as cash,sum(totalpaycash) as cashierAmount,sum(totalpaytransfer) as totalpaytransfer,sum(totalpaycredit) as totalpaycredit FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} group by shopid`;
+  var query = `select sum(qty) as sale_qty,st.barcode,pb.names,pb.unitcode from saleinvoice_transaction_detail st left join productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid left join saleinvoice_transaction s on s.shopid = st.shopid and s.docno = st.docno where st.shopid='${shopid}' ${where} group by st.barcode,pb.names,pb.unitcode order by sale_qty desc limit 10`;
   try {
     await pg.connect();
 
@@ -21,16 +21,19 @@ const dataresult = async (shopid, fromdate, todate) => {
     // console.log(result);
     var data = [];
     result.rows.forEach((ele) => {
+      var names = [{ code: "en", name: ele.barcode },{ code: "th", name: ele.barcode }];
+      if(ele.names!=null) {
+        names = ele.names;
+      }
       data.push({
         shopid: ele.shopid,
-        discount: parseFloat(parseFloat(ele.discount).toFixed(2)),
-        cash: parseFloat(parseFloat(ele.cash).toFixed(2)),
-        cashieramount: parseFloat(parseFloat(ele.cashieramount).toFixed(2)),
-        totalpaytransfer: parseFloat(parseFloat(ele.totalpaytransfer).toFixed(2)),
-        totalpaycredit: parseFloat(parseFloat(ele.totalpaycredit).toFixed(2)),
+        unitcode: ele.unitcode,
+        qty: parseFloat(parseFloat(ele.sale_qty).toFixed(2)),
+        barcode: ele.barcode,
+        names: names,
       });
     });
-   // console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     console.log(error);

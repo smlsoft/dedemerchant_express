@@ -8,8 +8,9 @@ const enumerateErrorFormat = winston.format((info) => {
     }
     return info;
 });
+
 const logger = winston.createLogger({
-    level: 'info',
+    level: process.env.LOG_LEVEL || 'info',
     format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         //   enumerateErrorFormat(),
@@ -23,8 +24,8 @@ const logger = winston.createLogger({
         new winston.transports.Console({
             stderrLevels: ['error'],
         }),
-        new winston.transports.File({ filename: 'error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'log.log', level: 'info' }),
+        new winston.transports.File({ filename: './log/error.log', level: 'error' }),
+        new winston.transports.File({ filename: './log/log.log', level: 'info' }),
     ],
 });
 

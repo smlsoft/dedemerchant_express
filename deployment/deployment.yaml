@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apireport
+  namespace: dedepos-dev
+  labels:
+    app: apireport
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apireport
+  template:
+    metadata:
+      labels:
+        app: apireport
+    spec:
+      # volumes:
+      #   - name: certificate-configmap-volume
+      #     configMap: 
+      #       name: dedepos-api-dev-certificate-configmap
+      imagePullSecrets:
+        - name: dockerconfigjson-github-com
+      containers:
+      - name: apireport
+        image: ghcr.io/smlsoft/dedemerchantapireport:sha-adaa4c9
+        volumeMounts:
+          - name: mongodb-certificate-secret-volume
+            readOnly: true
+            mountPath: /cert            
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: web-port
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: API_PROVIDER
+          value: "https://api.dev.dedepos.com"
+        # MONGODB
+        - name: MONGODB_URI
+          value: "mongodb+srv://doadmin:8Lpfn6203W4U51XK@db-mongodb-sgp1-pos-356fc016.mongo.ondigitalocean.com/?ssl=true"                             
+        - name: MONGODB_DB
+          value: "smldevdb"
+        - name: MONGODB_SSL
+          value: "true"
+        - name: MONGODB_TLS_CA_FILE
+          value: "/cert/ca-certificate"
+           
+        # postgresql
+        - name: POSTGRES_HOST
+          value: "178.128.55.234"
+        - name: POSTGRES_PORT
+          value: "5533"
+        - name: POSTGRES_DB_NAME
+          value: "dedeposdev"
+        - name: POSTGRES_USERNAME
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dedepos-dev-postgresql-secret
+              key: postgresql-password
+        - name: POSTGRES_SSL_MODE
+          value: "disable"
+        # ClickHouse
+        - name: CH_SERVER_ADDRESS
+          value: "http://103.212.36.91:18123"
+        - name: CH_USERNAME
+          value: "smlchdb"
+        - name: CH_PASSWORD
+          value: "heiR5XpDMyn4"
+        - name: CH_DATABASE_NAME
+          value: "dede001"
+        # Redis
+        - name: REDIS_CACHE_URI
+          value: "redis://default:AVNS_dhilsnrZwup9NhqL8GQ@db-redis-sgp1-13586-do-user-11230406-0.b.db.ondigitalocean.com:25061"  
+        # - name: REDIS_CACHE_USERNAME
+        #   value: "default"
+        - name: REDIS_CACHE_TLS_ENABLE
+          value: "true"
+        # - name: REDIS_CACHE_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: dedepos-dev-redisp-secret
+        #       key: redis-password
+        # volumeMounts:
+        #   - name: certificate-configmap-volume
+        #     mountPath: /cert
+        # env:
+        #   - name: ENV_NAME
+        #     value: "ENV_VALUE"
+        #   - name: ENV_NAME_SECRET
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: dedepos-dev-mongodb-secret
+        #         key: mongodb-passwords
+      volumes:
+        # - name: firebase-service-account-key
+        #   secret:
+        #     secretName: dedepos-firebase-auth-service-account            
+        # - name: certificate-configmap-volume
+        #   configMap:
+        #     name: dedepos-api-dev-certificate-configmap
+        - name: mongodb-certificate-secret-volume
+          secret:
+            secretName: dedepos-mongodb-ca-secret
