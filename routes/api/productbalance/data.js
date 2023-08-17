@@ -6,7 +6,7 @@ const dataresult = async (shopid, search, fromdate, todate) => {
   var where = "";
 
   if (utils.isNotEmpty(search)) {
-    where += ` and ( barcode like '%${search}%' or  or EXISTS (
+    where += ` and ( barcode like '%${search}%'  or EXISTS (
       SELECT 1
       FROM jsonb_array_elements_text(a.names) AS element
       WHERE element LIKE '%${search}%'

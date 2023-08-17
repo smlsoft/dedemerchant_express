@@ -3033,3 +3033,6 @@
 {"contentLength":"77","duration":441,"level":"info","message":"GET /?token=83acc299e3ee617c7ad1de0332ef1d87c37beab91cd10b78652f16d296ebdada&search=AAA","method":"GET","status":500,"timestamp":"2023-08-17 15:45:03","url":"/?token=83acc299e3ee617c7ad1de0332ef1d87c37beab91cd10b78652f16d296ebdada&search=AAA"}
 {"level":"error","message":"Redis Client Error","timestamp":"2023-08-17 15:50:04"}
 {"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-17 15:52:26"}
+{"contentLength":"66","duration":671,"level":"info","message":"GET /?token=83acc299e3ee617c7ad1de0332ef1d87c37beab91cd10b78652f16d296ebdada&search=AAA","method":"GET","status":500,"timestamp":"2023-08-17 15:54:58","url":"/?token=83acc299e3ee617c7ad1de0332ef1d87c37beab91cd10b78652f16d296ebdada&search=AAA"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-17 15:55:20"}
+{"contentLength":"261","duration":389,"level":"info","message":"GET /?token=83acc299e3ee617c7ad1de0332ef1d87c37beab91cd10b78652f16d296ebdada&search=AAA","method":"GET","status":200,"timestamp":"2023-08-17 15:55:23","url":"/?token=83acc299e3ee617c7ad1de0332ef1d87c37beab91cd10b78652f16d296ebdada&search=AAA"}
