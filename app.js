@@ -321,6 +321,7 @@ router.use("/getpay", require("./routes/api/getpay"));
 router.use("/salesummary", require("./routes/api/salesummary"));
 router.use("/salesummarypg", require("./routes/api/salesummarypg"));
 router.use("/salesummarymg", require("./routes/api/salesummarymg"));
+router.use("/productbalance", require("./routes/api/productbalance"));
 router.use("/health", require("./routes"));
 
 router.get("/getUserShop", async (req, res) => {
