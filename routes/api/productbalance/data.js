@@ -6,7 +6,11 @@ const dataresult = async (shopid, search, fromdate, todate) => {
   var where = "";
 
   if (utils.isNotEmpty(search)) {
-    where += ` and ( barcode like '%${search}%' or names like '%${search}%')`;
+    where += ` and ( barcode like '%${search}%' or  or EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements_text(a.names) AS element
+      WHERE element LIKE '%${search}%'
+  ) )`;
   }
 
   var query = `select a.shopid,a.barcode
@@ -18,7 +22,7 @@ const dataresult = async (shopid, search, fromdate, todate) => {
   order by a.barcode  `;
   try {
     await pg.connect();
-
+    console.log(query)
     const result = await pg.query(query);
     return result.rows;
   } catch (error) {
