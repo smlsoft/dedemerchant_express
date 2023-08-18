@@ -334,14 +334,12 @@ router.get("/getUserShop", async (req, res) => {
   //3e1a8e2e1f37054603176b88c1be8e4b4f33024a01fb91422059e33d0c8e65b7
   try {
     var result = await globalservice.getUserShop(req.query.token);
-    
     if (result.success) {
       res.status(200).send({ success: true, data: result.data });
     } else {
       res.status(200).send({ success: false, msg: result.msg });
     }
   } catch (error) {
-
     res.status(500).send("Error getting value from Redis");
   }
 });
