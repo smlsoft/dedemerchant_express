@@ -89,12 +89,11 @@ const genPDF = async (body, dataprofile, year, month, type) => {
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   var currentMonthName = "";
-  if(parseInt(type) == 1){
-    currentMonthName = monthsThai[parseInt(month)]
-  }else{
-    currentMonthName = monthsThai[parseInt(month)]
+  if (parseInt(type) == 1) {
+    currentMonthName = monthsThai[parseInt(month)];
+  } else {
+    currentMonthName = monthsThai[parseInt(month)];
   }
-
 
   var docDefinition = {
     header: function (currentPage, pageCount, pageSize) {
@@ -244,7 +243,7 @@ const genPDF = async (body, dataprofile, year, month, type) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["7%", "13%", "13%", "10%", "10%", "11%", "9%", "9%", "9%", "9%"],
+        widths: ["3%", "7%", "13%", "13%", "10%", "10%", "11%", "8%", "9%", "8%", "8%"],
         body: body,
       },
       layout: {
@@ -268,6 +267,7 @@ const genBodyPDF = async (dataset) => {
   var sumTotalExceptVat = 0;
   var sumTotalVatValue = 0;
   body.push([
+    { text: "ลำดับ", style: "tableCell", alignment: "center" },
     { text: "วันที่ใบกำกับ", style: "tableCell", alignment: "center" },
     { text: "เลขที่ใบกำกับ", style: "tableCell", alignment: "center" },
     { text: "เลขที่เอกสาร", style: "tableCell", alignment: "center" },
@@ -294,6 +294,7 @@ const genBodyPDF = async (dataset) => {
         sumTotalVatValue = sumTotalVatValue + ele.totalvatvalue;
         sumTotalValue = sumTotalValue + ele.totalvalue;
         body.push([
+          { text: idx, style: "tableCell", alignment: "center" },
           { text: utils.formateDate(ele.taxdocdate), style: "tableCell", alignment: "center" },
           { text: ele.taxdocno, style: "tableCell" },
           { text: ele.docno, style: "tableCell" },
@@ -310,7 +311,8 @@ const genBodyPDF = async (dataset) => {
       olddoc = ele.docno;
     });
   body.push([
-    { text: "รวม", style: "tableFooter", alignment: "center", colSpan: 6 },
+    { text: "รวม", style: "tableFooter", alignment: "center", colSpan: 7 },
+    {},
     {},
     {},
     {},

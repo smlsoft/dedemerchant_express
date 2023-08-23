@@ -243,7 +243,7 @@ const genPDF = async (body, dataprofile, year, month, type) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["7%", "13%", "13%", "10%", "10%", "11%", "9%", "9%", "9%", "9%"],
+        widths: ["3%","7%", "15%", "15%", "13%", "13%", "14%", "10%", "10%"],
         body: body,
       },
       layout: {
@@ -267,15 +267,14 @@ const genBodyPDF = async (dataset) => {
   var sumTotalExceptVat = 0;
   var sumTotalVatValue= 0;
   body.push([
+    { text: "ลำดับ", style: "tableCell", alignment: "center" },
     { text: "วันที่ใบกำกับ", style: "tableCell", alignment: "center" },
     { text: "เลขที่ใบกำกับ", style: "tableCell", alignment: "center" },
     { text: "เลขที่เอกสาร", style: "tableCell", alignment: "center" },
     { text: "ชื่อผู้ประกอบการ", style: "tableCell", alignment: "center" },
     { text: "สถานประกอบการ", style: "tableCell", alignment: "center" },
     { text: "เลขผู้เสียภาษี", style: "tableCell", alignment: "center" },
-    { text: "รวมมูลค่าสินค้า/บริการ", style: "tableCell", alignment: "center" },
-    { text: "มูลค่ายกเว้นภาษี", style: "tableCell", alignment: "center" },
-    { text: "มูลค่าสินค้า/บริการ", style: "tableCell", alignment: "center" },
+    { text: "มูลค่าก่อนภาษี", style: "tableCell", alignment: "center" },
     { text: "จำนวนภาษี", style: "tableCell", alignment: "center" },
   ]),
     dataset.forEach((ele) => {
@@ -292,17 +291,16 @@ const genBodyPDF = async (dataset) => {
         sumTotalAmount = sumTotalAmount + ele.totalamount;
         sumTotalExceptVat = sumTotalExceptVat + ele.totalexceptvat;
         sumTotalVatValue = sumTotalVatValue + ele.totalvatvalue;
-        sumTotalValue = sumTotalValue + ele.totalvalue;
+        sumTotalValue = sumTotalValue + ele.totalbeforevat;
         body.push([
+          { text: idx, style: "tableCell", alignment: "center" },
           { text: utils.formateDate(ele.taxdocdate), style: "tableCell", alignment: "center" },
           { text: ele.taxdocno, style: "tableCell" },
           { text: ele.docno, style: "tableCell" },
           { text: utils.packName(ele.custnames), style: "tableCell", alignment: "left" },
           { text: custType == 1 ? "สำนักงานใหญ่" : btancNum, style: "tableCell" },
           { text: taxID, style: "tableCell" },
-          { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(ele.totalexceptvat), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(ele.totalvalue), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(ele.totalbeforevat), style: "tableCell", alignment: "right" },
           { text: utils.formatNumber(ele.totalvatvalue), style: "tableCell", alignment: "right" },
         ]);
         idx = idx + 1;
@@ -310,14 +308,13 @@ const genBodyPDF = async (dataset) => {
       olddoc = ele.docno;
     });
   body.push([
-    { text: "รวม", style: "tableFooter", alignment: "center", colSpan: 6 },
+    { text: "รวม", style: "tableFooter", alignment: "center", colSpan: 7 },
     {},
     {},
     {},
     {},
     {},
-    { text: utils.formatNumber(sumTotalAmount), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(sumTotalExceptVat), style: "tableFooter", alignment: "right" },
+    {},
     { text: utils.formatNumber(sumTotalValue), style: "tableFooter", alignment: "right" },
     { text: utils.formatNumber(sumTotalVatValue), style: "tableFooter", alignment: "right" },
   ]);
