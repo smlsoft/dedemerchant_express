@@ -64,6 +64,33 @@ const dataShop = async (token) => {
   }
 };
 
+const dataCompany = async (shopid) => {
+ 
+  const client = await provider.connectToMongoDB();
+  var resultSet = { success: false, data: null };
+  try {
+    let db;
+    db = client.db(process.env.MONGODB_DB);
+    const collect= db.collection("restaurantSettings");
+    const data = await collect.find({ shopid: shopid,code:'company' }).toArray();
+
+    if (data.length > 0) {
+      resultSet.success = true;
+      resultSet.data = data[0];
+    } else {
+      resultSet.success = false;
+      resultSet.data = null;
+    }
+
+    // console.log(data);
+    return resultSet;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  } finally {
+    await client.close();
+  }
+};
+
 const getUserShop = async (token) => {
 
   var results = { success: false, data: null, msg: "" };
@@ -93,4 +120,4 @@ const getUserShop = async (token) => {
   return results;
 };
 
-module.exports = { getProfileshop, getReport, dataShop, getUserShop ,redisClient};
+module.exports = { getProfileshop, getReport, dataShop, getUserShop ,dataCompany,redisClient};
