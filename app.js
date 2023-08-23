@@ -327,6 +327,9 @@ router.use("/salesummarypg", require("./routes/api/salesummarypg"));
 router.use("/salesummarymg", require("./routes/api/salesummarymg"));
 router.use("/productbalance", require("./routes/api/productbalance"));
 router.use("/bestseller", require("./routes/api/bestseller"));
+router.use("/vatsale", require("./routes/api/vat_sale"));
+router.use("/vatpurchase", require("./routes/api/vat_purchase"));
+router.use("/salebydebtor", require("./routes/api/salebydebtor"));
 router.use("/health", require("./routes"));
 
 router.get("/getUserShop", async (req, res) => {
