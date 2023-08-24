@@ -18,7 +18,10 @@ const dataresult = async (token, year, month) => {
     filters.push({
       shopid: token,
     });
- 
+    filters.push({
+      taxdocno: { $ne: "" },
+    });
+
     if (utils.isNotEmpty(year) && utils.isNotEmpty(month)) {
       const firstDayMonth = new Date(parseInt(year), parseInt(month), 1, 0, 0, 0, 0);
       const lastDayMonth = new Date(parseInt(year), parseInt(month) + 1, 0, 23, 59, 59, 999);
@@ -86,12 +89,11 @@ const genPDF = async (body, dataprofile, year, month, type) => {
   const monthsThai = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-
   var currentMonthName = "";
-  if(parseInt(type) == 1){
-    currentMonthName = monthsThai[parseInt(month)]
-  }else{
-    currentMonthName = monthsThai[parseInt(month)]
+  if (parseInt(type) == 1) {
+    currentMonthName = monthsThai[parseInt(month)];
+  } else {
+    currentMonthName = monthsThai[parseInt(month)];
   }
   console.log(currentMonthName);
 
@@ -243,7 +245,7 @@ const genPDF = async (body, dataprofile, year, month, type) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["3%","7%", "15%", "15%", "13%", "13%", "14%", "10%", "10%"],
+        widths: ["3%", "7%", "15%", "15%", "13%", "13%", "14%", "10%", "10%"],
         body: body,
       },
       layout: {
@@ -265,7 +267,7 @@ const genBodyPDF = async (dataset) => {
   var sumTotalAmount = 0;
   var sumTotalValue = 0;
   var sumTotalExceptVat = 0;
-  var sumTotalVatValue= 0;
+  var sumTotalVatValue = 0;
   body.push([
     { text: "ลำดับ", style: "tableCell", alignment: "center" },
     { text: "วันที่ใบกำกับ", style: "tableCell", alignment: "center" },
@@ -279,7 +281,6 @@ const genBodyPDF = async (dataset) => {
   ]),
     dataset.forEach((ele) => {
       if (olddoc != ele.docno) {
-       
         let custType = 1;
         let taxID = 1;
         let btancNum = 1;
@@ -338,7 +339,6 @@ const pdfPreview = async (token, year, month, type, res) => {
     res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
-
 
 const pdfDownload = async (token, search, res) => {
   var dataset = await dataresult(token, search);

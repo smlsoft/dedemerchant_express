@@ -18,7 +18,9 @@ const dataresult = async (token, year, month) => {
     filters.push({
       shopid: token,
     });
-
+    filters.push({
+      taxdocno: { $ne: "" },
+    });
     if (utils.isNotEmpty(year) && utils.isNotEmpty(month)) {
       const firstDayMonth = new Date(parseInt(year), parseInt(month), 1, 0, 0, 0, 0);
       const lastDayMonth = new Date(parseInt(year), parseInt(month) + 1, 0, 23, 59, 59, 999);
