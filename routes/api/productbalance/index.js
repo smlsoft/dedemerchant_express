@@ -24,4 +24,18 @@ router.get(
   })
 );
 
+router.get(
+  "/pdfview",
+  utils.catchAsync(async (req, res) => {
+    var result = await globalservice.getUserShop(req.query.token);
+    console.log(result);
+    if (!result.success) {
+      res.status(401).json({ success: false, msg: "Invalid shop" });
+      return;
+    }
+
+    data.pdfPreview(result.data.shopid,req.query.search,res);
+  })
+);
+
 module.exports = router;

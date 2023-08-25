@@ -4255,3 +4255,47 @@
 {"duration":1664,"level":"info","message":"GET /pdfview?token=235dd95dcddeaac7cec45f91bd3e14909ee35cb0b7c47575bde468ce42317fef&year=2023&month=7","method":"GET","status":200,"timestamp":"2023-08-23 14:20:14","url":"/pdfview?token=235dd95dcddeaac7cec45f91bd3e14909ee35cb0b7c47575bde468ce42317fef&year=2023&month=7"}
 {"duration":1707,"level":"info","message":"GET /pdfview?token=ccec9c165ce41556b72ba4479397e95a9fc5220e73b161f225f5ab7b9efd273c&year=2020&month=0","method":"GET","status":200,"timestamp":"2023-08-23 14:25:12","url":"/pdfview?token=ccec9c165ce41556b72ba4479397e95a9fc5220e73b161f225f5ab7b9efd273c&year=2020&month=0"}
 {"duration":1827,"level":"info","message":"GET /pdfview?token=ccec9c165ce41556b72ba4479397e95a9fc5220e73b161f225f5ab7b9efd273c&year=2023&month=5","method":"GET","status":200,"timestamp":"2023-08-23 14:25:27","url":"/pdfview?token=ccec9c165ce41556b72ba4479397e95a9fc5220e73b161f225f5ab7b9efd273c&year=2023&month=5"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-24 15:59:33"}
+{"contentLength":"38","duration":38,"level":"info","message":"GET /pdfview?token=b252473ac4c73f7f2dc00b63ea0fd6744ac57c20f21bd98934d280d3510d1026","method":"GET","status":401,"timestamp":"2023-08-24 16:00:19","url":"/pdfview?token=b252473ac4c73f7f2dc00b63ea0fd6744ac57c20f21bd98934d280d3510d1026"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2023-08-24 16:00:20","url":"/favicon.ico"}
+{"duration":2000,"level":"info","message":"GET /pdfview?token=68c64da384f2b09feeae2df6192500928ab6dde1d83a1a9076bb02cd4919396f","method":"GET","status":200,"timestamp":"2023-08-24 16:04:37","url":"/pdfview?token=68c64da384f2b09feeae2df6192500928ab6dde1d83a1a9076bb02cd4919396f"}
+{"duration":1563,"level":"info","message":"GET /pdfview?token=68c64da384f2b09feeae2df6192500928ab6dde1d83a1a9076bb02cd4919396f","method":"GET","status":200,"timestamp":"2023-08-24 16:06:17","url":"/pdfview?token=68c64da384f2b09feeae2df6192500928ab6dde1d83a1a9076bb02cd4919396f"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-24 16:09:52"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:01:53"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:02:08"}
+{"contentLength":"38","duration":43,"level":"info","message":"GET /pdfview?token=b252473ac4c73f7f2dc00b63ea0fd6744ac57c20f21bd98934d280d3510d1026","method":"GET","status":401,"timestamp":"2023-08-25 15:02:17","url":"/pdfview?token=b252473ac4c73f7f2dc00b63ea0fd6744ac57c20f21bd98934d280d3510d1026"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2023-08-25 15:02:17","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:04:06"}
+{"duration":2111,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":200,"timestamp":"2023-08-25 15:04:10","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:05:37"}
+{"duration":2050,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":200,"timestamp":"2023-08-25 15:05:42","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:06:27"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:06:57"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:07:43"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:07:52"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:09:13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:09:52"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:10:22"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:11:21"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:13:11"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:13:14"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:13:42"}
+{"contentLength":379,"duration":47,"level":"info","message":"GET /apireport/productbalance/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":500,"timestamp":"2023-08-25 15:14:00","url":"/apireport/productbalance/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:14:19"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:14:31"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:14:59"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:15:33"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:17:38"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:17:45"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:18:02"}
+{"contentLength":"38","duration":7,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":401,"timestamp":"2023-08-25 15:18:02","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"duration":957,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":200,"timestamp":"2023-08-25 15:18:04","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:18:55"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:19:13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:19:20"}
+{"duration":989,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":200,"timestamp":"2023-08-25 15:19:21","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:19:54"}
+{"duration":949,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":200,"timestamp":"2023-08-25 15:19:57","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:20:15"}
+{"duration":955,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":200,"timestamp":"2023-08-25 15:20:16","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:21:28"}

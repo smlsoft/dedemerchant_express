@@ -84,8 +84,11 @@ const dataresult = async (token, year, month) => {
 
 const genPDF = async (body, dataprofile, year, month, type) => {
   var company = await globalservice.dataCompany(dataprofile.data.guidfixed);
+  var companyResult = { names: [], taxID: "", branchNames: [] };
+  if (company.data.body != null) {
+    companyResult = JSON.parse(company.data.body);
+  }
 
-  var companyResult = JSON.parse(company.data.body);
   // console.log(companyResult);
   const monthsThai = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
