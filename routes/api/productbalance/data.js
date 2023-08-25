@@ -85,7 +85,7 @@ const genPDF = async (body, dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["5%", "*", "*", "15%", "15%", "15%", "15%"],
+        widths: ["5%", "15%", "20%", "15%", "15%", "15%", "15%"],
         body: body,
       },
       layout: "lightHorizontalLines",
