@@ -112,7 +112,7 @@ const genBodyPDF = async (dataset) => {
   var sumAmount = 0;
   dataset.forEach((ele) => {
     body.push([
-      { text: idx, style: "tableCell" },
+      { text: idx, style: "tableCell", alignment: "center" },
       { text: ele.barcode, style: "tableCell" },
       { text: utils.packName(ele.names) + " / " + ele.unitcode, style: "tableCell", alignment: "left" },
       { text: ele.standunit, style: "tableCell", alignment: "center" },
@@ -153,4 +153,20 @@ const pdfPreview = async (token, search, res) => {
   }
 };
 
-module.exports = { dataresult, pdfPreview };
+const pdfDownload = async (token, search, res) => {
+  var dataset = await dataresult(token, search);
+  console.log(dataset);
+  var dataprofile = await globalservice.dataShop(token);
+  if (dataset.success) {
+    var body = await genBodyPDF(dataset.data);
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'attachment; filename="productbalance.pdf"');
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "" });
+  }
+};
+
+module.exports = { dataresult, pdfPreview, pdfDownload };
