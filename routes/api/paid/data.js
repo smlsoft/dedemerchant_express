@@ -130,6 +130,10 @@ const genPDF = async (body, dataprofile) => {
       tableCell: {
         fontSize: 9,
       },
+      tableFooter: {
+        fontSize: 9,
+        bold: true,
+      },
     },
   };
   if (body.length > 0) {
@@ -148,7 +152,10 @@ const genPDF = async (body, dataprofile) => {
 
 const genBodyPDF = async (dataset) => {
   let body = [];
-
+  var sumamount = 0;
+  var sumcash = 0;
+  var sumtransfer = 0;
+  var sumcredit = 0;
   body.push([
     { text: "เอกสารวันที่", style: "tableCell", alignment: "center" },
     { text: "เอกสารเลขที่", style: "tableCell", alignment: "center" },
@@ -188,7 +195,20 @@ const genBodyPDF = async (dataset) => {
         { text: utils.formatNumber(transferAmount), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(creditAmount), style: "tableCell", alignment: "right" },
       ]);
+      sumamount += ele.totalamount;
+      sumcash += cash;
+      sumtransfer += transferAmount;
+      sumcredit += creditAmount;
     });
+  body.push([
+    { text: "",rowspan:3},
+    { text: ""  },
+    { text: "" },
+    { text: utils.formatNumber(sumamount), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumcash), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumtransfer), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumcredit), style: "tableFooter", alignment: "right" },
+  ]);
   return body;
 };
 
