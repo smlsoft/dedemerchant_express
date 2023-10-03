@@ -55,9 +55,9 @@ const setActivePos = async (pin, shopid, token, deviceid, actoken, isdev) => {
   return result;
 };
 
-/// delete poscenter where pincode and shopid
+/// DELETE FROM poscenter.pinlist  WHERE pincode = '${pin}' and shopid='${shopid}
 const deletePos = async (pin, shopid) => {
-  const query = `delete from poscenter.pinlist  where pincode = '${pin}' and shopid='${shopid}'`;
+  const query = `select pincode,status,shipid from poscenter.pinlist  where pincode = '${pin}' and shipid='${shopid}'`;
   var result = { success: false, msg: "" };
   try {
     const resultSet = await client.query({
@@ -67,8 +67,12 @@ const deletePos = async (pin, shopid) => {
     const dataset = await resultSet.json();
 
     if (dataset.length > 0) {
-      console.log("Data update successful");
-      result.msg = "POS active successful"
+      const activeQuery = `ALTER TABLE poscenter.pinlist DELETE  WHERE pincode = '${pin}' and shipid='${shopid}'`;
+
+      await client.exec({ query: activeQuery });
+
+      console.log("Data delete successful");
+      result.msg = "POS delete successful"
       result.success = true;
     } else {
       result.msg = "Pin Number not found"
@@ -81,7 +85,7 @@ const deletePos = async (pin, shopid) => {
   }
   await client.close();
   return result;
-}
+};
 
 
 module.exports = { dataresult, setActivePos, deletePos };

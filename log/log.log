@@ -4299,3 +4299,167 @@
 {"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:20:15"}
 {"duration":955,"level":"info","message":"GET /pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d","method":"GET","status":200,"timestamp":"2023-08-25 15:20:16","url":"/pdfview?token=a95c745067ad77150a6ce4a5106ca57fbe1a7cd93a2c6b9301d3a23d7d3dda4d"}
 {"level":"info","message":"Node app is running on port 3345","timestamp":"2023-08-25 15:21:28"}
+{"level":"info","message":"Node app is running on port 8080","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:28"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:28"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:29"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:29"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:29"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:32"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:32"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:34"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:35"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:35"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:36"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:36"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:37"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:37"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:38"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:38"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:39"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:39"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:40"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:40"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:41"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:41"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:42"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:42"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:43"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:43"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:45"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:45"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:46"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:46"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:47"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:47"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:48"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:48"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:49"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:49"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:50"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:50"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:51"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:51"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:52"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:52"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:53"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:53"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:54"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:54"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:55"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:55"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:56"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:56"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:57"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:57"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:59"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:42:59"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:00"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:00"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:01"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:01"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:02"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:02"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:03"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:03"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:05"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:05"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:06"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:06"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:07"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:07"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:08"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:08"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:09"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:09"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:10"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:10"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:11"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:11"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:12"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:12"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:13"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:13"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:14"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:14"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:15"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:15"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:16"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:16"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:17"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:17"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:19"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:19"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:20"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:20"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:23"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:23"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:24"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:24"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:25"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:25"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:26"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 09:43:26"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:43:30"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:43:52"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2023-10-03 09:45:00","url":"/favicon.ico"}
+{"contentLength":165,"duration":2,"level":"info","message":"GET /apireport/poscenter/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":404,"timestamp":"2023-10-03 09:47:33","url":"/apireport/poscenter/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:48:03"}
+{"level":"error","message":"Error during server close:","timestamp":"2023-10-03 09:48:18"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:48:22"}
+{"contentLength":165,"duration":5,"level":"info","message":"GET /apireport/poscenter/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":404,"timestamp":"2023-10-03 09:48:30","url":"/apireport/poscenter/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:49:12"}
+{"contentLength":"285","duration":73,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":500,"timestamp":"2023-10-03 09:49:49","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:53:18"}
+{"contentLength":"209","duration":48,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":500,"timestamp":"2023-10-03 09:53:40","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:54:20"}
+{"level":"error","message":"Error during server close:","timestamp":"2023-10-03 09:54:22"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:54:25"}
+{"contentLength":"285","duration":55,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":500,"timestamp":"2023-10-03 09:54:43","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:56:25"}
+{"level":"error","message":"Error during server close:","timestamp":"2023-10-03 09:56:27"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:56:30"}
+{"contentLength":"320","duration":51,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":500,"timestamp":"2023-10-03 09:56:40","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 09:58:53"}
+{"contentLength":"135","duration":76,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":500,"timestamp":"2023-10-03 09:59:12","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 10:03:55"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 10:04:07"}
+{"level":"error","message":"Error during server close:","timestamp":"2023-10-03 10:04:09"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 10:04:11"}
+{"contentLength":"203","duration":76,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":500,"timestamp":"2023-10-03 10:04:19","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 10:05:10"}
+{"level":"error","message":"Error during server close:","timestamp":"2023-10-03 10:05:11"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-10-03 10:05:13"}
+{"contentLength":"46","duration":81,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":200,"timestamp":"2023-10-03 10:05:22","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"contentLength":"59","duration":97,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863","method":"GET","status":500,"timestamp":"2023-10-03 10:06:54","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=99937863"}
+{"contentLength":"46","duration":69,"level":"info","message":"GET /active?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=00084147&token=c61268c5a963f339f6999265e4306c8eda278573f65e55e073e1bf28d5bbbe5b&deviceid=POS06&actoken=e47fb0659bd845d12238c0ecb1030e1c4e7a501c6cd7122efd50f25d387e77b2&isdev=1","method":"GET","status":200,"timestamp":"2023-10-03 10:07:40","url":"/active?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=00084147&token=c61268c5a963f339f6999265e4306c8eda278573f65e55e073e1bf28d5bbbe5b&deviceid=POS06&actoken=e47fb0659bd845d12238c0ecb1030e1c4e7a501c6cd7122efd50f25d387e77b2&isdev=1"}
+{"contentLength":"46","duration":96,"level":"info","message":"GET /delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=00084147","method":"GET","status":200,"timestamp":"2023-10-03 10:07:48","url":"/delete?shopid=2PrIIqTWxoBXv16K310sNwfHmfY&pin=00084147"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 10:10:15"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 10:15:17"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 10:20:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-10-03 10:25:20"}
