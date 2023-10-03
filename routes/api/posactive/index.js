@@ -34,7 +34,7 @@ router.get("/active", utils.catchAsync(async (req, res) => {
 
 router.get("/delete", utils.catchAsync(async (req, res) => {
   try {
-    var dataset = await data.deletePos(req.query.pin);
+    var dataset = await data.deletePos(req.query.pin , req.query.shopid);
     if (dataset.success) {
       res.status(200).json(dataset);
     } else {

@@ -24,7 +24,7 @@ const dataresult = async (pin) => {
   return dataset;
 };
 
-const setActivePos = async (pin, shopid,token,deviceid,actoken,isdev) => {
+const setActivePos = async (pin, shopid, token, deviceid, actoken, isdev) => {
   const query = `select pincode,status,shipid,token,deviceid,access_token,isdev from poscenter.pinlist  where pincode = '${pin}'`;
   var result = { success: false, msg: "" };
   try {
@@ -37,12 +37,12 @@ const setActivePos = async (pin, shopid,token,deviceid,actoken,isdev) => {
     if (dataset.length > 0) {
       const activeQuery = `ALTER TABLE poscenter.pinlist UPDATE status=1,shipid='${shopid}',token='${token}',access_token='${actoken}',deviceid='${deviceid}',isdev='${isdev}' where pincode = '${pin}'`;
 
-      await client.exec({ query: activeQuery});
+      await client.exec({ query: activeQuery });
 
       console.log("Data update successful");
       result.msg = "POS active successful"
       result.success = true;
-    }else{
+    } else {
       result.msg = "Pin Number not found"
       result.false = true;
     }
@@ -55,9 +55,9 @@ const setActivePos = async (pin, shopid,token,deviceid,actoken,isdev) => {
   return result;
 };
 
-/// delete poscenter where pincode 
-const deletePos = async (pin) => {
-  const query = `delete from poscenter.pinlist  where pincode = '${pin}'`;
+/// delete poscenter where pincode and shopid
+const deletePos = async (pin, shopid) => {
+  const query = `delete from poscenter.pinlist  where pincode = '${pin}' and shopid='${shopid}'`;
   var result = { success: false, msg: "" };
   try {
     const resultSet = await client.query({
@@ -70,7 +70,7 @@ const deletePos = async (pin) => {
       console.log("Data update successful");
       result.msg = "POS active successful"
       result.success = true;
-    }else{
+    } else {
       result.msg = "Pin Number not found"
       result.false = true;
     }
@@ -84,4 +84,4 @@ const deletePos = async (pin) => {
 }
 
 
-module.exports = { dataresult, setActivePos , deletePos };
+module.exports = { dataresult, setActivePos, deletePos };
