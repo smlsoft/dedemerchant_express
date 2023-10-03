@@ -55,4 +55,33 @@ const setActivePos = async (pin, shopid,token,deviceid,actoken,isdev) => {
   return result;
 };
 
-module.exports = { dataresult, setActivePos };
+/// delete poscenter where pincode 
+const deletePos = async (pin) => {
+  const query = `delete from poscenter.pinlist  where pincode = '${pin}'`;
+  var result = { success: false, msg: "" };
+  try {
+    const resultSet = await client.query({
+      query: query,
+      format: "JSONEachRow",
+    });
+    const dataset = await resultSet.json();
+
+    if (dataset.length > 0) {
+      console.log("Data update successful");
+      result.msg = "POS active successful"
+      result.success = true;
+    }else{
+      result.msg = "Pin Number not found"
+      result.false = true;
+    }
+  } catch (error) {
+    console.error(error);
+    result.success = false;
+    result.msg = error.message;
+  }
+  await client.close();
+  return result;
+}
+
+
+module.exports = { dataresult, setActivePos , deletePos };

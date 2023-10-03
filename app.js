@@ -156,7 +156,7 @@ const server = require("http").createServer(app);
 
 const gracefulShutdown = () => {
   console.log("Starting graceful shutdown...");
-   globalservice.redisClient.quit();
+  globalservice.redisClient.quit();
 
   // Close server to stop accepting new connections
   server.close((err) => {
@@ -212,22 +212,22 @@ const logRequest = (req, res, next) => {
   const startTime = Date.now();
 
   res.on('finish', () => {
-  const duration = Date.now() - startTime;
-  const { method, url } = req;
-  const status = res.statusCode;
-  const contentLength = res.get('Content-Length');
+    const duration = Date.now() - startTime;
+    const { method, url } = req;
+    const status = res.statusCode;
+    const contentLength = res.get('Content-Length');
 
-  logger.info(`${method} ${url}`, { method, url, status, contentLength, duration });
-});
+    logger.info(`${method} ${url}`, { method, url, status, contentLength, duration });
+  });
 
-return next();
+  return next();
 };
 app.use(logRequest);
 
 globalservice.redisClient.connect();
 
-globalservice.redisClient.on("error", (err) => { 
-  console.log("Redis Client Error", err) 
+globalservice.redisClient.on("error", (err) => {
+  console.log("Redis Client Error", err)
   logger.error("Redis Client Error", err);
 });
 globalservice.redisClient.on("connect", () => {
@@ -302,6 +302,7 @@ router.use("/balance", require("./routes/api/balance"));
 router.use("/saleinvoice", require("./routes/api/sale"));
 router.use("/productdetail", require("./routes/api/productdetail"));
 router.use("/poscenter", require("./routes/api/posactive"));
+
 router.use(
   "/productbarcode",
   require("./routes/api/productbarcode_clickhouse")
