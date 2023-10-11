@@ -80,19 +80,10 @@ router.post("/upload", upload.single("uploadfile"), async (req, res) => {
       productindex++;
     });
 
-    //console.log(productData);
     try {
-      productData.parts.forEach(async (product) => {
-       // console.log(product.products);
-        setTimeout(() => {
-          provider
-            .instanceApi(req.query.token)
-            .put(`/stockbalanceimport/task/part/` + product.partid, JSON.stringify(product.products))
-            .then((res) => res.data);
-        }, 300);
-      });
-      productData.success = true;
-      res.json(productData);
+      const results = await Promise.all(productData.parts.map((products) => asyncSendTask(req.query.token, products)));
+
+      res.json({ success: true, taskid:productData.taskid,chunksize:productData.chunksize, totalitem: productData.totalitem, partsize:productData.parts.length ,updatepartdone:results.length });
     } catch (err) {
       console.log(err);
       res.json({ success: false, msg: "error on updateitem " + err });
@@ -101,6 +92,26 @@ router.post("/upload", upload.single("uploadfile"), async (req, res) => {
     res.json({ success: false, msg: "no data found" });
   }
 });
+
+const asyncSendTask = (token, product) => {
+  return new Promise((resolve) => {
+    provider
+      .instanceApi(token)
+      .put(`/stockbalanceimport/task/part/` + product.partid, JSON.stringify(product.products))
+      .then((res) => resolve(res.data));
+  });
+};
+
+const sendTask = async (productData) => {
+  var sendIndex = 0;
+  var returnvalue = [];
+
+  var resTask = await provider
+    .instanceApi(req.query.token)
+    .put(`/stockbalanceimport/task/part/` + partid, JSON.stringify(products))
+    .then((res) => res.data);
+  return resTask;
+};
 
 router.get("/pdfview", async (req, res) => {
   console.log("pdfview");
