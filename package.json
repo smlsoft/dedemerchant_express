@@ -21,6 +21,7 @@
     "lightship": "^8.0.2",
     "moment": "^2.29.4",
     "mongodb": "^5.0.1",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",
     "numeral": "^2.0.6",
     "pdf-lib": "^1.17.1",
@@ -32,7 +33,8 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2",
     "uuid": "^9.0.0",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

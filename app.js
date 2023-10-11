@@ -332,6 +332,7 @@ router.use("/vatsale", require("./routes/api/vat_sale"));
 router.use("/vatpurchase", require("./routes/api/vat_purchase"));
 router.use("/salebydebtor", require("./routes/api/salebydebtor"));
 router.use("/cancel", require("./routes/api/cancel"));
+router.use("/balanceimport", require("./routes/api/balanceimport"));
 router.use("/health", require("./routes"));
 
 router.get("/getUserShop", async (req, res) => {
