@@ -42,8 +42,10 @@ router.post("/upload", upload.single("uploadfile"), async (req, res) => {
       itemnames: [{ code: "th", name: row.ชื่อสินค้า }],
       unitcode: row.รหัสหน่วยนับ,
       qty: parseFloat(row.จำนวน).toFixed(2),
-      cost: parseFloat(row.ต้นทุน).toFixed(2),
-      amount: parseFloat(row.รวม).toFixed(2),
+      price: parseFloat(row.ต้นทุน).toFixed(2),
+      priceexcludevat: parseFloat(row.ต้นทุน).toFixed(2),
+      sumamount: parseFloat(row.รวม).toFixed(2),
+      sumamountexcludevat: parseFloat(row.รวม).toFixed(2),
     });
   });
 
@@ -73,8 +75,10 @@ router.post("/upload", upload.single("uploadfile"), async (req, res) => {
         //  console.log(product);
       }
       product.qty = parseFloat(product.qty);
-      product.cost = parseFloat(product.cost);
-      product.amount = parseFloat(product.amount);
+      product.price = parseFloat(product.price);
+      product.priceexcludevat = parseFloat(product.priceexcludevat);
+      product.sumamount = parseFloat(product.sumamount);
+      product.sumamountexcludevat = parseFloat(product.sumamountexcludevat);
 
       productData.parts[partindex].products.push(product);
       productindex++;
@@ -83,7 +87,7 @@ router.post("/upload", upload.single("uploadfile"), async (req, res) => {
     try {
       const results = await Promise.all(productData.parts.map((products) => asyncSendTask(req.query.token, products)));
 
-      res.json({ success: true, taskid:productData.taskid,chunksize:productData.chunksize, totalitem: productData.totalitem, partsize:productData.parts.length ,updatepartdone:results.length });
+      res.json({ success: true, taskid: productData.taskid, chunksize: productData.chunksize, totalitem: productData.totalitem, partsize: productData.parts.length, updatepartdone: results.length });
     } catch (err) {
       console.log(err);
       res.json({ success: false, msg: "error on updateitem " + err });
