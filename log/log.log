@@ -5667,3 +5667,39 @@
 {"level":"error","message":"Redis Client Error","timestamp":"2023-11-07 16:07:24"}
 {"level":"error","message":"Redis Client Error","timestamp":"2023-11-07 16:12:25"}
 {"level":"error","message":"Redis Client Error","timestamp":"2023-11-07 16:17:27"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:29:24"}
+{"contentLength":"26","duration":303,"level":"info","message":"GET /?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:30:42","url":"/?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2023-11-13 12:30:42","url":"/favicon.ico"}
+{"contentLength":"64","duration":288,"level":"info","message":"GET /?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:31:04","url":"/?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"contentLength":"81","duration":286,"level":"info","message":"GET /weeklysales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:32:38","url":"/weeklysales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:33:05"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:33:18"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:33:47"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:34:04"}
+{"contentLength":"54","duration":296,"level":"info","message":"GET /?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":500,"timestamp":"2023-11-13 12:34:08","url":"/?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:34:19"}
+{"contentLength":"144","duration":291,"level":"info","message":"GET /?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:34:21","url":"/?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:35:32"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:39:32"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:39:43"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:40:04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-13 12:45:05"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:47:41"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:48:30"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:49:06"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:49:14"}
+{"contentLength":"74","duration":55,"level":"info","message":"GET /productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":500,"timestamp":"2023-11-13 12:49:23","url":"/productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:49:34"}
+{"contentLength":"81","duration":295,"level":"info","message":"GET /productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:49:35","url":"/productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:49:52"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:50:00"}
+{"contentLength":"26","duration":290,"level":"info","message":"GET /productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:50:02","url":"/productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:50:34"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:51:06"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:52:21"}
+{"contentLength":"67","duration":306,"level":"info","message":"GET /productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":500,"timestamp":"2023-11-13 12:52:24","url":"/productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:52:39"}
+{"contentLength":"26","duration":283,"level":"info","message":"GET /productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:52:41","url":"/productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"contentLength":"4849","duration":294,"level":"info","message":"GET /productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-10&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-11-13 12:52:49","url":"/productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-10&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:53:07"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-11-13 12:53:09"}

@@ -80,6 +80,47 @@ const dataWeeklySale = async (shopid, fromdate, todate) => {
     await pg.end();
   }
 };
+
+const dataProductSale = async (shopid, fromdate, todate) => {
+  const pg = await provider.connectPG();
+  var where = "";
+
+  if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
+    where += `and docdate between '${fromdate} 00:00:00' and '${todate} 23:59:59' `;
+  } else if (utils.isNotEmpty(fromdate)) {
+    where += `and docdate >= '${fromdate} 00:00:00' `;
+  } else if (utils.isNotEmpty(todate)) {
+    where += `and docdate <= '${todate} 23:59:59' `;
+  }
+
+  var query = `select barcode,itemnames,unitcode,sum(qty) as total_qty from public.saleinvoice_transaction_detail where docno in (SELECT docno FROM public.saleinvoice_transaction where 
+    shopid='${shopid}' ${where}
+    order by docdate asc) and shopid='${shopid}' group by barcode,itemnames,unitcode order by total_qty desc`;
+  try {
+    await pg.connect();
+
+    const result = await pg.query(query);
+    console.log(result);
+    var dataresult = [];
+    result.rows.forEach((ele) => {
+      dataresult.push({
+        barcode: ele.barcode,
+        itemnames: ele.itemnames,
+        unitcode: ele.unitcode,
+        total_qty: ele.total_qty,
+      });
+    });
+    console.log(dataresult);
+ 
+    return dataresult;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  } finally {
+    await pg.end();
+  }
+};
+
 const getDayName = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", { weekday: "long" });
@@ -99,4 +140,4 @@ const groupByDayAndSum = (data) => {
   return result;
 };
 
-module.exports = { dataresult, dataWeeklySale };
+module.exports = { dataresult, dataWeeklySale ,dataProductSale};
