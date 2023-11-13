@@ -104,10 +104,10 @@ const dataProductSale = async (shopid, fromdate, todate) => {
     var dataresult = [];
     result.rows.forEach((ele) => {
       dataresult.push({
-        barcode: ele.barcode,
-        itemnames: ele.itemnames,
+        shopid: shopid,
+        names: ele.itemnames,
         unitcode: ele.unitcode,
-        total_qty: ele.total_qty,
+        qty: ele.total_qty,
       });
     });
     console.log(dataresult);
