@@ -107,7 +107,7 @@ const dataProductSale = async (shopid, fromdate, todate) => {
         shopid: shopid,
         names: ele.itemnames,
         unitcode: ele.unitcode,
-        qty: ele.total_qty,
+        qty: parseFloat(parseFloat(ele.total_qty).toFixed(2)),
       });
     });
     console.log(dataresult);
