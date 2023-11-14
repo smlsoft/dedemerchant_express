@@ -67,11 +67,19 @@ const dataWeeklySale = async (shopid, fromdate, todate) => {
     //   });
     // });
     console.log(result.rows);
-   
+
     const groupByDay = await groupByDayAndSum(result.rows);
-    const groupedData = {Mon: groupByDay.Monday ?? 0, Tue: groupByDay.Tuesday ?? 0, Wed:  groupByDay.Wednesday ?? 0, Thu: groupByDay.Thursday ?? 0, Fri: groupByDay.Friday ?? 0, Sat: groupByDay.Saturday ?? 0, Sun: groupByDay.Sunday ?? 0}
-    
-    console.log(groupedData)
+    const groupedData = {
+      Mon: groupByDay.Monday ?? 0,
+      Tue: groupByDay.Tuesday ?? 0,
+      Wed: groupByDay.Wednesday ?? 0,
+      Thu: groupByDay.Thursday ?? 0,
+      Fri: groupByDay.Friday ?? 0,
+      Sat: groupByDay.Saturday ?? 0,
+      Sun: groupByDay.Sunday ?? 0,
+    };
+
+    console.log(groupedData);
     return groupedData;
   } catch (error) {
     console.log(error);
@@ -93,9 +101,9 @@ const dataProductSale = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `select barcode,itemnames,unitcode,sum(qty) as total_qty from public.saleinvoice_transaction_detail where docno in (SELECT docno FROM public.saleinvoice_transaction where 
+  var query = `select barcode,itemnames,unitcode,sum(qty) as total_qty,price from public.saleinvoice_transaction_detail where docno in (SELECT docno FROM public.saleinvoice_transaction where 
     shopid='${shopid}' ${where}
-    order by docdate asc) and shopid='${shopid}' group by barcode,itemnames,unitcode order by total_qty desc`;
+    order by docdate asc) and shopid='${shopid}' group by barcode,itemnames,unitcode,price order by total_qty desc`;
   try {
     await pg.connect();
 
@@ -108,10 +116,69 @@ const dataProductSale = async (shopid, fromdate, todate) => {
         names: ele.itemnames,
         unitcode: ele.unitcode,
         qty: parseFloat(parseFloat(ele.total_qty).toFixed(2)),
+        price: parseFloat(parseFloat(ele.price).toFixed(2)),
       });
     });
-    console.log(dataresult);
- 
+    // console.log(dataresult);
+
+    return dataresult;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  } finally {
+    await pg.end();
+  }
+};
+
+const dataSaleByItem = async (shopid, search, page) => {
+  const pg = await provider.connectPG();
+  var where = "";
+  var limit = 30;
+
+  if (utils.isNotEmpty(search)) {
+    var searchTerms = search.split(" ");
+
+    if (searchTerms.length > 0) {
+      searchTerms.forEach((term) => {
+        term = term.trim();
+        if (term) {
+          where += ` AND (st.barcode LIKE '%${term}%' OR EXISTS (
+            SELECT 1
+            FROM jsonb_array_elements_text(st.itemnames) AS element
+            WHERE element LIKE '%${term}%'
+          )) `;
+        }
+      });
+    } else {
+      where += ` and (st.barcode like '%${search}%' or EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements_text(st.itemnames) AS element
+      WHERE element LIKE '%${search}%'
+  )) `;
+    }
+  }
+
+  var query = `select sum(qty) as sale_qty,st.barcode,st.itemnames,st.unitcode,st.price from saleinvoice_transaction_detail st left join productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid left join saleinvoice_transaction s on s.shopid = st.shopid and s.docno = st.docno where st.shopid='${shopid}' ${where} group by st.barcode,st.itemnames,st.unitcode,st.price order by sale_qty desc offset ${
+    limit * parseFloat(page)
+  } limit ${limit}`;
+  try {
+    await pg.connect();
+
+    const result = await pg.query(query);
+    console.log(result);
+    var dataresult = [];
+    result.rows.forEach((ele) => {
+      dataresult.push({
+        shopid: shopid,
+        barcode: ele.barcode,
+        names: ele.itemnames,
+        unitcode: ele.unitcode,
+        qty: parseFloat(parseFloat(ele.sale_qty).toFixed(2)),
+        price: parseFloat(parseFloat(ele.price).toFixed(2)),
+      });
+    });
+    // console.log(dataresult);
+
     return dataresult;
   } catch (error) {
     console.log(error);
@@ -140,4 +207,4 @@ const groupByDayAndSum = (data) => {
   return result;
 };
 
-module.exports = { dataresult, dataWeeklySale ,dataProductSale};
+module.exports = { dataresult, dataWeeklySale, dataProductSale, dataSaleByItem };

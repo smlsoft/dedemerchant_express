@@ -13,7 +13,7 @@ const dataresult = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `select sum(qty) as sale_qty,st.barcode,pb.names,pb.unitcode from saleinvoice_transaction_detail st left join productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid left join saleinvoice_transaction s on s.shopid = st.shopid and s.docno = st.docno where st.shopid='${shopid}' ${where} group by st.barcode,pb.names,pb.unitcode order by sale_qty desc limit 10`;
+  var query = `select sum(qty) as sale_qty,st.barcode,pb.names,pb.unitcode,st.price from saleinvoice_transaction_detail st left join productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid left join saleinvoice_transaction s on s.shopid = st.shopid and s.docno = st.docno where st.shopid='${shopid}' ${where} group by st.barcode,pb.names,pb.unitcode,st.price order by sale_qty desc limit 10`;
   try {
     await pg.connect();
 
@@ -29,6 +29,7 @@ const dataresult = async (shopid, fromdate, todate) => {
         shopid: ele.shopid,
         unitcode: ele.unitcode,
         qty: parseFloat(parseFloat(ele.sale_qty).toFixed(2)),
+        price: parseFloat(parseFloat(ele.price).toFixed(2)),
         barcode: ele.barcode,
         names: names,
       });
