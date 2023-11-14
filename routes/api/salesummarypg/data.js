@@ -16,9 +16,7 @@ const dataresult = async (shopid, fromdate, todate) => {
   var query = `SELECT shopid, sum(totaldiscount) as discount,sum(totalamount) as cash,sum(totalpaycash) as cashierAmount,sum(totalpaytransfer) as totalpaytransfer,sum(totalpaycredit) as totalpaycredit FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} group by shopid`;
   try {
     await pg.connect();
-
     const result = await pg.query(query);
-    // console.log(result);
     var data = [];
     result.rows.forEach((ele) => {
       data.push({
@@ -101,25 +99,37 @@ const dataProductSale = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `select barcode,itemnames,unitcode,sum(qty) as total_qty,price from public.saleinvoice_transaction_detail where docno in (SELECT docno FROM public.saleinvoice_transaction where 
-    shopid='${shopid}' ${where}
-    order by docdate asc) and shopid='${shopid}' group by barcode,itemnames,unitcode,price order by total_qty desc`;
+  // var query = `select barcode,itemnames,unitcode,sum(qty) as total_qty,price from public.saleinvoice_transaction_detail where docno in (SELECT docno FROM public.saleinvoice_transaction where
+  //   shopid='${shopid}' ${where}
+  //   order by docdate asc) and shopid='${shopid}' group by barcode,itemnames,unitcode,price order by total_qty desc`;
+
+  var query = `select st.barcode,st.itemnames,st.unitcode,sum(qty) as total_qty,sum(st.sumamount) as sumamount,price,mainbarcoderef as owner from public.saleinvoice_transaction_detail st left join public.productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid where st.docno in (SELECT docno FROM public.saleinvoice_transaction where 
+      st.shopid='${shopid}' ${where}
+      order by docdate asc) and st.shopid='${shopid}' group by st.barcode,st.itemnames,st.unitcode,price,mainbarcoderef order by total_qty desc`;
   try {
     await pg.connect();
 
     const result = await pg.query(query);
     console.log(result);
     var dataresult = [];
+    var xx = 0;
     result.rows.forEach((ele) => {
+      var owxx = "";
+      if (xx > 5) {
+        owxx = "jead";
+      }
       dataresult.push({
         shopid: shopid,
         names: ele.itemnames,
         unitcode: ele.unitcode,
+        owner: owxx,
         qty: parseFloat(parseFloat(ele.total_qty).toFixed(2)),
         price: parseFloat(parseFloat(ele.price).toFixed(2)),
+        sumamount: parseFloat(parseFloat(ele.sumamount).toFixed(2)),
       });
+
+      xx++;
     });
-    // console.log(dataresult);
 
     return dataresult;
   } catch (error) {
@@ -158,7 +168,7 @@ const dataSaleByItem = async (shopid, search, page) => {
     }
   }
 
-  var query = `select sum(qty) as sale_qty,st.barcode,st.itemnames,st.unitcode,st.price from saleinvoice_transaction_detail st left join productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid left join saleinvoice_transaction s on s.shopid = st.shopid and s.docno = st.docno where st.shopid='${shopid}' ${where} group by st.barcode,st.itemnames,st.unitcode,st.price order by sale_qty desc offset ${
+  var query = `select sum(qty) as sale_qty,st.barcode,st.itemnames,st.unitcode,sum(st.sumamount) as sumamount,price from saleinvoice_transaction_detail st left join productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid left join saleinvoice_transaction s on s.shopid = st.shopid and s.docno = st.docno where st.shopid='${shopid}' ${where} group by st.barcode,st.itemnames,st.unitcode,price order by sale_qty desc offset ${
     limit * parseFloat(page)
   } limit ${limit}`;
   try {
@@ -175,6 +185,7 @@ const dataSaleByItem = async (shopid, search, page) => {
         unitcode: ele.unitcode,
         qty: parseFloat(parseFloat(ele.sale_qty).toFixed(2)),
         price: parseFloat(parseFloat(ele.price).toFixed(2)),
+        sumamount: parseFloat(parseFloat(ele.sumamount).toFixed(2)),
       });
     });
     // console.log(dataresult);
