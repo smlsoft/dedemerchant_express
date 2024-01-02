@@ -13,6 +13,14 @@ const catchAsync = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch((err) => next(err));
 };
 
+const extractDate = (datetime) => {
+  if (datetime) {
+    // If datetime is a Date object or not a string, convert it to a string
+    const dateString = datetime instanceof Date ? datetime.toISOString() : String(datetime);
+    return dateString.split("T")[0];
+  }
+  return "";
+};
 
 const formateDate = (datetime) => {
   let date = new Date(datetime);
@@ -47,10 +55,10 @@ const packName = (names) => {
 
 const isNotEmpty = (data) => {
   var result = false;
-  if (data != null && data != undefined && data != 'undefined'  && data != "") {
+  if (data != null && data != undefined && data != "undefined" && data != "") {
     result = true;
   }
   return result;
 };
 
-module.exports = { formatNumber, formateDate, packName,isNotEmpty, catchAsync };
+module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate };

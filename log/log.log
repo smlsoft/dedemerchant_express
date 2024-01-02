@@ -9333,3 +9333,174 @@
 {"contentLength":"157","duration":266,"level":"info","message":"GET /?token=62c07e090aa9039fc783d25c548ec4149e9dd89f599c8b97831bfe4c58f2a635&fromdate=2023-11-01&todate=2023-11-30","method":"GET","status":200,"timestamp":"2023-11-14 14:32:09","url":"/?token=62c07e090aa9039fc783d25c548ec4149e9dd89f599c8b97831bfe4c58f2a635&fromdate=2023-11-01&todate=2023-11-30"}
 {"contentLength":"157","duration":256,"level":"info","message":"GET /?token=62c07e090aa9039fc783d25c548ec4149e9dd89f599c8b97831bfe4c58f2a635&fromdate=2023-11-01&todate=2023-11-30","method":"GET","status":200,"timestamp":"2023-11-14 14:32:13","url":"/?token=62c07e090aa9039fc783d25c548ec4149e9dd89f599c8b97831bfe4c58f2a635&fromdate=2023-11-01&todate=2023-11-30"}
 {"contentLength":"2056","duration":292,"level":"info","message":"GET /?token=62c07e090aa9039fc783d25c548ec4149e9dd89f599c8b97831bfe4c58f2a635&fromdate=2023-01-01&todate=2023-12-31","method":"GET","status":200,"timestamp":"2023-11-14 14:32:17","url":"/?token=62c07e090aa9039fc783d25c548ec4149e9dd89f599c8b97831bfe4c58f2a635&fromdate=2023-01-01&todate=2023-12-31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-14 14:37:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-14 14:42:19"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-14 14:47:20"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-14 14:52:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-14 14:57:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-14 15:02:23"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-11-14 15:07:24"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 10:14:36"}
+{"contentLength":"38","duration":42,"level":"info","message":"GET /productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":401,"timestamp":"2023-12-28 10:16:06","url":"/productsales?token=154e80d71bbb71113fe4768475b3174ccf147bdf465bda4996c965384e7612fc&fromdate=2023-11-13&todate=2023-11-13"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2023-12-28 10:16:06","url":"/favicon.ico"}
+{"contentLength":153,"duration":1,"level":"info","message":"GET /apireport/sale?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":404,"timestamp":"2023-12-28 10:17:12","url":"/apireport/sale?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-11-13&todate=2023-11-13"}
+{"contentLength":"35","duration":656,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-11-13&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 10:17:40","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-11-13&todate=2023-11-13"}
+{"contentLength":"881425","duration":888,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 10:17:56","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"duration":4212,"level":"info","message":"GET /pdfview?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 10:18:33","url":"/pdfview?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:23:29"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:28:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:33:31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:38:32"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:43:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:48:34"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:53:35"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 10:58:36"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:03:37"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:08:38"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 11:13:32"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 11:13:37"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:18:37"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:23:38"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:28:39"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:33:40"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:38:41"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:43:42"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:48:43"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:53:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 11:58:45"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:03:40"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:04:07"}
+{"duration":1007,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":304,"timestamp":"2023-12-28 12:04:28","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2023-12-28 12:04:29","url":"/favicon.ico"}
+{"contentLength":"881425","duration":1754,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:04:32","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:05:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 12:10:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 12:15:23"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:18:53"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:23:21"}
+{"contentLength":"88","duration":999,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":500,"timestamp":"2023-12-28 12:23:25","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:23:41"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:23:47"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:23:57"}
+{"contentLength":"88","duration":991,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":500,"timestamp":"2023-12-28 12:24:00","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:24:17"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:24:25"}
+{"contentLength":"88","duration":2023,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":500,"timestamp":"2023-12-28 12:24:29","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:24:55"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:26:11"}
+{"contentLength":"25","duration":949,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:26:21","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:26:52"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:26:53"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:26:58"}
+{"contentLength":"2788","duration":925,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:27:00","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 12:31:59"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:34:51"}
+{"contentLength":"2830","duration":1022,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:34:55","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-08-01&todate=2023-11-13"}
+{"contentLength":"178","duration":617,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-11-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:35:25","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-11-01&todate=2023-11-13"}
+{"contentLength":"1287","duration":731,"level":"info","message":"GET /?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-10-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:35:33","url":"/?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-10-01&todate=2023-11-13"}
+{"duration":1846,"level":"info","message":"GET /pdfview?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-10-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:36:49","url":"/pdfview?token=a0765dd6783997d3aa2ecb5d27bb6e057584bea2a9f1f8003e30c31dfa746f84&fromdate=2023-10-01&todate=2023-11-13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:38:24"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:40:37"}
+{"contentLength":"2458","duration":910,"level":"info","message":"GET /?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-10-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:40:40","url":"/?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-10-01&todate=2023-11-13"}
+{"duration":4935,"level":"info","message":"GET /pdfview?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-10-01&todate=2023-11-13","method":"GET","status":200,"timestamp":"2023-12-28 12:40:43","url":"/pdfview?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-10-01&todate=2023-11-13"}
+{"duration":1106,"level":"info","message":"GET /pdfview?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-28&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:40:55","url":"/pdfview?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-28&todate=2023-12-28"}
+{"contentLength":"181","duration":609,"level":"info","message":"GET /?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-28&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:41:09","url":"/?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-28&todate=2023-12-28"}
+{"duration":2762,"level":"info","message":"GET /pdfview?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:41:25","url":"/pdfview?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28"}
+{"contentLength":"341","duration":745,"level":"info","message":"GET /?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:41:33","url":"/?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:42:30"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:42:49"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:42:51"}
+{"contentLength":"341","duration":802,"level":"info","message":"GET /sale?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:43:10","url":"/sale?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28"}
+{"contentLength":167,"duration":3,"level":"info","message":"GET /apireport/salebydate/receive?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":404,"timestamp":"2023-12-28 12:43:13","url":"/apireport/salebydate/receive?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28"}
+{"contentLength":"326149","duration":1027,"level":"info","message":"GET /receivemoney?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:43:19","url":"/receivemoney?token=e67910bb9e2e4996bb2cf2c87670b7cc4894ca68f92c4ecd90c7c5d22bbeb1c4&fromdate=2023-12-27&todate=2023-12-28"}
+{"contentLength":"35","duration":634,"level":"info","message":"GET /receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:47:54","url":"/receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-27&todate=2023-12-28"}
+{"contentLength":"35","duration":584,"level":"info","message":"GET /sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:47:57","url":"/sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-27&todate=2023-12-28"}
+{"contentLength":"319","duration":572,"level":"info","message":"GET /sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:48:02","url":"/sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:48:13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 12:48:29"}
+{"duration":600,"level":"info","message":"GET /sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28","method":"GET","status":304,"timestamp":"2023-12-28 12:48:31","url":"/sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28"}
+{"duration":529,"level":"info","message":"GET /receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-27&todate=2023-12-28","method":"GET","status":304,"timestamp":"2023-12-28 12:48:38","url":"/receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-27&todate=2023-12-28"}
+{"contentLength":"13251","duration":672,"level":"info","message":"GET /receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:48:45","url":"/receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28"}
+{"contentLength":"190185","duration":1122,"level":"info","message":"GET /receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-11-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:48:59","url":"/receivemoney?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-11-01&todate=2023-12-28"}
+{"contentLength":"38","duration":37,"level":"info","message":"GET /sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-11-01&todate=2023-12-28","method":"GET","status":401,"timestamp":"2023-12-28 12:51:58","url":"/sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-11-01&todate=2023-12-28"}
+{"contentLength":"38","duration":37,"level":"info","message":"GET /sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-11-01&todate=2023-12-28","method":"GET","status":401,"timestamp":"2023-12-28 12:52:09","url":"/sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-11-01&todate=2023-12-28"}
+{"contentLength":"38","duration":36,"level":"info","message":"GET /sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28","method":"GET","status":401,"timestamp":"2023-12-28 12:52:13","url":"/sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28"}
+{"contentLength":"38","duration":35,"level":"info","message":"GET /sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28","method":"GET","status":401,"timestamp":"2023-12-28 12:52:18","url":"/sale?token=d71980ed0991ef399368ef5702148d795d517373fe8061d6536773765cb23ccd&fromdate=2023-12-01&todate=2023-12-28"}
+{"contentLength":"319","duration":595,"level":"info","message":"GET /sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-12-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:52:49","url":"/sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-12-01&todate=2023-12-28"}
+{"contentLength":"3846","duration":894,"level":"info","message":"GET /sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-1-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:52:55","url":"/sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-1-01&todate=2023-12-28"}
+{"contentLength":"1194","duration":698,"level":"info","message":"GET /sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-11-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 12:52:58","url":"/sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-11-01&todate=2023-12-28"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 12:57:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:02:59"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:08:00"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:13:01"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:18:02"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:23:03"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:28:04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:33:05"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:38:06"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:43:07"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:48:08"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:53:09"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 13:58:10"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 14:03:11"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 14:08:12"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 14:13:13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2023-12-28 15:31:58"}
+{"contentLength":"1341","duration":846,"level":"info","message":"GET /sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-11-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 15:32:21","url":"/sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-11-01&todate=2023-12-28"}
+{"contentLength":"3993","duration":936,"level":"info","message":"GET /sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-28-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 15:32:27","url":"/sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-28-01&todate=2023-12-28"}
+{"contentLength":"466","duration":591,"level":"info","message":"GET /sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-12-01&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 15:32:38","url":"/sale?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-12-01&todate=2023-12-28"}
+{"contentLength":"6200","duration":582,"level":"info","message":"GET /receivemoney?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-12-28&todate=2023-12-28","method":"GET","status":200,"timestamp":"2023-12-28 15:32:52","url":"/receivemoney?token=acce73d885cd0c490fe52f23ca7edac6851b711ef3737054e4de7a38a0f3345d&fromdate=2023-12-28&todate=2023-12-28"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 15:37:52"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 15:42:53"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 15:47:54"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 15:52:55"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 15:57:56"}
+{"level":"error","message":"Redis Client Error","timestamp":"2023-12-28 16:02:57"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-02 17:24:21"}
+{"contentLength":"38","duration":6,"level":"info","message":"GET /weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":401,"timestamp":"2024-01-02 17:24:21","url":"/weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-02 17:24:21","url":"/favicon.ico"}
+{"contentLength":"87","duration":357,"level":"info","message":"GET /weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":200,"timestamp":"2024-01-02 17:25:14","url":"/weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07"}
+{"duration":322,"level":"info","message":"GET /weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":304,"timestamp":"2024-01-02 17:25:44","url":"/weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07"}
+{"duration":348,"level":"info","message":"GET /weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":304,"timestamp":"2024-01-02 17:25:59","url":"/weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07"}
+{"duration":310,"level":"info","message":"GET /weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":304,"timestamp":"2024-01-02 17:26:25","url":"/weeklysales?token=e8d76faec24d1556e1ae8e0f5b1eb4df2916e02bb97b25373034e4de17c28691&fromdate=2024-01-01&todate=2024-01-07"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-02 17:27:44"}
+{"contentLength":"87","duration":376,"level":"info","message":"GET /weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":200,"timestamp":"2024-01-02 17:28:22","url":"/weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07"}
+{"duration":311,"level":"info","message":"GET /weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":304,"timestamp":"2024-01-02 17:28:59","url":"/weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07"}
+{"duration":315,"level":"info","message":"GET /weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":304,"timestamp":"2024-01-02 17:29:57","url":"/weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07"}
+{"duration":320,"level":"info","message":"GET /weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":304,"timestamp":"2024-01-02 17:34:40","url":"/weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07"}
+{"duration":303,"level":"info","message":"GET /weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07","method":"GET","status":304,"timestamp":"2024-01-02 17:34:43","url":"/weeklysales?token=d8826df0791d1af62a2d85540ede8b24132fbc70f35dfebd925c20506392579e&fromdate=2024-01-01&todate=2024-01-07"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 17:39:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 17:44:45"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 17:49:47"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 17:54:47"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 17:59:48"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:04:50"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:09:51"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:14:53"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:19:54"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:24:55"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:29:57"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:34:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:39:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:45:00"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:50:01"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 18:55:02"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:00:03"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:05:04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:10:05"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:15:07"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:20:08"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:25:08"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:30:10"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:35:11"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:40:12"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:45:12"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:50:14"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 19:55:16"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:00:16"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:05:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:10:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:15:20"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:20:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:25:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:30:23"}

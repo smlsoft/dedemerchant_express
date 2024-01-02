@@ -103,7 +103,7 @@ const dataProductSale = async (shopid, fromdate, todate) => {
   //   shopid='${shopid}' ${where}
   //   order by docdate asc) and shopid='${shopid}' group by barcode,itemnames,unitcode,price order by total_qty desc`;
 
-  var query = `select st.barcode,st.itemnames,st.unitcode,sum(qty) as total_qty,sum(st.sumamount) as sumamount,price,mainbarcoderef as owner from public.saleinvoice_transaction_detail st left join public.productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid where st.docno in (SELECT docno FROM public.saleinvoice_transaction where 
+  var query = `select st.barcode,st.itemnames,st.unitcode,sum(qty) as qty,sum(st.sumamount) as sumamount,price,mainbarcoderef as owner from public.saleinvoice_transaction_detail st left join public.productbarcode pb on pb.barcode = st.barcode and pb.shopid = st.shopid where st.docno in (SELECT docno FROM public.saleinvoice_transaction where 
       st.shopid='${shopid}' ${where}
       order by docdate asc) and st.shopid='${shopid}' group by st.barcode,st.itemnames,st.unitcode,price,mainbarcoderef order by total_qty desc`;
   try {

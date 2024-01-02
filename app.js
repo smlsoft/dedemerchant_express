@@ -300,6 +300,7 @@ router.get("/sendPDFEmail", async (req, res) => {
 router.use("/product", require("./routes/api/product"));
 router.use("/balance", require("./routes/api/balance"));
 router.use("/saleinvoice", require("./routes/api/sale"));
+router.use("/salebydate", require("./routes/api/salebydate"));
 router.use("/productdetail", require("./routes/api/productdetail"));
 router.use("/poscenter", require("./routes/api/posactive"));
 
