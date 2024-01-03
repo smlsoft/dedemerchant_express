@@ -167,9 +167,40 @@ const receivemoney = async (token, search, fromdate, todate) => {
       ])
       .toArray();
     resultSet.success = true;
+    const aggregatedData = result.reduce((acc, item) => {
+  
+      const date = utils.extractDate(item.docdatetime);
+      
+      if (!acc[date]) {
+        acc[date] = {
+          cashAmount: 0,
+          creditAmount: 0,
+          transferAmount: 0,
+          couponAmount: 0,
+          chequeAmount: 0,
+          totalAmount: 0
+        };
+      }
+    
+      // Aggregate the values
+      acc[date].cashAmount += item.paycashamount - item.paycashchange;
+      acc[date].creditAmount += item.sumcreditcard;
+      acc[date].transferAmount += item.summoneytransfer;
+      acc[date].couponAmount += item.sumcoupon;
+      acc[date].chequeAmount += item.sumcheque;
+      acc[date].totalAmount += item.totalamountafterdiscount;
+    
+      return acc;
+    }, {});
+    
+  
+    resultSet.data = Object.entries(aggregatedData).map(([date, data]) => ({
+      date,
+      data
+    }));
+    
+    console.log(resultSet.data)
 
-    console.log(result);
-    resultSet.data = result;
     return resultSet;
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
