@@ -79,6 +79,11 @@ const dataresult = async (token, fromuser, touser, fromdate, todate) => {
             $and: filters,
           },
         },
+        {
+          $sort: {
+            docdatetime: -1,
+          },
+        },
       ])
       .toArray();
     resultSet.success = true;
@@ -129,6 +134,10 @@ const genPDF = async (body, dataprofile) => {
       tableCell: {
         fontSize: 9,
       },
+      tableFooter: {
+        fontSize: 9,
+        bold: true,
+      },
     },
   };
   if (body.length > 0) {
@@ -136,7 +145,7 @@ const genPDF = async (body, dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["15%", "20%", "15%", "15%", "15%", "10%", "10%", "10%"],
+        widths: ["15%", "15%", "15%", "9%", "9%", "9%", "9%", "9%", "9%"],
         body: body,
       },
       layout: "lightHorizontalLines",
@@ -147,7 +156,12 @@ const genPDF = async (body, dataprofile) => {
 
 const genBodyPDF = async (dataset) => {
   let body = [];
-
+  var sumamount = 0;
+  var sumcash = 0;
+  var sumtransfer = 0;
+  var sumcredit = 0;
+  var sumcheque = 0;
+  var sumcoupon = 0;
   body.push([
     { text: "เอกสารวันที่", style: "tableCell", alignment: "center" },
     { text: "เอกสารเลขที่", style: "tableCell", alignment: "center" },
@@ -156,38 +170,47 @@ const genBodyPDF = async (dataset) => {
     { text: "เงินสด", style: "tableCell", alignment: "center" },
     { text: "เงินโอน", style: "tableCell", alignment: "center" },
     { text: "บัตรเครดิต", style: "tableCell", alignment: "center" },
+    { text: "เช็ค", style: "tableCell", alignment: "center" },
+    { text: "คูปอง", style: "tableCell", alignment: "center" },
   ]),
     dataset.forEach((ele) => {
       console.log(ele);
 
-      var creditAmount = 0;
-      var transferAmount = 0;
+    
+      var name = "";
 
-      var cash = 0;
-      if (ele.paymentdetail != undefined && ele.paymentdetail != "undefined" && ele.paymentdetail != null) {
-        cash = ele.paymentdetail.cashamount;
-
-        if (ele.paymentdetail.paymentcreditcards != null) {
-          ele.paymentdetail.paymentcreditcards.forEach((ele) => {
-            creditAmount += ele.amount;
-          });
-        }
-        if (ele.paymentdetail.paymenttransfers != null) {
-          ele.paymentdetail.paymenttransfers.forEach((ele) => {
-            transferAmount += ele.amount;
-          });
-        }
+      if(ele.custcode != ''){
+        name = ele.custcode + "|" + utils.packName(ele.custnames);
       }
       body.push([
         { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "center" },
         { text: ele.docno, style: "tableCell" },
-        { text: ele.custcode + "|" + utils.packName(ele.custnames), style: "tableCell", alignment: "left" },
+        { text: name, style: "tableCell", alignment: "left" },
         { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(cash), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(transferAmount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(creditAmount), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.paycashamount-ele.paycashchange), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.summoneytransfer), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.sumcreditcard), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.sumcheque), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.sumcoupon), style: "tableCell", alignment: "right" },
       ]);
+      sumamount += ele.totalamount;
+      sumcash += (ele.paycashamount-ele.paycashchange);
+      sumtransfer += ele.summoneytransfer;
+      sumcredit += ele.sumcreditcard;
+      sumcheque += ele.sumcheque;
+      sumcoupon += ele.sumcoupon;
     });
+    body.push([
+      { text: "",rowspan:3},
+      { text: ""  },
+      { text: "" },
+      { text: utils.formatNumber(sumamount), style: "tableFooter", alignment: "right" },
+      { text: utils.formatNumber(sumcash), style: "tableFooter", alignment: "right" },
+      { text: utils.formatNumber(sumtransfer), style: "tableFooter", alignment: "right" },
+      { text: utils.formatNumber(sumcredit), style: "tableFooter", alignment: "right" },
+      { text: utils.formatNumber(sumcheque), style: "tableFooter", alignment: "right" },
+      { text: utils.formatNumber(sumcoupon), style: "tableFooter", alignment: "right" },
+    ]);
   return body;
 };
 

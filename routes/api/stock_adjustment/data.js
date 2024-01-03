@@ -44,7 +44,7 @@ const dataresult = async (token, search, fromdate, todate) => {
       shopid: token,
     });
 
-    const data = db.collection("transactionSaleInvoiceReturn");
+    const data = db.collection("transactionStockAdjustment");
 
     const result = await data
       .aggregate([
