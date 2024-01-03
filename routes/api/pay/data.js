@@ -187,14 +187,14 @@ const genBodyPDF = async (dataset) => {
         { text: ele.docno, style: "tableCell" },
         { text: name, style: "tableCell", alignment: "left" },
         { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.paycashamount-ele.paycashchange), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.paycashamount - ele.paycashchange), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.summoneytransfer), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.sumcreditcard), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.sumcheque), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.sumcoupon), style: "tableCell", alignment: "right" },
       ]);
       sumamount += ele.totalamount;
-      sumcash += (ele.paycashamount-ele.paycashchange);
+      sumcash += (ele.paycashamount - ele.paycashchange);
       sumtransfer += ele.summoneytransfer;
       sumcredit += ele.sumcreditcard;
       sumcheque += ele.sumcheque;
