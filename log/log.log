@@ -9504,3 +9504,252 @@
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:20:22"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:25:22"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-02 20:30:23"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-04 13:18:12"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 13:23:13"}
+{"contentLength":"79","duration":186,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675","method":"GET","status":500,"timestamp":"2024-01-04 13:26:19","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675"}
+{"contentLength":"79","duration":647,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675","method":"GET","status":500,"timestamp":"2024-01-04 13:28:46","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675"}
+{"contentLength":"79","duration":647,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675","method":"GET","status":500,"timestamp":"2024-01-04 13:28:46","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-04 13:29:51"}
+{"contentLength":"114","duration":359,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675","method":"GET","status":500,"timestamp":"2024-01-04 13:30:05","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675"}
+{"contentLength":"114","duration":358,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675","method":"GET","status":500,"timestamp":"2024-01-04 13:30:05","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675"}
+{"contentLength":"114","duration":335,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675","method":"GET","status":500,"timestamp":"2024-01-04 13:30:32","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675"}
+{"contentLength":"439","duration":494,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 13:31:00","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":437,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 13:32:44","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-04 13:35:33"}
+{"contentLength":"439","duration":464,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 13:35:44","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 13:40:45"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 13:45:46"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 13:50:47"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 13:55:47"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 14:00:49"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 14:05:51"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 14:10:52"}
+{"contentLength":"439","duration":472,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:12:46","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":793,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:13:51","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":386,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:14:15","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":374,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:14:47","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":1198,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:15:23","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":1142,"level":"info","message":"GET /?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:19:48","url":"/?token=ad5a3849a311f3610021baae8e80ef7f40fb0fae3a2d4892fa84fd11346ce675&fromdate=2024-01-01&todate=2024-01-04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 14:24:48"}
+{"contentLength":"114","duration":332,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0","method":"GET","status":500,"timestamp":"2024-01-04 14:28:56","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0"}
+{"contentLength":"50","duration":1160,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:30:19","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"50","duration":1085,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:30:36","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"439","duration":1091,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:30:46","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":365,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:32:31","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":374,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:34:55","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 14:39:55"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 14:44:56"}
+{"contentLength":"50","duration":451,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:46:00","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"439","duration":529,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:47:32","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":425,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:47:50","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"105616","duration":589,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2023-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:50:00","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2023-01-01&todate=2024-01-04"}
+{"contentLength":"439","duration":384,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:53:02","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"179","duration":415,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:53:49","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"179","duration":374,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 14:53:54","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-01-01&todate=2024-01-04"}
+{"contentLength":"53","duration":421,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-02-01&todate=2024-02-04","method":"GET","status":200,"timestamp":"2024-01-04 14:54:16","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-02-01&todate=2024-02-04"}
+{"contentLength":"53","duration":368,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-02-01&todate=2024-02-04","method":"GET","status":200,"timestamp":"2024-01-04 14:56:53","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-02-01&todate=2024-02-04"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-04 14:58:00"}
+{"contentLength":"38","duration":6,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-02-01&todate=2023-02-04","method":"GET","status":401,"timestamp":"2024-01-04 14:58:04","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-02-01&todate=2023-02-04"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-04 14:58:17"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-04 14:58:21"}
+{"contentLength":"50","duration":1316,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-02-01&todate=2023-02-04","method":"GET","status":200,"timestamp":"2024-01-04 14:58:32","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-02-01&todate=2023-02-04"}
+{"contentLength":"51","duration":402,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-02-01&todate=2024-02-04","method":"GET","status":200,"timestamp":"2024-01-04 14:58:47","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2024-02-01&todate=2024-02-04"}
+{"contentLength":"179","duration":396,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-02-01&todate=2024-02-04","method":"GET","status":200,"timestamp":"2024-01-04 15:00:02","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&barcode=8851959132166&fromdate=2023-02-01&todate=2024-02-04"}
+{"contentLength":"105616","duration":589,"level":"info","message":"GET /?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2023-02-01&todate=2024-02-04","method":"GET","status":200,"timestamp":"2024-01-04 15:00:05","url":"/?token=9360125c6398f53033ebf49af976d1a592df7934844dd08317aa85e0b649b8a0&fromdate=2023-02-01&todate=2024-02-04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:05:06"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:10:08"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:15:09"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:20:09"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:25:11"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:30:12"}
+{"contentLength":"52","duration":367,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=BARCODE001&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:34:43","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=BARCODE001&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"50","duration":389,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8859159800434&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:35:01","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8859159800434&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"50","duration":388,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132364&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:35:09","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132364&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"51","duration":398,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132166&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:35:45","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132166&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"50","duration":368,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8859159800434&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:35:52","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8859159800434&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"50","duration":398,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=BARCODE012&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:36:03","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=BARCODE012&fromdate=2024-01-04&todate=2024-01-04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:41:04"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:46:05"}
+{"contentLength":"51","duration":370,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132166&fromdate=2024-01-04&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:46:32","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132166&fromdate=2024-01-04&todate=2024-01-04"}
+{"contentLength":"179","duration":385,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132166&fromdate=2024-01-01&todate=2024-01-04","method":"GET","status":200,"timestamp":"2024-01-04 15:46:37","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441&barcode=8851959132166&fromdate=2024-01-01&todate=2024-01-04"}
+{"contentLength":"11229","duration":348,"level":"info","message":"GET /?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441","method":"GET","status":200,"timestamp":"2024-01-04 15:47:17","url":"/?token=298d1bae20119c0ad4d7abe4978900bf66d27db8436b61385f3070a52cdba441"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:52:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 15:57:19"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:02:20"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:07:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:12:23"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:17:24"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:22:26"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:27:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:32:28"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:37:29"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:42:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:47:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:52:32"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 16:57:34"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 17:02:35"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 20:05:02"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 20:36:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 21:05:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 21:37:51"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 22:09:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 22:35:35"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 23:07:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 23:23:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-04 23:39:20"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 00:11:13"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 00:43:06"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 01:14:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 01:46:51"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 02:18:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 02:50:36"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 03:22:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 03:54:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 04:26:16"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 04:55:56"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 05:05:06"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 09:51:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 09:56:34"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:01:35"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:03:59"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:04:01"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:04:35"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:09:37"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:14:38"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:17:49"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:22:50"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:27:52"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:32:03"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:32:39"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-05 10:32:46"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:32:51"}
+{"contentLength":157,"duration":5,"level":"info","message":"GET /debtor_transaction","method":"GET","status":404,"timestamp":"2024-01-05 10:37:11","url":"/debtor_transaction"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 10:37:11","url":"/favicon.ico"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:37:52"}
+{"contentLength":167,"duration":2,"level":"info","message":"GET /apireport/debtor_transaction","method":"GET","status":404,"timestamp":"2024-01-05 10:37:59","url":"/apireport/debtor_transaction"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 10:37:59","url":"/favicon.ico"}
+{"contentLength":167,"duration":2,"level":"info","message":"GET /apireport/debtor_transaction?token=4dfec7aea882cbb8dcacc62539011483478a02a21b560a183995130da8a9032c","method":"GET","status":404,"timestamp":"2024-01-05 10:38:19","url":"/apireport/debtor_transaction?token=4dfec7aea882cbb8dcacc62539011483478a02a21b560a183995130da8a9032c"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 10:38:19","url":"/favicon.ico"}
+{"contentLength":314,"duration":4,"level":"info","message":"GET /","method":"GET","status":200,"timestamp":"2024-01-05 10:39:25","url":"/"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 10:39:25","url":"/favicon.ico"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 10:39:25","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:39:42"}
+{"contentLength":"38","duration":59,"level":"info","message":"GET /","method":"GET","status":401,"timestamp":"2024-01-05 10:39:45","url":"/"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 10:39:45","url":"/favicon.ico"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-05 10:40:35"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 10:40:38"}
+{"contentLength":"173205","duration":502,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0","method":"GET","status":200,"timestamp":"2024-01-05 10:41:03","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 10:41:03","url":"/favicon.ico"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:46:03"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:51:05"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 10:56:07"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:01:08"}
+{"contentLength":"173205","duration":444,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&shopid=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":200,"timestamp":"2024-01-05 11:05:52","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&shopid=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":0,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:05:52","url":"/favicon.ico"}
+{"contentLength":"173205","duration":458,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":200,"timestamp":"2024-01-05 11:06:34","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:06:34","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:07:49"}
+{"contentLength":"38","duration":356,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":200,"timestamp":"2024-01-05 11:08:08","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:08:08","url":"/favicon.ico"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:13:09"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:18:10"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:23:11"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:28:12"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:33:14"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:38:15"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:41:54"}
+{"duration":337,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":304,"timestamp":"2024-01-05 11:41:59","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:41:59","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:42:22"}
+{"contentLength":"173205","duration":465,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":200,"timestamp":"2024-01-05 11:42:25","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:42:25","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:42:57"}
+{"contentLength":"38","duration":356,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":200,"timestamp":"2024-01-05 11:43:05","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:43:05","url":"/favicon.ico"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-05 11:43:12"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:43:20"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:43:42"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:44:24"}
+{"duration":374,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":304,"timestamp":"2024-01-05 11:44:27","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":4,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:44:27","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:44:32"}
+{"contentLength":"90","duration":61,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":500,"timestamp":"2024-01-05 11:44:33","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:44:33","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:45:34"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:45:50"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 11:45:57"}
+{"contentLength":"38","duration":7,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":401,"timestamp":"2024-01-05 11:45:57","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":4,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:45:57","url":"/favicon.ico"}
+{"contentLength":"38","duration":379,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":200,"timestamp":"2024-01-05 11:46:06","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:46:06","url":"/favicon.ico"}
+{"contentLength":"2472","duration":331,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 11:46:30","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 11:46:30","url":"/favicon.ico"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:51:31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 11:56:32"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:01:34"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 12:05:35"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 12:05:39"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 12:05:54"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 12:06:08"}
+{"contentLength":"38","duration":337,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 12:06:12","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 12:06:12","url":"/favicon.ico"}
+{"contentLength":"1299","duration":347,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 12:06:34","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 12:06:34","url":"/favicon.ico"}
+{"duration":321,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002","method":"GET","status":304,"timestamp":"2024-01-05 12:06:41","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 12:06:41","url":"/favicon.ico"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:11:41"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:16:43"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:21:44"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:26:45"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:31:46"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:36:48"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:41:49"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:46:50"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:51:52"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 12:56:53"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:01:54"}
+{"duration":336,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002","method":"GET","status":304,"timestamp":"2024-01-05 13:06:19","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-05 13:06:19","url":"/favicon.ico"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:11:19"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:16:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:21:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:26:24"}
+{"contentLength":"38","duration":48,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0AR001","method":"GET","status":401,"timestamp":"2024-01-05 13:29:03","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0AR001"}
+{"contentLength":"38","duration":50,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0AR001","method":"GET","status":401,"timestamp":"2024-01-05 13:30:07","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0AR001"}
+{"contentLength":"2472","duration":330,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 13:30:40","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 13:31:34"}
+{"contentLength":"2460","duration":360,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 13:31:55","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"contentLength":"2460","duration":340,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 13:35:25","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 13:37:24"}
+{"contentLength":"2460","duration":358,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 13:37:31","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"contentLength":"2460","duration":366,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 13:37:51","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"contentLength":"2460","duration":327,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 13:40:14","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AR001"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:45:14"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:50:15"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 13:55:17"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:00:17"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:05:19"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:10:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:15:22"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:20:24"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:25:25"}
+{"contentLength":"2460","duration":337,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 14:28:50","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AR001"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:33:51"}
+{"contentLength":"1299","duration":319,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:34:31","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"contentLength":"1299","duration":343,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:34:43","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 14:37:15"}
+{"contentLength":"1287","duration":345,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:37:17","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"contentLength":"2460","duration":336,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 14:38:06","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AR001"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:43:07"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 14:45:20"}
+{"contentLength":"2460","duration":337,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AR001","method":"GET","status":200,"timestamp":"2024-01-05 14:45:28","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AR001"}
+{"contentLength":"1305","duration":326,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:45:45","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 14:46:27"}
+{"contentLength":"1303","duration":354,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:46:33","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-05 14:47:29"}
+{"contentLength":"1303","duration":361,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:51:22","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"contentLength":"1303","duration":315,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:54:54","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"contentLength":"1303","duration":324,"level":"info","message":"GET /?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 14:58:39","url":"/?token=218a5bbfcfff46a12b874e4bd3fb333a2e35636def01bbc694a7b3b5c76aa72a&creditorcode=AP002"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 15:03:40"}
+{"contentLength":"1303","duration":334,"level":"info","message":"GET /?token=ef3dcfe5c10b4f82b91245c7289d8e48cd35209ac32a852a03fe193e5513aeec&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 15:08:02","url":"/?token=ef3dcfe5c10b4f82b91245c7289d8e48cd35209ac32a852a03fe193e5513aeec&creditorcode=AP002"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 15:13:03"}

@@ -37,9 +37,11 @@ const dataresult = async (shopid, barcode, fromdate, todate) => {
       balanceqty = resultBalance.rows[0].balanceqty;
     }
     const resultData = {
-      balance: balanceqty,
+      balance: parseFloat(balanceqty),
       details: result.rows,
     };
+
+    console.log(resultData);
     
     return resultData;
   } catch (error) {

@@ -335,6 +335,9 @@ router.use("/salebydebtor", require("./routes/api/salebydebtor"));
 router.use("/cancel", require("./routes/api/cancel"));
 router.use("/balanceimport", require("./routes/api/balanceimport"));
 router.use("/health", require("./routes"));
+router.use("/debtortransaction", require("./routes/api/debtor_transaction"));
+router.use("/creditortransaction", require("./routes/api/creditor_transaction"));
+
 
 router.get("/getUserShop", async (req, res) => {
   //8be917f9e93923fb18a7a1b74716c4c506cc4e97d982840cd26f0d37c60b11d2
