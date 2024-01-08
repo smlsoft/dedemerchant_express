@@ -9753,3 +9753,44 @@
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 15:03:40"}
 {"contentLength":"1303","duration":334,"level":"info","message":"GET /?token=ef3dcfe5c10b4f82b91245c7289d8e48cd35209ac32a852a03fe193e5513aeec&creditorcode=AP002","method":"GET","status":200,"timestamp":"2024-01-05 15:08:02","url":"/?token=ef3dcfe5c10b4f82b91245c7289d8e48cd35209ac32a852a03fe193e5513aeec&creditorcode=AP002"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 15:13:03"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-05 15:13:43"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 09:54:31"}
+{"duration":1764,"level":"info","message":"GET /pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81","method":"GET","status":200,"timestamp":"2024-01-08 09:54:44","url":"/pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81"}
+{"duration":1441,"level":"info","message":"GET /pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81","method":"GET","status":200,"timestamp":"2024-01-08 09:55:22","url":"/pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81"}
+{"duration":1867,"level":"info","message":"GET /pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81","method":"GET","status":200,"timestamp":"2024-01-08 09:55:31","url":"/pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 09:55:53"}
+{"duration":1944,"level":"info","message":"GET /pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81","method":"GET","status":200,"timestamp":"2024-01-08 09:55:56","url":"/pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 09:56:21"}
+{"duration":9801,"level":"info","message":"GET /pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81","method":"GET","status":200,"timestamp":"2024-01-08 09:56:31","url":"/pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-08 09:56:36"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 09:56:39"}
+{"duration":1878,"level":"info","message":"GET /pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81","method":"GET","status":200,"timestamp":"2024-01-08 09:56:47","url":"/pdfview?token=a0f15db155edd321e590080077d6a5f5f23345c607cb7fd206bcce1fcda1ad81"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:01:45"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:06:15"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:06:18"}
+{"duration":8264,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb","method":"GET","status":200,"timestamp":"2024-01-08 10:07:17","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb"}
+{"duration":1274,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03","method":"GET","status":200,"timestamp":"2024-01-08 10:07:56","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:12:15"}
+{"duration":1576,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03","method":"GET","status":200,"timestamp":"2024-01-08 10:12:41","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:13:13"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:13:42"}
+{"duration":4095,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03","method":"GET","status":200,"timestamp":"2024-01-08 10:17:25","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:17:50"}
+{"duration":1571,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03","method":"GET","status":200,"timestamp":"2024-01-08 10:18:01","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:19:25"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:19:50"}
+{"duration":1405,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03","method":"GET","status":200,"timestamp":"2024-01-08 10:19:52","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:20:04"}
+{"duration":1505,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03","method":"GET","status":200,"timestamp":"2024-01-08 10:20:09","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:20:27"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:20:29"}
+{"duration":1399,"level":"info","message":"GET /pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03","method":"GET","status":200,"timestamp":"2024-01-08 10:20:33","url":"/pdfview?token=dbc4a2fbbbf1f03e57131a5a62fdff84fe50a3fb8fdf4bf05bab1587aecd23bb&fromdate=2024-01-03&todate=2024-01-03"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:25:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:30:33"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:31:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:36:21"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:38:10"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:39:57"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:40:01"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:45:02"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:50:07"}

@@ -174,12 +174,17 @@ const genBodyPDF = async (dataset) => {
     { text: "คูปอง", style: "tableCell", alignment: "center" },
   ]),
     dataset.forEach((ele) => {
+
+      if (!ele.paycashchange || ele.paycashchange == null || ele.paycashchange == undefined || ele.paycashchange == "") {
+        ele.paycashchange = 0;
+      }
+
       console.log(ele);
 
-    
+
       var name = "";
 
-      if(ele.custcode != ''){
+      if (ele.custcode != '') {
         name = ele.custcode + "|" + utils.packName(ele.custnames);
       }
       body.push([
@@ -200,17 +205,17 @@ const genBodyPDF = async (dataset) => {
       sumcheque += ele.sumcheque;
       sumcoupon += ele.sumcoupon;
     });
-    body.push([
-      { text: "",rowspan:3},
-      { text: ""  },
-      { text: "" },
-      { text: utils.formatNumber(sumamount), style: "tableFooter", alignment: "right" },
-      { text: utils.formatNumber(sumcash), style: "tableFooter", alignment: "right" },
-      { text: utils.formatNumber(sumtransfer), style: "tableFooter", alignment: "right" },
-      { text: utils.formatNumber(sumcredit), style: "tableFooter", alignment: "right" },
-      { text: utils.formatNumber(sumcheque), style: "tableFooter", alignment: "right" },
-      { text: utils.formatNumber(sumcoupon), style: "tableFooter", alignment: "right" },
-    ]);
+  body.push([
+    { text: "", rowspan: 3 },
+    { text: "" },
+    { text: "" },
+    { text: utils.formatNumber(sumamount), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumcash), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumtransfer), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumcredit), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumcheque), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sumcoupon), style: "tableFooter", alignment: "right" },
+  ]);
   return body;
 };
 

@@ -163,7 +163,7 @@ const genBodyPDF = async (dataset) => {
   var sumcredit = 0;
   var sumcheque = 0;
   var sumcoupon = 0;
-  
+
   body.push([
     { text: "เอกสารวันที่", style: "tableCell", alignment: "center" },
     { text: "เอกสารเลขที่", style: "tableCell", alignment: "center" },
@@ -176,11 +176,16 @@ const genBodyPDF = async (dataset) => {
     { text: "คูปอง", style: "tableCell", alignment: "center" },
   ]),
     dataset.forEach((ele) => {
+
+      if (!ele.paycashchange || ele.paycashchange == null || ele.paycashchange == undefined || ele.paycashchange == "") {
+        ele.paycashchange = 0;
+      }
+
       console.log(ele);
 
       var name = "";
 
-      if(ele.custcode != ''){
+      if (ele.custcode != '') {
         name = ele.custcode + "|" + utils.packName(ele.custnames);
       }
       body.push([
@@ -188,22 +193,22 @@ const genBodyPDF = async (dataset) => {
         { text: ele.docno, style: "tableCell" },
         { text: name, style: "tableCell", alignment: "left" },
         { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.paycashamount-ele.paycashchange), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.paycashamount - ele.paycashchange), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.summoneytransfer), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.sumcreditcard), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.sumcheque), style: "tableCell", alignment: "right" },
         { text: utils.formatNumber(ele.sumcoupon), style: "tableCell", alignment: "right" },
       ]);
       sumamount += ele.totalamount;
-      sumcash += (ele.paycashamount-ele.paycashchange);
+      sumcash += (ele.paycashamount - ele.paycashchange);
       sumtransfer += ele.summoneytransfer;
       sumcredit += ele.sumcreditcard;
       sumcheque += ele.sumcheque;
       sumcoupon += ele.sumcoupon;
     });
   body.push([
-    { text: "",rowspan:3},
-    { text: ""  },
+    { text: "", rowspan: 3 },
+    { text: "" },
     { text: "" },
     { text: utils.formatNumber(sumamount), style: "tableFooter", alignment: "right" },
     { text: utils.formatNumber(sumcash), style: "tableFooter", alignment: "right" },

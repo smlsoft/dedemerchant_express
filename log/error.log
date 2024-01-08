@@ -1823,3 +1823,11 @@
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 14:43:07"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 15:03:40"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-05 15:13:03"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-05 15:13:43"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-08 09:56:36"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:01:45"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:25:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:30:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:36:21"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:45:02"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:50:07"}
