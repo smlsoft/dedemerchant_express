@@ -157,13 +157,12 @@ const dataresult = async (token, search, fromdate, todate,) => {
         },
       ])
       .toArray();
-
+  
     resultSet.success = true;
     resultSet.data = [...purchaseTransactions, ...purchaseReturnTransactions
       , ...saleInvoices, ...saleReturnInvoices, ...transferTransactions, ...receiveTransactions
       , ...withdrawTransactions, ...withdrawReturnTransactions, ...stockAdjustTransactions];
     const dataset = resultSet;
-    console.log(dataset);
     return dataset;
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);

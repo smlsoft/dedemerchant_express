@@ -61,7 +61,6 @@ const isNotEmpty = (data) => {
   return result;
 };
 
-
 const getNameByTransflag = (transflag) => {
   var result = "";
   switch (transflag) {
