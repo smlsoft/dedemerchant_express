@@ -61,4 +61,42 @@ const isNotEmpty = (data) => {
   return result;
 };
 
-module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate };
+
+const getNameByTransflag = (transflag) => {
+  var result = "";
+  switch (transflag) {
+    case 12:
+      result = "ซื้อสินค้า";
+      break;
+    case 16:
+      result = "ส่งคืนสินค้า";
+      break;
+    case 44:
+      result = "ขายสินค้า";
+      break;
+    case 48:
+      result = "รับคืนสินค้า";
+      break;
+    case 56:
+      result = "เบิกสินค้า";
+      break;
+    case 58:
+      result = "รับคืนจากการเบิก";
+      break;
+    case 60:
+      result = "รับสินค้า";
+      break;
+    case 66:
+      result = "ปรับปรุงสต็อก";
+      break;
+    case 72:
+      result = "โอนสินค้า";
+      break;
+    default:
+      result = "Unknow";
+      break;
+  }
+  return result;
+};
+
+module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate, getNameByTransflag };

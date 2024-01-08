@@ -7,7 +7,7 @@ const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const dataresult = async (token, search,fromdate, todate,) => {
+const dataresult = async (token, search, fromdate, todate,) => {
   const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
   try {
@@ -36,7 +36,7 @@ const dataresult = async (token, search,fromdate, todate,) => {
           {
             docno: { $regex: pattern },
           },
-     
+
         ],
       });
     }
@@ -45,9 +45,30 @@ const dataresult = async (token, search,fromdate, todate,) => {
       shopid: token,
     });
 
-    const data = db.collection("transactionStockReceiveProduct");
 
-    const result = await data
+    filters.push({
+      iscancel: true,
+    });
+    /// ซื้อสินค้า
+    const transactionPurchase = db.collection("transactionPurchase");
+    /// ส่งคืนสินค้า
+    const transactionPurchaseReturn = db.collection("transactionPurchaseReturn");
+    /// ขายสินค้า
+    const transactionSaleInvoice = db.collection("transactionSaleInvoice");
+    /// รับคืนสินค้า
+    const transactionSaleReturn = db.collection("transactionSaleInvoiceReturn");
+    /// โอนสินค้า
+    const transactionTransfer = db.collection("transactionStockTransfer");
+    /// รับสินค้า
+    const transactionReceive = db.collection("transactionStockReceiveProduct");
+    /// เบิกสินค้า
+    const transactionWithdraw = db.collection("transactionStockPickupProduct");
+    /// รับคืนจากการเบิก
+    const transactionWithdrawReturn = db.collection("transactionStockReturnProduct");
+    /// ปรับปรุงสต็อก
+    const transactionStockAdjust = db.collection("transactionStockAdjustment");
+
+    const purchaseTransactions = await transactionPurchase
       .aggregate([
         {
           $match: {
@@ -56,10 +77,93 @@ const dataresult = async (token, search,fromdate, todate,) => {
         },
       ])
       .toArray();
+
+    const purchaseReturnTransactions = await transactionPurchaseReturn
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
+    const saleInvoices = await transactionSaleInvoice
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
+    const saleReturnInvoices = await transactionSaleReturn
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
+    const transferTransactions = await transactionTransfer
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
+    const receiveTransactions = await transactionReceive
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
+    const withdrawTransactions = await transactionWithdraw
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
+    const withdrawReturnTransactions = await transactionWithdrawReturn
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
+    const stockAdjustTransactions = await transactionStockAdjust
+      .aggregate([
+        {
+          $match: {
+            $and: filters,
+          },
+        },
+      ])
+      .toArray();
+
     resultSet.success = true;
-    resultSet.data = result;
+    resultSet.data = [...purchaseTransactions, ...purchaseReturnTransactions
+      , ...saleInvoices, ...saleReturnInvoices, ...transferTransactions, ...receiveTransactions
+      , ...withdrawTransactions, ...withdrawReturnTransactions, ...stockAdjustTransactions];
     const dataset = resultSet;
-    //console.log(dataset);
+    console.log(dataset);
     return dataset;
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
@@ -68,7 +172,7 @@ const dataresult = async (token, search,fromdate, todate,) => {
   }
 };
 
-const genPDF = async (body,dataprofile) => {
+const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
@@ -103,7 +207,7 @@ const genPDF = async (body,dataprofile) => {
       },
       tableCell: {
         fontSize: 9
-    }
+      }
     },
   };
   if (body.length > 0) {
@@ -111,7 +215,7 @@ const genPDF = async (body,dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ['*', '*', '*', '*' ,'*','*'   ],
+        widths: ['*', '*', '*', '*', '*', '*'],
         body: body
       },
       layout: "lightHorizontalLines",
@@ -124,57 +228,57 @@ const genBodyPDF = async (dataset) => {
   let body = [];
 
   body.push([
-    { text: "เอกสารวันที่", style: 'tableCell',alignment: "center" },
-    { text: "เอกสารเลขที่", style: 'tableCell',alignment: "center" },
-    { text: "เมนูที่ยกเลิก", style: 'tableCell',alignment: "center" },
-    { text: "วันที่ยกเลิก", style: 'tableCell',alignment: "center" },
-    { text: "ผู้ยกเลิก", style: 'tableCell',alignment: "center" },
-    { text: "สาเหตุการยกเลิก", style: 'tableCell',alignment: "center" },
+    { text: "เอกสารวันที่", style: 'tableCell', alignment: "left" },
+    { text: "เอกสารเลขที่", style: 'tableCell', alignment: "left" },
+    { text: "เมนูที่ยกเลิก", style: 'tableCell', alignment: "left" },
+    { text: "วันที่ยกเลิก", style: 'tableCell', alignment: "left" },
+    { text: "ผู้ยกเลิก", style: 'tableCell', alignment: "left" },
+    { text: "สาเหตุการยกเลิก", style: 'tableCell', alignment: "left" },
 
   ]),
-  dataset.forEach((ele) => {
-    body.push([
-      { text: utils.formateDate(ele.docdatetime) ,style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4' },
-      { text: ele.docno ,style: 'tableCell',fillColor: '#f5e8c4' },
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: "" ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: "" ,style: 'tableCell',alignment: "right"  ,fillColor: '#f5e8c4'},
+    dataset.forEach((ele) => {
+      body.push([
+        { text: utils.formateDate(ele.docdatetime), style: 'tableCell', alignment: "left" },
+        { text: ele.docno, style: 'tableCell', },
+        { text: utils.getNameByTransflag(ele.transflag), style: 'tableCell', alignment: "left" },
+        { text: utils.formateDate(ele.updatedat), style: 'tableCell', alignment: "left" },
+        { text: ele.updatedby, style: 'tableCell', alignment: "left" },
+        { text: "", style: 'tableCell', alignment: "left" },
 
-    ]);
-    ele.details.forEach((detail) => {
-      console.log(detail);
-     
-        body.push(
-          [
-            { text: detail.barcode ,style: 'tableCell'},
-            { text: utils.packName(detail.itemnames),style: 'tableCell' },
-            { text: utils.packName(detail.whnames),style: 'tableCell',alignment: "center" },
-            { text: utils.packName(detail.locationnames) ,style: 'tableCell',alignment: "center"},
-            { text: utils.packName(detail.unitnames) ,style: 'tableCell',alignment: "center"},
-            { text: utils.formatNumber(detail.qty) ,style: 'tableCell',alignment: "right"},
-            { text: utils.formatNumber(detail.price) ,style: 'tableCell',alignment: "right"},
-            { text: utils.formatNumber(detail.sumamount),style: 'tableCell',alignment: "right" },
-          ]
-        );
-      
+      ]);
+      // ele.details.forEach((detail) => {
+      //   console.log(detail);
+
+      //   body.push(
+      //     [
+      //       { text: detail.barcode, style: 'tableCell' },
+      //       { text: utils.packName(detail.itemnames), style: 'tableCell' },
+      //       { text: utils.packName(detail.whnames), style: 'tableCell', alignment: "center" },
+      //       { text: utils.packName(detail.locationnames), style: 'tableCell', alignment: "center" },
+      //       { text: utils.packName(detail.unitnames), style: 'tableCell', alignment: "center" },
+      //       { text: utils.formatNumber(detail.qty), style: 'tableCell', alignment: "right" },
+      //       { text: utils.formatNumber(detail.price), style: 'tableCell', alignment: "right" },
+      //       { text: utils.formatNumber(detail.sumamount), style: 'tableCell', alignment: "right" },
+      //     ]
+      //   );
+
+      // });
     });
-  });
   return body;
 };
 
 
 
-const pdfPreview = async (token, res) => {
- // var dataset = await dataresult(token, search,fromdate,todate);
+const pdfPreview = async (token, search, fromdate, todate, res) => {
+  var dataset = await dataresult(token, search, fromdate, todate);
   var dataprofile = await globalservice.dataShop(token);
-  if (dataprofile.success) {
-    var body = await genBodyPDF([]);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
+  if (dataset.success) {
+    var body = await genBodyPDF(dataset.data);
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
-  }else {
+  } else {
     res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };

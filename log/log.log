@@ -9794,3 +9794,171 @@
 {"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 10:40:01"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:45:02"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:50:07"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-08 10:51:36"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:19:28"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 13:20:22","url":"/favicon.ico"}
+{"contentLength":"38","duration":60,"level":"info","message":"GET /?token=139a87e81344e5f27d436a9736f3fafd6a193336c18bbc043f119a9e050ca0f1","method":"GET","status":401,"timestamp":"2024-01-08 13:20:30","url":"/?token=139a87e81344e5f27d436a9736f3fafd6a193336c18bbc043f119a9e050ca0f1"}
+{"contentLength":"5318","duration":1633,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:21:31","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"duration":736,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:21:40","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"duration":760,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":304,"timestamp":"2024-01-08 13:21:47","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:23:16"}
+{"duration":936,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:23:18","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:24:19"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:24:48"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:24:51"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:25:27"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:25:30"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-08 13:25:33"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:25:35"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:25:47"}
+{"duration":791,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":304,"timestamp":"2024-01-08 13:25:48","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:26:05"}
+{"duration":739,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":304,"timestamp":"2024-01-08 13:26:10","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:26:26"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:26:35"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:26:40"}
+{"contentLength":"38","duration":6,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":401,"timestamp":"2024-01-08 13:26:40","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"duration":863,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:26:50","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:27:04"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:27:31"}
+{"contentLength":"38","duration":4,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":401,"timestamp":"2024-01-08 13:27:31","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:27:49"}
+{"duration":734,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":304,"timestamp":"2024-01-08 13:27:52","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:28:17"}
+{"duration":1467,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:28:20","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:28:26"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:30:17"}
+{"duration":781,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":304,"timestamp":"2024-01-08 13:30:18","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"duration":730,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":304,"timestamp":"2024-01-08 13:30:23","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:30:54"}
+{"duration":734,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":304,"timestamp":"2024-01-08 13:30:55","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"duration":1661,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:30:59","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:31:33"}
+{"duration":2955,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:31:38","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:32:22"}
+{"duration":1568,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:32:26","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:33:32"}
+{"contentLength":"38","duration":50,"level":"info","message":"GET /pdfview?token=139a87e81344e5f27d436a9736f3fafd6a193336c18bbc043f119a9e050ca0f1","method":"GET","status":401,"timestamp":"2024-01-08 13:35:28","url":"/pdfview?token=139a87e81344e5f27d436a9736f3fafd6a193336c18bbc043f119a9e050ca0f1"}
+{"duration":1547,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:35:34","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:37:38"}
+{"duration":3365,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:38:01","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:41:21"}
+{"duration":1454,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:41:24","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:41:43"}
+{"duration":1389,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:41:49","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 13:42:25"}
+{"duration":1474,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 13:42:27","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 13:47:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 13:52:28"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 13:57:29"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:02:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:07:31"}
+{"duration":4277,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:09:33","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:14:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:19:31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:24:32"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:26:12"}
+{"duration":2202,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:26:28","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:29:46"}
+{"duration":1495,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:29:54","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":"38","duration":55,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY","method":"GET","status":401,"timestamp":"2024-01-08 14:32:37","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&search=2PrIIqTWxoBXv16K310sNwfHmfY"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:32:37","url":"/favicon.ico"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:32:37","url":"/favicon.ico"}
+{"contentLength":"38","duration":48,"level":"info","message":"GET /?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002","method":"GET","status":401,"timestamp":"2024-01-08 14:32:50","url":"/?token=fecc8071d9e125c565df9703f78e92bbda7d7e49088fd6369ed81694f76079c0&creditorcode=AP002"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:32:50","url":"/favicon.ico"}
+{"contentLength":150,"duration":0,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:32:50","url":"/favicon.ico"}
+{"contentLength":"6620","duration":1323,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:33:09","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:33:09","url":"/favicon.ico"}
+{"duration":1729,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:33:20","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:33:20","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:34:20"}
+{"duration":8052,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:34:31","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:34:31","url":"/favicon.ico"}
+{"contentLength":169,"duration":1,"level":"info","message":"GET //apireport/vatpurchase/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2024&month=0","method":"GET","status":404,"timestamp":"2024-01-08 14:38:33","url":"//apireport/vatpurchase/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2024&month=0"}
+{"contentLength":150,"duration":0,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:38:33","url":"/favicon.ico"}
+{"duration":3293,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2024&month=0","method":"GET","status":200,"timestamp":"2024-01-08 14:38:41","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2024&month=0"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:38:41","url":"/favicon.ico"}
+{"duration":9541,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2023&month=0","method":"GET","status":200,"timestamp":"2024-01-08 14:38:57","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2023&month=0"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:38:57","url":"/favicon.ico"}
+{"duration":7927,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2023&month=12","method":"GET","status":200,"timestamp":"2024-01-08 14:39:23","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2023&month=12"}
+{"contentLength":150,"duration":0,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:39:23","url":"/favicon.ico"}
+{"duration":3096,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2023&month=11","method":"GET","status":200,"timestamp":"2024-01-08 14:39:29","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824&year=2023&month=11"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:39:29","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:42:03"}
+{"duration":2151,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:42:10","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":4,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:42:10","url":"/favicon.ico"}
+{"duration":1819,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:43:19","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:43:19","url":"/favicon.ico"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:48:18"}
+{"duration":2871,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:50:47","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:50:47","url":"/favicon.ico"}
+{"duration":2401,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:51:07","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":0,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:51:07","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:51:36"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:51:55"}
+{"duration":1932,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:51:58","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:51:58","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:52:13"}
+{"duration":1931,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:52:15","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:52:16","url":"/favicon.ico"}
+{"contentLength":"10333","duration":950,"level":"info","message":"GET /?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:52:36","url":"/?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":0,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:52:36","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:53:43"}
+{"duration":2075,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:53:45","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:53:45","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:57:07"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:57:21"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:57:40"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:58:02"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 14:58:17"}
+{"duration":1475,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 14:58:19","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 14:58:19","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:00:50"}
+{"duration":1567,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:01:06","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:01:06","url":"/favicon.ico"}
+{"duration":1348,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:01:53","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:01:53","url":"/favicon.ico"}
+{"duration":1793,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:06:26","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:06:26","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:07:29"}
+{"duration":1628,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:08:07","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:08:07","url":"/favicon.ico"}
+{"duration":1459,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:08:19","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:08:19","url":"/favicon.ico"}
+{"duration":1472,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:09:49","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:09:49","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:11:12"}
+{"duration":2360,"level":"info","message":"GET /pdfview?token=a535e07f90dd746a97350ae6e3175c46730850b32694e230938c8d1a4214e325","method":"GET","status":200,"timestamp":"2024-01-08 15:12:54","url":"/pdfview?token=a535e07f90dd746a97350ae6e3175c46730850b32694e230938c8d1a4214e325"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:17:52"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:22:53"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:27:55"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:32:56"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:37:57"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:42:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:47:59"}
+{"duration":1638,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:48:38","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:48:38","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:49:18"}
+{"duration":1683,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:52:26","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:52:26","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:53:43"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:53:48"}
+{"duration":2523,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:53:53","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:53:53","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:55:40"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:55:55"}
+{"duration":2498,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:55:58","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":3,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:55:58","url":"/favicon.ico"}
+{"duration":1754,"level":"info","message":"GET /pdfview?token=c1db05d538555778966e63d5698e3b81a9e8d7b3bbf9c662469845da600126cb","method":"GET","status":200,"timestamp":"2024-01-08 15:56:53","url":"/pdfview?token=c1db05d538555778966e63d5698e3b81a9e8d7b3bbf9c662469845da600126cb"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:57:49"}
+{"duration":1798,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:57:52","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:57:52","url":"/favicon.ico"}
+{"duration":11017,"level":"info","message":"GET /pdfview?token=c1db05d538555778966e63d5698e3b81a9e8d7b3bbf9c662469845da600126cb","method":"GET","status":200,"timestamp":"2024-01-08 15:58:36","url":"/pdfview?token=c1db05d538555778966e63d5698e3b81a9e8d7b3bbf9c662469845da600126cb"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 15:59:41"}
+{"duration":1966,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 15:59:44","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":2,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 15:59:44","url":"/favicon.ico"}
+{"duration":1751,"level":"info","message":"GET /pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824","method":"GET","status":200,"timestamp":"2024-01-08 16:00:17","url":"/pdfview?token=b82858406b8d10dd1d496b2437848780b7a65e49f3cec551da501362f2654824"}
+{"contentLength":150,"duration":1,"level":"info","message":"GET /favicon.ico","method":"GET","status":404,"timestamp":"2024-01-08 16:00:17","url":"/favicon.ico"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 16:01:48"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 16:04:37"}
+{"level":"info","message":"Node app is running on port 3345","timestamp":"2024-01-08 16:04:44"}

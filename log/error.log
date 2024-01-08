@@ -1831,3 +1831,21 @@
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:36:21"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:45:02"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 10:50:07"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-08 10:51:36"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-01-08 13:25:33"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 13:47:27"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 13:52:28"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 13:57:29"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:02:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:07:31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:14:30"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:19:31"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:24:32"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 14:48:18"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:17:52"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:22:53"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:27:55"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:32:56"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:37:57"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:42:58"}
+{"level":"error","message":"Redis Client Error","timestamp":"2024-01-08 15:47:59"}
