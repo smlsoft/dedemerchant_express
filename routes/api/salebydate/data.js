@@ -168,9 +168,9 @@ const receivemoney = async (token, search, fromdate, todate) => {
       .toArray();
     resultSet.success = true;
     const aggregatedData = result.reduce((acc, item) => {
-  
+
       const date = utils.extractDate(item.docdatetime);
-      
+
       if (!acc[date]) {
         acc[date] = {
           cashAmount: 0,
@@ -181,7 +181,7 @@ const receivemoney = async (token, search, fromdate, todate) => {
           totalAmount: 0
         };
       }
-    
+
       // Aggregate the values
       acc[date].cashAmount += item.paycashamount - item.paycashchange;
       acc[date].creditAmount += item.sumcreditcard;
@@ -189,16 +189,16 @@ const receivemoney = async (token, search, fromdate, todate) => {
       acc[date].couponAmount += item.sumcoupon;
       acc[date].chequeAmount += item.sumcheque;
       acc[date].totalAmount += item.totalamountafterdiscount;
-    
+
       return acc;
     }, {});
-    
-  
+
+
     resultSet.data = Object.entries(aggregatedData).map(([date, data]) => ({
       date,
       data
     }));
-    
+
     console.log(resultSet.data)
 
     return resultSet;
@@ -209,16 +209,21 @@ const receivemoney = async (token, search, fromdate, todate) => {
   }
 };
 
-const genPDF = async (body, dataprofile) => {
+const genPDF = async (body, dataprofile, fromdate, todate) => {
   var docDefinition = {
     content: [
       {
-        text: "รายงานขาย",
+        text: "รายงานยอดขายตามวัน",
         style: "header",
         alignment: "center",
       },
       {
         text: dataprofile.data.name1,
+        style: "subheader",
+        alignment: "center",
+      },
+      {
+        text: "วันที่ " + utils.formateDate(fromdate) + " - " + utils.formateDate(todate),
         style: "subheader",
         alignment: "center",
       },
@@ -238,8 +243,8 @@ const genPDF = async (body, dataprofile) => {
         margin: [0, 0, 0, 5],
       },
       subheader: {
-        fontSize: 13,
-        bold: true,
+        fontSize: 10,
+        bold: false,
         margin: [0, 0, 0, 10],
       },
       tableCell: {
@@ -252,7 +257,7 @@ const genPDF = async (body, dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 2,
-        widths: ["15%", "20%", "10%", "10%", "9%", "9%", "9%", "9%", "9%", "10%"],
+        widths: ["14%", "16%", "14%", "14%", "14%", "14%", "14%"],
         body: body,
       },
       layout: "lightHorizontalLines",
@@ -263,67 +268,67 @@ const genPDF = async (body, dataprofile) => {
 
 const genBodyPDF = async (dataset) => {
   let body = [];
+  let totaldetailtotalamount = 0;
+  let totaltotaldiscount = 0;
+  let totaltotalexceptvat = 0;
+  let totaltotalbeforevat = 0;
+  let totaltotalvatvalue = 0;
+  let totaltotalamount = 0;
+
 
   body.push(
     [
-      { text: "เอกสารวันที่", style: "tableCell", alignment: "left" },
-      { text: "เอกสารเลขที่", style: "tableCell", alignment: "left" },
-      { text: "ลูกหนี้", style: "tableCell", alignment: "left" },
-      { text: "มูลค่าสินค้า", style: "tableCell", alignment: "left" },
-      { text: "มูลค่าส่วนลด", style: "tableCell", alignment: "left" },
-      { text: "หลังหักส่วนลด", style: "tableCell", alignment: "left" },
-      { text: "ยกเว้นภาษี", style: "tableCell", alignment: "left" },
-      { text: "ภาษีมูลค่าเพิ่ม", style: "tableCell", alignment: "left" },
-      { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "left" },
-    ],
-    [
-      { text: "บาร์โค้ด", style: "tableCell", alignment: "center" },
-      { text: "ชื่อสินค้า", style: "tableCell", alignment: "center" },
-      { text: "คลัง", style: "tableCell", alignment: "center" },
-      { text: "พื้นที่เก็บ", style: "tableCell", alignment: "center" },
-      { text: "หน่วยนับ", style: "tableCell", alignment: "center" },
-      { text: "จำนวน", style: "tableCell", alignment: "center" },
-      { text: "ราคา", style: "tableCell", alignment: "center" },
-      { text: "ส่วนลด", style: "tableCell", alignment: "center" },
-      { text: "รวมมูลค่า", style: "tableCell", alignment: "center" },
+      { text: "วันที่", style: "tableCell", alignment: "left", bold: true },
+      { text: "ยอดรวมก่อนหักส่วนลดท้ายบิล", style: "tableCell", alignment: "left", bold: true },
+      { text: "รวมส่วนลดทั้งสิ้น", style: "tableCell", alignment: "left", bold: true },
+      { text: "ยอดยกเว้นภาษี", style: "tableCell", alignment: "left", bold: true },
+      { text: "ยอดก่อนภาษี", style: "tableCell", alignment: "left", bold: true },
+      { text: "ยอดภาษี", style: "tableCell", alignment: "left", bold: true },
+      { text: "รวมเงินทั้งสิ้น", style: "tableCell", alignment: "left", bold: true },
     ]
   ),
     dataset.forEach((ele) => {
+      totaldetailtotalamount += ele.detailtotalamount;
+      totaltotaldiscount += ele.totaldiscount;
+      totaltotalexceptvat += ele.totalexceptvat;
+      totaltotalbeforevat += ele.totalbeforevat;
+      totaltotalvatvalue += ele.totalvatvalue;
+      totaltotalamount += ele.totalamount;
+
       body.push([
-        { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "left", fillColor: "#f5e8c4" },
-        { text: ele.docno, style: "tableCell", fillColor: "#f5e8c4" },
-        { text: utils.packName(ele.custnames), style: "tableCell", alignment: "left", fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(ele.totalvalue), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(ele.totaldiscount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(ele.totalbeforevat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(ele.totalexceptvat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(ele.totalvatvalue), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "left" },
+        { text: utils.formatNumber(ele.detailtotalamount), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.totaldiscount), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.totalexceptvat), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.totalbeforevat), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.totalvatvalue), style: "tableCell", alignment: "right" },
+        { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
       ]);
-      ele.details.forEach((detail) => {
-        console.log(detail);
-        body.push([
-          { text: detail.barcode, style: "tableCell" },
-          { text: utils.packName(detail.itemnames), style: "tableCell" },
-          { text: utils.packName(detail.whnames), style: "tableCell", alignment: "center" },
-          { text: utils.packName(detail.locationnames), style: "tableCell", alignment: "center" },
-          { text: utils.packName(detail.unitnames), style: "tableCell", alignment: "center" },
-          { text: utils.formatNumber(detail.qty), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(detail.price), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(detail.discountamount), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(detail.sumamount), style: "tableCell", alignment: "right" },
-        ]);
-      });
     });
+
+  body.push(
+    [
+      { text: "รวม", style: "tableCell", alignment: "left", bold: true },
+      { text: utils.formatNumber(totaldetailtotalamount), style: "tableCell", alignment: "right", bold: true },
+      { text: utils.formatNumber(totaltotaldiscount), style: "tableCell", alignment: "right", bold: true },
+      { text: utils.formatNumber(totaltotalexceptvat), style: "tableCell", alignment: "right", bold: true },
+      { text: utils.formatNumber(totaltotalbeforevat), style: "tableCell", alignment: "right", bold: true },
+      { text: utils.formatNumber(totaltotalvatvalue), style: "tableCell", alignment: "right", bold: true },
+      { text: utils.formatNumber(totaltotalamount), style: "tableCell", alignment: "right", bold: true },
+    ]
+  );
+
   return body;
 };
+
+
 
 const pdfPreview = async (token, search, fromdate, todate, res) => {
   var dataset = await salebydate(token, search, fromdate, todate);
   var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -332,14 +337,25 @@ const pdfPreview = async (token, search, fromdate, todate, res) => {
   }
 };
 
-const pdfDownload = async (token, search, res) => {
-  var dataset = await salebydate(token, search);
-  var body = await genBodyPDF(dataset.data);
-  var pdfDoc = printer.createPdfKitDocument(await genPDF(body), {});
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", 'attachment; filename="balance.pdf"');
-  pdfDoc.pipe(res);
-  pdfDoc.end();
+const pdfDownload = async (token, search, fromdate, todate, res) => {
+  var dataset = await salebydate(token, search, fromdate, todate);
+  var dataprofile = await globalservice.dataShop(token);
+
+  if (dataset.success) {
+    var body = await genBodyPDF(dataset.data);
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
+
+    // Generate a filename using fromdate and todate
+    const filename = `sale_by_date_${fromdate}-${todate}.pdf`;
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
 };
+
 
 module.exports = { salebydate, genPDF, pdfPreview, pdfDownload, receivemoney };
