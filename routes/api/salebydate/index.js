@@ -65,6 +65,15 @@ router.get("/receivemoney", async (req, res) => {
   }
 });
 
+router.get("/receivemoney/pdfview", async (req, res) => {
+  var result = await globalservice.getUserShop(req.query.token);
+  if (!result.success) {
+    res.status(401).json({ success: false, msg: "Invalid shop" });
+    return;
+  }
+  data.pdfPreviewReceivemoney(result.data.shopid, req.query.search, req.query.fromdate, req.query.todate, res);
+});
+
 
 
 

@@ -7,7 +7,7 @@ const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const dataresult = async (token, search,fromdate, todate,) => {
+const dataresult = async (token, search, fromdate, todate,) => {
   const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
   try {
@@ -60,12 +60,21 @@ const dataresult = async (token, search,fromdate, todate,) => {
             $and: filters,
           },
         },
+        {
+          $sort: { docdatetime: -1 } // Sorting in descending order
+        }
       ])
       .toArray();
     resultSet.success = true;
     resultSet.data = result;
     const dataset = resultSet;
-    //console.log(dataset);
+
+    for (let index = 0; index < dataset.data.length; index++) {
+      console.log(index + " : " + dataset.data[index].docdatetime);
+
+    }
+
+
     return dataset;
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
@@ -75,7 +84,7 @@ const dataresult = async (token, search,fromdate, todate,) => {
 };
 
 
-const genPDF = async (body,dataprofile) => {
+const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
@@ -110,7 +119,7 @@ const genPDF = async (body,dataprofile) => {
       },
       tableCell: {
         fontSize: 9
-    }
+      }
     },
   };
   if (body.length > 0) {
@@ -118,7 +127,7 @@ const genPDF = async (body,dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 2,
-        widths: ['15%', '20%', '10%', '10%' , '9%' , '9%' , '9%' , '9%' , '9%' , '10%' ],
+        widths: ['15%', '20%', '10%', '10%', '9%', '9%', '9%', '9%', '9%', '10%'],
         body: body
       },
       layout: "lightHorizontalLines",
@@ -131,70 +140,70 @@ const genBodyPDF = async (dataset) => {
   let body = [];
 
   body.push([
-    { text: "เอกสารวันที่", style: 'tableCell',alignment: "left" },
-    { text: "เอกสารเลขที่", style: 'tableCell',alignment: "left" },
-    { text: "ลูกหนี้", style: 'tableCell',alignment: "left" },
-    { text: "มูลค่าสินค้า", style: 'tableCell',alignment: "left" },
-    { text: "มูลค่าส่วนลด", style: 'tableCell',alignment: "left" },
-    { text: "หลังหักส่วนลด", style: 'tableCell',alignment: "left" },
-    { text: "ยกเว้นภาษี", style: 'tableCell',alignment: "left" },
-    { text: "ภาษีมูลค่าเพิ่ม", style: 'tableCell',alignment: "left" },
-    { text: "มูลค่าสุทธิ", style: 'tableCell',alignment: "left" },
-  ],[
-    { text: "บาร์โค้ด", style: 'tableCell',alignment: "center" },
-    { text: "ชื่อสินค้า", style: 'tableCell',alignment: "center" },
-    { text: "คลัง", style: 'tableCell',alignment: "center" },
-    { text: "พื้นที่เก็บ", style: 'tableCell',alignment: "center" },
-    { text: "หน่วยนับ", style: 'tableCell',alignment: "center" },
-    { text: "จำนวน", style: 'tableCell',alignment: "center" },
-    { text: "ราคา", style: 'tableCell',alignment: "center" },
-    { text: "ส่วนลด", style: 'tableCell',alignment: "center" },
-    { text: "รวมมูลค่า", style: 'tableCell',alignment: "center" },
+    { text: "เอกสารวันที่", style: 'tableCell', alignment: "left" },
+    { text: "เอกสารเลขที่", style: 'tableCell', alignment: "left" },
+    { text: "ลูกหนี้", style: 'tableCell', alignment: "left" },
+    { text: "มูลค่าสินค้า", style: 'tableCell', alignment: "left" },
+    { text: "มูลค่าส่วนลด", style: 'tableCell', alignment: "left" },
+    { text: "หลังหักส่วนลด", style: 'tableCell', alignment: "left" },
+    { text: "ยกเว้นภาษี", style: 'tableCell', alignment: "left" },
+    { text: "ภาษีมูลค่าเพิ่ม", style: 'tableCell', alignment: "left" },
+    { text: "มูลค่าสุทธิ", style: 'tableCell', alignment: "left" },
+  ], [
+    { text: "บาร์โค้ด", style: 'tableCell', alignment: "center" },
+    { text: "ชื่อสินค้า", style: 'tableCell', alignment: "center" },
+    { text: "คลัง", style: 'tableCell', alignment: "center" },
+    { text: "พื้นที่เก็บ", style: 'tableCell', alignment: "center" },
+    { text: "หน่วยนับ", style: 'tableCell', alignment: "center" },
+    { text: "จำนวน", style: 'tableCell', alignment: "center" },
+    { text: "ราคา", style: 'tableCell', alignment: "center" },
+    { text: "ส่วนลด", style: 'tableCell', alignment: "center" },
+    { text: "รวมมูลค่า", style: 'tableCell', alignment: "center" },
   ]),
-  dataset.forEach((ele) => {
-    body.push([
-      { text: utils.formateDate(ele.docdatetime) ,style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4' },
-      { text: ele.docno ,style: 'tableCell',fillColor: '#f5e8c4' },
-      { text: utils.packName(ele.custnames),style: 'tableCell',alignment: "left" ,fillColor: '#f5e8c4'},
-      { text: utils.formatNumber(ele.totalvalue) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: utils.formatNumber(ele.totaldiscount) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: utils.formatNumber(ele.totalbeforevat) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: utils.formatNumber(ele.totalexceptvat) ,style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4'},
-      { text: utils.formatNumber(ele.totalvatvalue),style: 'tableCell',alignment: "right"  ,fillColor: '#f5e8c4'},
-      { text: utils.formatNumber(ele.totalamount),style: 'tableCell',alignment: "right" ,fillColor: '#f5e8c4' },
-    ]);
-    ele.details.forEach((detail) => {
-      console.log(detail);
-      body.push(
-        [
-          { text: detail.barcode ,style: 'tableCell'},
-          { text: utils.packName(detail.itemnames),style: 'tableCell' },
-          { text: utils.packName(detail.whnames),style: 'tableCell',alignment: "center" },
-          { text: utils.packName(detail.locationnames) ,style: 'tableCell',alignment: "center"},
-          { text: utils.packName(detail.unitnames) ,style: 'tableCell',alignment: "center"},
-          { text: utils.formatNumber(detail.qty) ,style: 'tableCell',alignment: "right"},
-          { text: utils.formatNumber(detail.price) ,style: 'tableCell',alignment: "right"},
-          { text: utils.formatNumber(detail.discountamount) ,style: 'tableCell',alignment: "right"},
-          { text: utils.formatNumber(detail.sumamount),style: 'tableCell',alignment: "right" },
-        ]
-      );
+    dataset.forEach((ele) => {
+      body.push([
+        { text: utils.formateDate(ele.docdatetime), style: 'tableCell', alignment: "left", fillColor: '#f5e8c4' },
+        { text: ele.docno, style: 'tableCell', fillColor: '#f5e8c4' },
+        { text: utils.packName(ele.custnames), style: 'tableCell', alignment: "left", fillColor: '#f5e8c4' },
+        { text: utils.formatNumber(ele.totalvalue), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+        { text: utils.formatNumber(ele.totaldiscount), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+        { text: utils.formatNumber(ele.totalbeforevat), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+        { text: utils.formatNumber(ele.totalexceptvat), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+        { text: utils.formatNumber(ele.totalvatvalue), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+        { text: utils.formatNumber(ele.totalamount), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+      ]);
+      ele.details.forEach((detail) => {
+        console.log(detail);
+        body.push(
+          [
+            { text: detail.barcode, style: 'tableCell' },
+            { text: utils.packName(detail.itemnames), style: 'tableCell' },
+            { text: utils.packName(detail.whnames), style: 'tableCell', alignment: "center" },
+            { text: utils.packName(detail.locationnames), style: 'tableCell', alignment: "center" },
+            { text: utils.packName(detail.unitnames), style: 'tableCell', alignment: "center" },
+            { text: utils.formatNumber(detail.qty), style: 'tableCell', alignment: "right" },
+            { text: utils.formatNumber(detail.price), style: 'tableCell', alignment: "right" },
+            { text: utils.formatNumber(detail.discountamount), style: 'tableCell', alignment: "right" },
+            { text: utils.formatNumber(detail.sumamount), style: 'tableCell', alignment: "right" },
+          ]
+        );
+      });
     });
-  });
   return body;
 };
 
 
 
-const pdfPreview = async (token, search,fromdate,todate, res) => {
-  var dataset = await dataresult(token, search,fromdate,todate);
+const pdfPreview = async (token, search, fromdate, todate, res) => {
+  var dataset = await dataresult(token, search, fromdate, todate);
   var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
-  }else {
+  } else {
     res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
