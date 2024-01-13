@@ -20,6 +20,7 @@ router.get("/", async (req, res) => {
 
 router.get("/sale", async (req, res) => {
   try {
+    
     var result = await globalservice.getUserShop(req.query.token);
     if (!result.success) {
       res.status(401).json({ success: false, msg: "Invalid shop" });

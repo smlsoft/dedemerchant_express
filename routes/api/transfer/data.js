@@ -39,7 +39,6 @@ const dataresult = async (token, search, fromdate, todate) => {
         ],
       });
     }
-
     filters.push({
       shopid: token,
     });

@@ -199,7 +199,7 @@ const receivemoney = async (token, search, fromdate, todate) => {
       data
     }));
 
-    console.log(resultSet.data)
+   // console.log(resultSet.data)
 
     return resultSet;
   } catch (error) {
