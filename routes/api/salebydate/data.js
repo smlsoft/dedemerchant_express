@@ -5,6 +5,10 @@ var nodemailer = require("nodemailer");
 const provider = require("../../../provider");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
+
 dotenv.config();
 
 const salebydate = async (token, search, fromdate, todate) => {
@@ -96,7 +100,7 @@ const salebydate = async (token, search, fromdate, todate) => {
       }, new Map())
     ).map(([_, value]) => value);
 
-    console.log(dataset);
+    //console.log(dataset);
     resultSet.data = dataset;
     return resultSet;
   } catch (error) {
@@ -168,7 +172,6 @@ const receivemoney = async (token, search, fromdate, todate) => {
       .toArray();
     resultSet.success = true;
     const aggregatedData = result.reduce((acc, item) => {
-
       const date = utils.extractDate(item.docdatetime);
 
       if (!acc[date]) {
@@ -178,7 +181,7 @@ const receivemoney = async (token, search, fromdate, todate) => {
           transferAmount: 0,
           couponAmount: 0,
           chequeAmount: 0,
-          totalAmount: 0
+          totalAmount: 0,
         };
       }
 
@@ -193,13 +196,12 @@ const receivemoney = async (token, search, fromdate, todate) => {
       return acc;
     }, {});
 
-
     resultSet.data = Object.entries(aggregatedData).map(([date, data]) => ({
       date,
-      data
+      data,
     }));
 
-   // console.log(resultSet.data)
+    // console.log(resultSet.data)
 
     return resultSet;
   } catch (error) {
@@ -275,18 +277,15 @@ const genBodyPDF = async (dataset) => {
   let totaltotalvatvalue = 0;
   let totaltotalamount = 0;
 
-
-  body.push(
-    [
-      { text: "วันที่", style: "tableCell", alignment: "left", bold: true },
-      { text: "รวมมูลค่า", style: "tableCell", alignment: "left", bold: true },
-      { text: "รวมส่วนลดทั้งสิ้น", style: "tableCell", alignment: "left", bold: true },
-      { text: "ยอดยกเว้นภาษี", style: "tableCell", alignment: "left", bold: true },
-      { text: "ยอดก่อนภาษี", style: "tableCell", alignment: "left", bold: true },
-      { text: "ยอดภาษี", style: "tableCell", alignment: "left", bold: true },
-      { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "left", bold: true },
-    ]
-  ),
+  body.push([
+    { text: "วันที่", style: "tableCell", alignment: "left", bold: true },
+    { text: "รวมมูลค่า", style: "tableCell", alignment: "left", bold: true },
+    { text: "รวมส่วนลดทั้งสิ้น", style: "tableCell", alignment: "left", bold: true },
+    { text: "ยอดยกเว้นภาษี", style: "tableCell", alignment: "left", bold: true },
+    { text: "ยอดก่อนภาษี", style: "tableCell", alignment: "left", bold: true },
+    { text: "ยอดภาษี", style: "tableCell", alignment: "left", bold: true },
+    { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "left", bold: true },
+  ]),
     dataset.forEach((ele) => {
       totaldetailtotalamount += ele.detailtotalamount;
       totaltotaldiscount += ele.totaldiscount;
@@ -306,21 +305,18 @@ const genBodyPDF = async (dataset) => {
       ]);
     });
 
-  body.push(
-    [
-      { text: "รวม", style: "tableCell", alignment: "left", bold: true },
-      { text: utils.formatNumber(totaldetailtotalamount), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totaltotaldiscount), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totaltotalexceptvat), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totaltotalbeforevat), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totaltotalvatvalue), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totaltotalamount), style: "tableCell", alignment: "right", bold: true },
-    ]
-  );
+  body.push([
+    { text: "รวม", style: "tableCell", alignment: "left", bold: true },
+    { text: utils.formatNumber(totaldetailtotalamount), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totaltotaldiscount), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totaltotalexceptvat), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totaltotalbeforevat), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totaltotalvatvalue), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totaltotalamount), style: "tableCell", alignment: "right", bold: true },
+  ]);
 
   return body;
 };
-
 
 const genPDFReceivemoney = async (body, dataprofile, fromdate, todate) => {
   var docDefinition = {
@@ -388,17 +384,15 @@ const genBodyPDFReceivemoney = async (dataset) => {
   let totalchequeAmount = 0;
   let totaltotalAmount = 0;
 
-  body.push(
-    [
-      { text: "วันที่", style: "tableCell", alignment: "left", bold: true },
-      { text: "เงินสด", style: "tableCell", alignment: "left", bold: true },
-      { text: "เครดิต", style: "tableCell", alignment: "left", bold: true },
-      { text: "เงินโอน", style: "tableCell", alignment: "left", bold: true },
-      { text: "คูปอง", style: "tableCell", alignment: "left", bold: true },
-      { text: "เช็ค", style: "tableCell", alignment: "left", bold: true },
-      { text: "รวมเงินทั้งสิน", style: "tableCell", alignment: "left", bold: true },
-    ]
-  ),
+  body.push([
+    { text: "วันที่", style: "tableCell", alignment: "left", bold: true },
+    { text: "เงินสด", style: "tableCell", alignment: "left", bold: true },
+    { text: "เครดิต", style: "tableCell", alignment: "left", bold: true },
+    { text: "เงินโอน", style: "tableCell", alignment: "left", bold: true },
+    { text: "คูปอง", style: "tableCell", alignment: "left", bold: true },
+    { text: "เช็ค", style: "tableCell", alignment: "left", bold: true },
+    { text: "รวมเงินทั้งสิน", style: "tableCell", alignment: "left", bold: true },
+  ]),
     dataset.forEach((ele) => {
       totalcashAmount += ele.data.cashAmount;
       totalcreditAmount += ele.data.creditAmount;
@@ -418,23 +412,18 @@ const genBodyPDFReceivemoney = async (dataset) => {
       ]);
     });
 
-  body.push(
-    [
-      { text: "รวม", style: "tableCell", alignment: "left", bold: true },
-      { text: utils.formatNumber(totalcashAmount), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totalcreditAmount), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totaltransferAmount), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totalcouponAmount), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totalchequeAmount), style: "tableCell", alignment: "right", bold: true },
-      { text: utils.formatNumber(totaltotalAmount), style: "tableCell", alignment: "right", bold: true },
-    ]
-  );
+  body.push([
+    { text: "รวม", style: "tableCell", alignment: "left", bold: true },
+    { text: utils.formatNumber(totalcashAmount), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totalcreditAmount), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totaltransferAmount), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totalcouponAmount), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totalchequeAmount), style: "tableCell", alignment: "right", bold: true },
+    { text: utils.formatNumber(totaltotalAmount), style: "tableCell", alignment: "right", bold: true },
+  ]);
 
   return body;
 };
-
-
-
 
 const pdfPreview = async (token, search, fromdate, todate, res) => {
   var dataset = await salebydate(token, search, fromdate, todate);
@@ -464,6 +453,38 @@ const pdfPreviewReceivemoney = async (token, search, fromdate, todate, res) => {
   }
 };
 
+const genDownLoadSaleByDatePDF = async (token, search, fromdate, todate, fileName) => {
+  var dataset = await salebydate(token, search, fromdate, todate);
+  var dataprofile = await globalservice.dataShop(token);
+
+  if (dataset.success) {
+    try {
+      var body = await genBodyPDF(dataset.data);
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
+      const tempPath = path.join(os.tmpdir(), fileName);
+      
+      const writeStream = fs.createWriteStream(tempPath);
+
+      pdfDoc.pipe(writeStream);
+      pdfDoc.end();
+
+      writeStream.on("error", function (err) {
+        console.error("Error writing PDF to file:", err);
+        // Handle the error appropriately
+      });
+
+      writeStream.on("finish", function () {
+        console.log(`PDF written to ${tempPath}`);
+        // Additional logic if needed after successfully writing the file
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
+};
+
 const pdfDownload = async (token, search, fromdate, todate, res) => {
   var dataset = await salebydate(token, search, fromdate, todate);
   var dataprofile = await globalservice.dataShop(token);
@@ -484,5 +505,4 @@ const pdfDownload = async (token, search, fromdate, todate, res) => {
   }
 };
 
-
-module.exports = { salebydate, genPDF, pdfPreview, pdfDownload, receivemoney, pdfPreviewReceivemoney };
+module.exports = { salebydate, genPDF, pdfPreview, pdfDownload, receivemoney, pdfPreviewReceivemoney, genDownLoadSaleByDatePDF };

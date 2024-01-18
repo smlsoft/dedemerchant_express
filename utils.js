@@ -98,4 +98,11 @@ const getNameByTransflag = (transflag) => {
   return result;
 };
 
-module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate, getNameByTransflag };
+
+const currentTimeStamp = (date) => {
+  const unixTimestamp = Math.floor(date / 1000);
+  return unixTimestamp.toString();
+}
+
+
+module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate, getNameByTransflag,currentTimeStamp };
