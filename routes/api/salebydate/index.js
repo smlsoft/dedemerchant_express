@@ -8,7 +8,7 @@ const utils = require("../../../utils");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const queueGenSaleByDateReport = new Queue("genSaleByDateReport", process.env.RADIS_QUEUE_URI);
+const queueGenSaleByDateReport = new Queue("genSaleByDateReport", process.env.REDIS_CACHE_URI+'?tls='+process.env.REDIS_CACHE_TLS_ENABLE);
 router.get("/", async (req, res) => {
   try {
     var result = await globalservice.getUserShop(req.query.token);
