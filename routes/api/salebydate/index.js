@@ -154,11 +154,21 @@ router.get("/check-salebydate/:jobId", async (req, res) => {
   const job = await queueGenSaleByDateReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    res.status(200).json({
-      success: true,
-      message: "File has been successfully generated",
-      data: [],
-    });
+    const filePath = path.join(os.tmpdir(), jobId);
+
+    if (fs.existsSync(filePath)) {
+      res.status(200).json({
+        success: true,
+        message: "File has been successfully generated",
+        data: [],
+      });
+    } else {
+      res.status(202).json({
+        success: false,
+        message: "regenerated",
+        data: [],
+      });
+    }
   } else {
     res.status(200).json({
       success: false,
@@ -193,11 +203,21 @@ router.get("/check-receive/:jobId", async (req, res) => {
   const job = await queueGenReceiveByDateReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    res.status(200).json({
-      success: true,
-      message: "File has been successfully generated",
-      data: [],
-    });
+    const filePath = path.join(os.tmpdir(), jobId);
+
+    if (fs.existsSync(filePath)) {
+      res.status(200).json({
+        success: true,
+        message: "File has been successfully generated",
+        data: [],
+      });
+    } else {
+      res.status(202).json({
+        success: false,
+        message: "regenerated",
+        data: [],
+      });
+    }
   } else {
     res.status(200).json({
       success: false,

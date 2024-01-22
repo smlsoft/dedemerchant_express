@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 const data = require("./data");
@@ -11,13 +10,20 @@ const os = require("os");
 const path = require("path");
 const queueGenSaleReport = new Queue("genSaleInvRepart", process.env.REDIS_CACHE_URI + "?tls=" + process.env.REDIS_CACHE_TLS_ENABLE);
 
-
 queueGenSaleReport.process(async (payload) => {
   logger.info("on process");
 
   const jobId = payload.data.fileName;
 
-  data.genDownLoadSaleInvPDF(payload.data.shopid, payload.data.search, payload.data.fromdate, payload.data.todate, payload.data.fileName, payload.data.showdetail);
+  data.genDownLoadSaleInvPDF(
+    payload.data.shopid,
+    payload.data.search,
+    payload.data.fromdate,
+    payload.data.todate,
+    payload.data.fileName,
+    payload.data.showdetail,
+    payload.data.showsumbydate
+  );
 
   return { jobId };
 });
@@ -29,7 +35,6 @@ queueGenSaleReport.on("completed", (job, result) => {
 queueGenSaleReport.on("failed", (job, err) => {
   logger.error(`Job Sale failed with error `, err.message);
 });
-
 
 router.get("/genPDFSale", async (req, res) => {
   try {
@@ -48,6 +53,7 @@ router.get("/genPDFSale", async (req, res) => {
       fromdate: req.query.fromdate,
       todate: req.query.todate,
       showdetail: req.query.showdetail,
+      showsumbydate: req.query.showsumbydate,
     };
 
     const protocol = req.protocol;
@@ -75,18 +81,27 @@ router.get("/genPDFSale", async (req, res) => {
   }
 });
 
-
 router.get("/check-saleinv/:jobId", async (req, res) => {
   const jobId = req.params.jobId;
 
   const job = await queueGenSaleReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    res.status(200).json({
-      success: true,
-      message: "File has been successfully generated",
-      data: [],
-    });
+    const filePath = path.join(os.tmpdir(), jobId);
+
+    if (fs.existsSync(filePath)) {
+      res.status(200).json({
+        success: true,
+        message: "File has been successfully generated",
+        data: [],
+      });
+    } else {
+      res.status(202).json({
+        success: false,
+        message: "regenerated",
+        data: [],
+      });
+    }
   } else {
     res.status(200).json({
       success: false,
@@ -114,7 +129,6 @@ router.get("/download-saleinv/:jobId", async (req, res) => {
   }
 });
 
-
 router.get("/", async (req, res) => {
   try {
     var result = await globalservice.getUserShop(req.query.token);
@@ -122,7 +136,7 @@ router.get("/", async (req, res) => {
       res.status(401).json({ success: false, msg: "Invalid shop" });
       return;
     }
-    var dataset = await data.dataresult(result.data.shopid,req.query.search,req.query.fromdate,req.query.todate);
+    var dataset = await data.dataresult(result.data.shopid, req.query.search, req.query.fromdate, req.query.todate);
     res.status(200).json({ success: true, data: dataset.data, msg: "" });
   } catch (err) {
     res.status(500).json({ success: false, data: [], msg: err.message });
@@ -135,14 +149,12 @@ router.get("/pdfview", async (req, res) => {
     res.status(401).json({ success: false, msg: "Invalid shop" });
     return;
   }
-  data.pdfPreview(result.data.shopid,req.query.search,req.query.fromdate,req.query.todate,req.query.showdetail,res);
+  data.pdfPreview(result.data.shopid, req.query.search, req.query.fromdate, req.query.todate, req.query.showdetail, res);
 });
 
 router.get("/pdfdownload", async (req, res) => {
   console.log("pdfdownload");
-  data.pdfDownload(req.query.auth,req.query.search,res);
+  data.pdfDownload(req.query.auth, req.query.search, res);
 });
-
-
 
 module.exports = router;
