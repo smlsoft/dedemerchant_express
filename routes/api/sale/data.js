@@ -6,8 +6,11 @@ const provider = require("../../../provider");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 
-const dataresult = async (token, search, fromdate, todate,) => {
+const dataresult = async (token, search, fromdate, todate) => {
   const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
   try {
@@ -61,8 +64,8 @@ const dataresult = async (token, search, fromdate, todate,) => {
           },
         },
         {
-          $sort: { docdatetime: -1 } // Sorting in descending order
-        }
+          $sort: { docdatetime: -1 }, // Sorting in descending order
+        },
       ])
       .toArray();
     resultSet.success = true;
@@ -70,10 +73,8 @@ const dataresult = async (token, search, fromdate, todate,) => {
     const dataset = resultSet;
 
     for (let index = 0; index < dataset.data.length; index++) {
-      console.log(index + " : " + dataset.data[index].docdatetime);
-
+      //   console.log(index + " : " + dataset.data[index].docdatetime);
     }
-
 
     return dataset;
   } catch (error) {
@@ -82,7 +83,6 @@ const dataresult = async (token, search, fromdate, todate,) => {
     await client.close();
   }
 };
-
 
 const genPDF = async (body, dataprofile) => {
   var docDefinition = {
@@ -110,16 +110,16 @@ const genPDF = async (body, dataprofile) => {
       header: {
         fontSize: 13,
         bold: true,
-        margin: [0, 0, 0, 5]
+        margin: [0, 0, 0, 5],
       },
       subheader: {
         fontSize: 13,
         bold: true,
-        margin: [0, 0, 0, 10]
+        margin: [0, 0, 0, 10],
       },
       tableCell: {
-        fontSize: 9
-      }
+        fontSize: 9,
+      },
     },
   };
   if (body.length > 0) {
@@ -127,8 +127,8 @@ const genPDF = async (body, dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 2,
-        widths: ['15%', '20%', '10%', '10%', '9%', '9%', '9%', '9%', '9%', '10%'],
-        body: body
+        widths: ["15%", "20%", "10%", "10%", "9%", "9%", "9%", "9%", "9%", "10%"],
+        body: body,
       },
       layout: "lightHorizontalLines",
     });
@@ -136,73 +136,133 @@ const genPDF = async (body, dataprofile) => {
   return docDefinition;
 };
 
-const genBodyPDF = async (dataset) => {
+const genBodyPDF = async (dataset,showdetail) => {
   let body = [];
-
-  body.push([
-    { text: "เอกสารวันที่", style: 'tableCell', alignment: "left" },
-    { text: "เอกสารเลขที่", style: 'tableCell', alignment: "left" },
-    { text: "ลูกหนี้", style: 'tableCell', alignment: "left" },
-    { text: "มูลค่าสินค้า", style: 'tableCell', alignment: "left" },
-    { text: "มูลค่าส่วนลด", style: 'tableCell', alignment: "left" },
-    { text: "หลังหักส่วนลด", style: 'tableCell', alignment: "left" },
-    { text: "ยกเว้นภาษี", style: 'tableCell', alignment: "left" },
-    { text: "ภาษีมูลค่าเพิ่ม", style: 'tableCell', alignment: "left" },
-    { text: "มูลค่าสุทธิ", style: 'tableCell', alignment: "left" },
-  ], [
-    { text: "บาร์โค้ด", style: 'tableCell', alignment: "center" },
-    { text: "ชื่อสินค้า", style: 'tableCell', alignment: "center" },
-    { text: "คลัง", style: 'tableCell', alignment: "center" },
-    { text: "พื้นที่เก็บ", style: 'tableCell', alignment: "center" },
-    { text: "หน่วยนับ", style: 'tableCell', alignment: "center" },
-    { text: "จำนวน", style: 'tableCell', alignment: "center" },
-    { text: "ราคา", style: 'tableCell', alignment: "center" },
-    { text: "ส่วนลด", style: 'tableCell', alignment: "center" },
-    { text: "รวมมูลค่า", style: 'tableCell', alignment: "center" },
-  ]),
-    dataset.forEach((ele) => {
-      body.push([
-        { text: utils.formateDate(ele.docdatetime), style: 'tableCell', alignment: "left", fillColor: '#f5e8c4' },
-        { text: ele.docno, style: 'tableCell', fillColor: '#f5e8c4' },
-        { text: utils.packName(ele.custnames), style: 'tableCell', alignment: "left", fillColor: '#f5e8c4' },
-        { text: utils.formatNumber(ele.totalvalue), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
-        { text: utils.formatNumber(ele.totaldiscount), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
-        { text: utils.formatNumber(ele.totalbeforevat), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
-        { text: utils.formatNumber(ele.totalexceptvat), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
-        { text: utils.formatNumber(ele.totalvatvalue), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
-        { text: utils.formatNumber(ele.totalamount), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
-      ]);
-      ele.details.forEach((detail) => {
-        console.log(detail);
-        body.push(
-          [
-            { text: detail.barcode, style: 'tableCell' },
-            { text: utils.packName(detail.itemnames), style: 'tableCell' },
-            { text: utils.packName(detail.whnames), style: 'tableCell', alignment: "center" },
-            { text: utils.packName(detail.locationnames), style: 'tableCell', alignment: "center" },
-            { text: utils.packName(detail.unitnames), style: 'tableCell', alignment: "center" },
-            { text: utils.formatNumber(detail.qty), style: 'tableCell', alignment: "right" },
-            { text: utils.formatNumber(detail.price), style: 'tableCell', alignment: "right" },
-            { text: utils.formatNumber(detail.discountamount), style: 'tableCell', alignment: "right" },
-            { text: utils.formatNumber(detail.sumamount), style: 'tableCell', alignment: "right" },
-          ]
-        );
+  if (showdetail == 1) {
+    body.push(
+      [
+        { text: "เอกสารวันที่", style: "tableCell", alignment: "left" },
+        { text: "เอกสารเลขที่", style: "tableCell", alignment: "left" },
+        { text: "ลูกหนี้", style: "tableCell", alignment: "left" },
+        { text: "มูลค่าสินค้า", style: "tableCell", alignment: "left" },
+        { text: "มูลค่าส่วนลด", style: "tableCell", alignment: "left" },
+        { text: "หลังหักส่วนลด", style: "tableCell", alignment: "left" },
+        { text: "ยกเว้นภาษี", style: "tableCell", alignment: "left" },
+        { text: "ภาษีมูลค่าเพิ่ม", style: "tableCell", alignment: "left" },
+        { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "left" },
+      ],
+      [
+        { text: "บาร์โค้ด", style: "tableCell", alignment: "center" },
+        { text: "ชื่อสินค้า", style: "tableCell", alignment: "center" },
+        { text: "คลัง", style: "tableCell", alignment: "center" },
+        { text: "พื้นที่เก็บ", style: "tableCell", alignment: "center" },
+        { text: "หน่วยนับ", style: "tableCell", alignment: "center" },
+        { text: "จำนวน", style: "tableCell", alignment: "center" },
+        { text: "ราคา", style: "tableCell", alignment: "center" },
+        { text: "ส่วนลด", style: "tableCell", alignment: "center" },
+        { text: "รวมมูลค่า", style: "tableCell", alignment: "center" },
+      ]
+    ),
+      dataset.forEach((ele) => {
+        body.push([
+          { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "left", fillColor: "#f5e8c4" },
+          { text: ele.docno, style: "tableCell", fillColor: "#f5e8c4" },
+          { text: utils.packName(ele.custnames), style: "tableCell", alignment: "left", fillColor: "#f5e8c4" },
+          { text: utils.formatNumber(ele.totalvalue), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+          { text: utils.formatNumber(ele.totaldiscount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+          { text: utils.formatNumber(ele.totalbeforevat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+          { text: utils.formatNumber(ele.totalexceptvat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+          { text: utils.formatNumber(ele.totalvatvalue), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+          { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        ]);
+        ele.details.forEach((detail) => {
+          console.log(detail);
+          body.push([
+            { text: detail.barcode, style: "tableCell" },
+            { text: utils.packName(detail.itemnames), style: "tableCell" },
+            { text: utils.packName(detail.whnames), style: "tableCell", alignment: "center" },
+            { text: utils.packName(detail.locationnames), style: "tableCell", alignment: "center" },
+            { text: utils.packName(detail.unitnames), style: "tableCell", alignment: "center" },
+            { text: utils.formatNumber(detail.qty), style: "tableCell", alignment: "right" },
+            { text: utils.formatNumber(detail.price), style: "tableCell", alignment: "right" },
+            { text: utils.formatNumber(detail.discountamount), style: "tableCell", alignment: "right" },
+            { text: utils.formatNumber(detail.sumamount), style: "tableCell", alignment: "right" },
+          ]);
+        });
       });
-    });
+  }else{
+    body.push(
+      [
+      { text: "เอกสารวันที่", style: 'tableCell', alignment: "left" },
+      { text: "เอกสารเลขที่", style: 'tableCell', alignment: "left" },
+      { text: "ลูกหนี้", style: 'tableCell', alignment: "left" },
+      { text: "มูลค่าสินค้า", style: 'tableCell', alignment: "left" },
+      { text: "มูลค่าส่วนลด", style: 'tableCell', alignment: "left" },
+      { text: "หลังหักส่วนลด", style: 'tableCell', alignment: "left" },
+      { text: "ยกเว้นภาษี", style: 'tableCell', alignment: "left" },
+      { text: "ภาษีมูลค่าเพิ่ม", style: 'tableCell', alignment: "left" },
+      { text: "มูลค่าสุทธิ", style: 'tableCell', alignment: "left" },
+    ]
+    ),
+      dataset.forEach((ele) => {
+        body.push([
+          { text: utils.formateDate(ele.docdatetime), style: 'tableCell', alignment: "left", fillColor: '#f5e8c4' },
+          { text: ele.docno, style: 'tableCell', fillColor: '#f5e8c4' },
+          { text: utils.packName(ele.custnames), style: 'tableCell', alignment: "left", fillColor: '#f5e8c4' },
+          { text: utils.formatNumber(ele.totalvalue), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+          { text: utils.formatNumber(ele.totaldiscount), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+          { text: utils.formatNumber(ele.totalbeforevat), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+          { text: utils.formatNumber(ele.totalexceptvat), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+          { text: utils.formatNumber(ele.totalvatvalue), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+          { text: utils.formatNumber(ele.totalamount), style: 'tableCell', alignment: "right", fillColor: '#f5e8c4' },
+        ]);
+      });
+  }
+
   return body;
 };
 
-
-
-const pdfPreview = async (token, search, fromdate, todate, res) => {
+const pdfPreview = async (token, search, fromdate, todate,showdetail, res) => {
   var dataset = await dataresult(token, search, fromdate, todate);
   var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
-    var body = await genBodyPDF(dataset.data);
+    var body = await genBodyPDF(dataset.data,showdetail);
     var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
+};
+
+const genDownLoadSaleInvPDF = async (token, search, fromdate, todate, fileName, showdetail) => {
+  console.log("processing");
+  var dataset = await dataresult(token, search, fromdate, todate);
+  var dataprofile = await globalservice.dataShop(token);
+
+  if (dataset.success) {
+    try {
+      var body = await genBodyPDF(dataset.data,showdetail);
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
+      const tempPath = path.join(os.tmpdir(), fileName);
+
+      const writeStream = fs.createWriteStream(tempPath);
+
+      pdfDoc.pipe(writeStream);
+
+      pdfDoc.end();
+
+      writeStream.on("error", function (err) {
+        console.error("Error writing PDF to file:", err);
+      });
+
+      writeStream.on("finish", function () {
+        console.log(`PDF written to ${tempPath}`);
+      });
+    } catch (err) {
+      console.log(err);
+    }
   } else {
     res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
@@ -267,4 +327,4 @@ const sendEmail = async (token, emails) => {
   }
 };
 
-module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail };
+module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail, genDownLoadSaleInvPDF };

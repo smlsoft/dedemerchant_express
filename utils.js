@@ -35,7 +35,19 @@ const formateDate = (datetime) => {
 
   return formattedDate;
 };
+const formateDateTime = (datetime) => {
+  let date = new Date(datetime);
+  // console.log("utcDate",utcDate)
+  // let date = new Date(utcDate.toLocaleString());
+  // console.log("date",date)
+  let day = String(date.getDate()).padStart(2, "0");
+  let month = String(date.getMonth() + 1).padStart(2, "0"); // January is 0
+  let year = date.getFullYear();
 
+  let formattedDate = day + month + year + date.getHours() + date.getMinutes() + date.getSeconds();
+
+  return formattedDate;
+};
 const packName = (names) => {
   var result = "";
   if (names != null) {
@@ -98,11 +110,9 @@ const getNameByTransflag = (transflag) => {
   return result;
 };
 
-
 const currentTimeStamp = (date) => {
   const unixTimestamp = Math.floor(date / 1000);
   return unixTimestamp.toString();
-}
+};
 
-
-module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate, getNameByTransflag,currentTimeStamp };
+module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate, getNameByTransflag, currentTimeStamp,formateDateTime };

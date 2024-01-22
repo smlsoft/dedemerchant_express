@@ -454,28 +454,60 @@ const pdfPreviewReceivemoney = async (token, search, fromdate, todate, res) => {
 };
 
 const genDownLoadSaleByDatePDF = async (token, search, fromdate, todate, fileName) => {
+  console.log("processing");
   var dataset = await salebydate(token, search, fromdate, todate);
   var dataprofile = await globalservice.dataShop(token);
-
+  //console.log(dataset)
   if (dataset.success) {
     try {
       var body = await genBodyPDF(dataset.data);
       var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
       const tempPath = path.join(os.tmpdir(), fileName);
-      
+
       const writeStream = fs.createWriteStream(tempPath);
 
       pdfDoc.pipe(writeStream);
+
       pdfDoc.end();
 
       writeStream.on("error", function (err) {
         console.error("Error writing PDF to file:", err);
-        // Handle the error appropriately
       });
 
       writeStream.on("finish", function () {
         console.log(`PDF written to ${tempPath}`);
-        // Additional logic if needed after successfully writing the file
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
+};
+
+const genDownLoadReceiveByDatePDF = async (token, search, fromdate, todate, fileName) => {
+  console.log("processing");
+  var dataset = await receivemoney(token, search, fromdate, todate);
+  var dataprofile = await globalservice.dataShop(token);
+  //console.log(dataset)
+  if (dataset.success) {
+    try {
+      var body = await genBodyPDFReceivemoney(dataset.data);
+      var pdfDoc = printer.createPdfKitDocument(await genPDFReceivemoney(body, dataprofile, fromdate, todate), {});
+      const tempPath = path.join(os.tmpdir(), fileName);
+
+      const writeStream = fs.createWriteStream(tempPath);
+
+      pdfDoc.pipe(writeStream);
+
+      pdfDoc.end();
+
+      writeStream.on("error", function (err) {
+        console.error("Error writing PDF to file:", err);
+      });
+
+      writeStream.on("finish", function () {
+        console.log(`PDF written to ${tempPath}`);
       });
     } catch (err) {
       console.log(err);
@@ -505,4 +537,4 @@ const pdfDownload = async (token, search, fromdate, todate, res) => {
   }
 };
 
-module.exports = { salebydate, genPDF, pdfPreview, pdfDownload, receivemoney, pdfPreviewReceivemoney, genDownLoadSaleByDatePDF };
+module.exports = { salebydate, genPDF, pdfPreview, pdfDownload, receivemoney, pdfPreviewReceivemoney, genDownLoadSaleByDatePDF, genDownLoadReceiveByDatePDF };
