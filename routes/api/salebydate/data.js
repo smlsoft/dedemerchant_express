@@ -66,7 +66,7 @@ const salebydate = async (token, search, fromdate, todate) => {
         },
         {
           $sort: {
-            docdatetime: -1,
+            docdatetime: 1,
           },
         },
       ])
