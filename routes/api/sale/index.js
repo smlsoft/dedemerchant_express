@@ -69,7 +69,7 @@ router.get("/genPDFSale", async (req, res) => {
         res.status(200).json({
           success: true,
           message: "PDF generation in progress",
-          data: { fileName: fileName, downloadLink: `${protocol}://${host}${desiredPath}download-saleinv/${fileName}` },
+          data: { fileName: fileName, downloadLink: `https://${host}${desiredPath}download-saleinv/${fileName}` },
         });
       })
       .catch((err) => {

@@ -92,7 +92,7 @@ router.get("/genPDFSaleByDate", async (req, res) => {
         res.status(200).json({
           success: true,
           message: "PDF generation in progress",
-          data: { fileName: fileName, downloadLink: `${protocol}://${host}${desiredPath}download-salebydate/${fileName}` },
+          data: { fileName: fileName, downloadLink: `https://${host}${desiredPath}download-salebydate/${fileName}` },
         });
       })
       .catch((err) => {
@@ -135,7 +135,7 @@ router.get("/genPDFReceiveByDate", async (req, res) => {
         res.status(200).json({
           success: true,
           message: "PDF generation in progress",
-          data: { fileName: fileName, downloadLink: `${protocol}://${host}${desiredPath}download-receive/${fileName}` },
+          data: { fileName: fileName, downloadLink: `https://${host}${desiredPath}download-receive/${fileName}` },
         });
       })
       .catch((err) => {
