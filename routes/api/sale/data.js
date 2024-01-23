@@ -64,7 +64,7 @@ const dataresult = async (token, search, fromdate, todate) => {
           },
         },
         {
-          $sort: { docdatetime: -1 }, // Sorting in descending order
+          $sort: { docdatetime: 1 }, // Sorting in descending order
         },
       ])
       .toArray();
