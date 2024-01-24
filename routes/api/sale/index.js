@@ -8,12 +8,10 @@ const utils = require("../../../utils");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const queueGenSaleReport = new Queue("genSaleInvRepart", process.env.REDIS_CACHE_URI + "?tls=" + process.env.REDIS_CACHE_TLS_ENABLE);
+const queueGenSaleReport = new Queue("dedemerchantSaleInvReport", process.env.REDIS_CACHE_URI + "?tls=" + process.env.REDIS_CACHE_TLS_ENABLE);
 
 queueGenSaleReport.process(async (payload) => {
   logger.info("on process");
-
-  const jobId = payload.data.fileName;
 
   data.genDownLoadSaleInvPDF(
     payload.data.shopid,
@@ -24,8 +22,6 @@ queueGenSaleReport.process(async (payload) => {
     payload.data.showdetail,
     payload.data.showsumbydate
   );
-
-  return { jobId };
 });
 
 queueGenSaleReport.on("completed", (job, result) => {
@@ -56,20 +52,20 @@ router.get("/genPDFSale", async (req, res) => {
       showsumbydate: req.query.showsumbydate,
     };
 
-    const protocol = "https";
+    const protocol = "http";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");
     const desiredPath = `/${parts[1]}/${parts[2]}/`;
 
     queueGenSaleReport
-      .add(payload, { jobId: fileName })
+      .add(payload)
       .then((job) => {
         console.log(`Job added with ID: ${job.id}`);
         res.status(200).json({
           success: true,
           message: "PDF generation in progress",
-          data: { fileName: fileName, downloadLink: `https://${host}${desiredPath}download-saleinv/${fileName}` },
+          data: { fileName: fileName, jobId: job.id, downloadLink: `${protocol}://${host}${desiredPath}download-saleinv/${job.id}/${fileName}` },
         });
       })
       .catch((err) => {
@@ -81,13 +77,13 @@ router.get("/genPDFSale", async (req, res) => {
   }
 });
 
-router.get("/check-saleinv/:jobId", async (req, res) => {
+router.get("/check-saleinv/:jobId/:filename", async (req, res) => {
   const jobId = req.params.jobId;
-
+  const filename = req.params.filename;
   const job = await queueGenSaleReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    const filePath = path.join(os.tmpdir(), jobId);
+    const filePath = path.join(os.tmpdir(), filename);
 
     if (fs.existsSync(filePath)) {
       res.status(200).json({
@@ -111,14 +107,15 @@ router.get("/check-saleinv/:jobId", async (req, res) => {
   }
 });
 
-router.get("/download-saleinv/:jobId", async (req, res) => {
+router.get("/download-saleinv/:jobId/:filename", async (req, res) => {
   const jobId = req.params.jobId;
-  const tempPath = path.join(os.tmpdir(), `${jobId}`);
+  const filename = req.params.filename;
+  const tempPath = path.join(os.tmpdir(), `${filename}`);
 
   const job = await queueGenSaleReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    res.download(tempPath, `${jobId}`, (err) => {
+    res.download(tempPath, `${filename}`, (err) => {
       if (err) {
         res.status(500).send("Something wrong with download. Please try again later");
       }
@@ -136,10 +133,12 @@ router.get("/", async (req, res) => {
       res.status(401).json({ success: false, msg: "Invalid shop" });
       return;
     }
-    var dataset = await data.dataresult(result.data.shopid, req.query.search, req.query.fromdate, req.query.todate);
-    res.status(200).json({ success: true, data: dataset.data, msg: "" });
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pagesize) || 10;
+    var dataset = await data.dataresultPage(result.data.shopid, req.query.search, req.query.fromdate, req.query.todate, page, pageSize);
+    res.status(200).json({ success: true, data: dataset.data, pagination: { perPage: pageSize, page: page, total: dataset.total, totalPage: dataset.total }, msg: "" });
   } catch (err) {
-    res.status(500).json({ success: false, data: [], msg: err.message });
+    res.status(500).json({ success: false, data: [], pagination: { perPage: 0, page: 0, total: 0, totalPage: 0 }, msg: err.message });
   }
 });
 

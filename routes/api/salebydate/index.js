@@ -8,8 +8,8 @@ const utils = require("../../../utils");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const queueGenSaleByDateReport = new Queue("genSaleByDate", process.env.REDIS_CACHE_URI + "?tls=" + process.env.REDIS_CACHE_TLS_ENABLE);
-const queueGenReceiveByDateReport = new Queue("genSaleByDate", process.env.REDIS_CACHE_URI + "?tls=" + process.env.REDIS_CACHE_TLS_ENABLE);
+const queueGenSaleByDateReport = new Queue("dedemerchantSaleByDateReport", process.env.REDIS_CACHE_URI + "?tls=" + process.env.REDIS_CACHE_TLS_ENABLE);
+const queueGenReceiveByDateReport = new Queue("dedemerchantReceiveMoneyReport", process.env.REDIS_CACHE_URI + "?tls=" + process.env.REDIS_CACHE_TLS_ENABLE);
 
 router.get("/", async (req, res) => {
   try {
@@ -28,21 +28,13 @@ router.get("/", async (req, res) => {
 queueGenSaleByDateReport.process(async (payload) => {
   logger.info("on sale process");
 
-  const jobId = payload.data.fileName;
-
   data.genDownLoadSaleByDatePDF(payload.data.shopid, payload.data.search, payload.data.fromdate, payload.data.todate, payload.data.fileName);
-
-  return { jobId };
 });
 
 queueGenReceiveByDateReport.process(async (payload) => {
   logger.info("on receive process");
 
-  const jobId = payload.data.fileName;
-
   data.genDownLoadReceiveByDatePDF(payload.data.shopid, payload.data.search, payload.data.fromdate, payload.data.todate, payload.data.fileName);
-
-  return { jobId };
 });
 
 queueGenSaleByDateReport.on("completed", (job, result) => {
@@ -79,20 +71,20 @@ router.get("/genPDFSaleByDate", async (req, res) => {
       todate: req.query.todate,
     };
 
-    const protocol = "https";
+    const protocol = "http";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");
     const desiredPath = `/${parts[1]}/${parts[2]}/`;
 
     queueGenSaleByDateReport
-      .add(payload, { jobId: fileName })
+      .add(payload)
       .then((job) => {
         console.log(`Job added with ID: ${job.id}`);
         res.status(200).json({
           success: true,
           message: "PDF generation in progress",
-          data: { fileName: fileName, downloadLink: `https://${host}${desiredPath}download-salebydate/${fileName}` },
+          data: { fileName: fileName, jobId: job.id, downloadLink: `${protocol}://${host}${desiredPath}download-salebydate/${job.id}/${fileName}` },
         });
       })
       .catch((err) => {
@@ -122,20 +114,20 @@ router.get("/genPDFReceiveByDate", async (req, res) => {
       todate: req.query.todate,
     };
 
-    const protocol = "https";
+    const protocol = "http";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");
     const desiredPath = `/${parts[1]}/${parts[2]}/`;
 
     queueGenReceiveByDateReport
-      .add(payload, { jobId: fileName })
+      .add(payload)
       .then((job) => {
         console.log(`Job added with ID: ${job.id}`);
         res.status(200).json({
           success: true,
           message: "PDF generation in progress",
-          data: { fileName: fileName, downloadLink: `https://${host}${desiredPath}download-receive/${fileName}` },
+          data: { fileName: fileName, jobId: job.id, downloadLink: `${protocol}://${host}${desiredPath}download-receive/${job.id}/${fileName}` },
         });
       })
       .catch((err) => {
@@ -147,14 +139,14 @@ router.get("/genPDFReceiveByDate", async (req, res) => {
   }
 });
 
-router.get("/check-salebydate/:jobId", async (req, res) => {
+router.get("/check-salebydate/:jobId/:filename", async (req, res) => {
   const jobId = req.params.jobId;
-  const tempPath = path.join(os.tmpdir(), `${jobId}`);
+  const filename = req.params.filename;
 
   const job = await queueGenSaleByDateReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    const filePath = path.join(os.tmpdir(), jobId);
+    const filePath = path.join(os.tmpdir(), filename);
 
     if (fs.existsSync(filePath)) {
       res.status(200).json({
@@ -178,14 +170,15 @@ router.get("/check-salebydate/:jobId", async (req, res) => {
   }
 });
 
-router.get("/download-salebydate/:jobId", async (req, res) => {
+router.get("/download-salebydate/:jobId/:filename", async (req, res) => {
   const jobId = req.params.jobId;
-  const tempPath = path.join(os.tmpdir(), `${jobId}`);
+  const filename = req.params.filename;
+  const tempPath = path.join(os.tmpdir(), `${filename}`);
 
   const job = await queueGenSaleByDateReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    res.download(tempPath, `${jobId}`, (err) => {
+    res.download(tempPath, `${filename}`, (err) => {
       if (err) {
         res.status(500).send("Something wrong with download. Please try again later");
       }
@@ -196,14 +189,15 @@ router.get("/download-salebydate/:jobId", async (req, res) => {
   }
 });
 
-router.get("/check-receive/:jobId", async (req, res) => {
+router.get("/check-receive/:jobId/:filename", async (req, res) => {
   const jobId = req.params.jobId;
-  const tempPath = path.join(os.tmpdir(), `${jobId}`);
+  const filename = req.params.filename;
+
 
   const job = await queueGenReceiveByDateReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    const filePath = path.join(os.tmpdir(), jobId);
+    const filePath = path.join(os.tmpdir(), filename);
 
     if (fs.existsSync(filePath)) {
       res.status(200).json({
@@ -227,14 +221,15 @@ router.get("/check-receive/:jobId", async (req, res) => {
   }
 });
 
-router.get("/download-receive/:jobId", async (req, res) => {
+router.get("/download-receive/:jobId/:filename", async (req, res) => {
   const jobId = req.params.jobId;
-  const tempPath = path.join(os.tmpdir(), `${jobId}`);
+  const filename = req.params.filename;
+  const tempPath = path.join(os.tmpdir(), `${filename}`);
 
   const job = await queueGenReceiveByDateReport.getJob(jobId);
 
   if (job && job.finishedOn) {
-    res.download(tempPath, `${jobId}`, (err) => {
+    res.download(tempPath, `${filename}`, (err) => {
       if (err) {
         res.status(500).send("Something wrong with download. Please try again later");
       }

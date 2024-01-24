@@ -16,7 +16,6 @@ const snoowrap = require("snoowrap");
 const axios = require("axios");
 const globalservice = require("./globalservice");
 
-
 const kafka = new Kafka({
   clientId: "my-app2",
   brokers: [process.env.BROKERS],
@@ -43,9 +42,7 @@ const connectToMongoDB = async () => {
     db = client.db(process.env.MONGODB_DB);
 
     const transactionPaid = db.collection("transactionPaid");
-    const transactionPurchaseReturn = db.collection(
-      "transactionPurchaseReturn"
-    );
+    const transactionPurchaseReturn = db.collection("transactionPurchaseReturn");
     const transactionSaleInvoice = db.collection("transactionSaleInvoice");
 
     const result = await transactionPaid
@@ -134,8 +131,7 @@ const connectToPostgres = async () => {
   });
   try {
     await pg.connect();
-    const query =
-      "SELECT shopid FROM chartofaccounts where shopid != '' limit 1";
+    const query = "SELECT shopid FROM chartofaccounts where shopid != '' limit 1";
     const result = await pg.query(query);
     return result.rows;
   } catch (error) {
@@ -172,9 +168,7 @@ const gracefulShutdown = () => {
 
   // Forcefully terminate process after 10 seconds
   setTimeout(() => {
-    console.error(
-      "Could not close connections in time. Forcefully terminating process."
-    );
+    console.error("Could not close connections in time. Forcefully terminating process.");
     process.exit(1);
   }, 10 * 1000);
 };
@@ -189,13 +183,9 @@ app.use(bodyParser.json({ limit: "200mb" }));
 app.use(bodyParser.urlencoded({ limit: "200mb", extended: true }));
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -208,14 +198,13 @@ const router = express.Router();
 // })
 
 const logRequest = (req, res, next) => {
-
   const startTime = Date.now();
 
-  res.on('finish', () => {
+  res.on("finish", () => {
     const duration = Date.now() - startTime;
     const { method, url } = req;
     const status = res.statusCode;
-    const contentLength = res.get('Content-Length');
+    const contentLength = res.get("Content-Length");
 
     logger.info(`${method} ${url}`, { method, url, status, contentLength, duration });
   });
@@ -227,13 +216,12 @@ app.use(logRequest);
 globalservice.redisClient.connect();
 
 globalservice.redisClient.on("error", (err) => {
-  console.log("Redis Client Error", err)
+  console.log("Redis Client Error", err);
   logger.error("Redis Client Error", err);
 });
 globalservice.redisClient.on("connect", () => {
   logger.debug("Connected to Redis");
 });
-
 
 router.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -304,10 +292,7 @@ router.use("/salebydate", require("./routes/api/salebydate"));
 router.use("/productdetail", require("./routes/api/productdetail"));
 router.use("/poscenter", require("./routes/api/posactive"));
 
-router.use(
-  "/productbarcode",
-  require("./routes/api/productbarcode_clickhouse")
-);
+router.use("/productbarcode", require("./routes/api/productbarcode_clickhouse"));
 router.use("/debtor", require("./routes/api/debtor"));
 router.use("/creditor", require("./routes/api/creditor"));
 router.use("/bookbank", require("./routes/api/bookbank"));
@@ -337,7 +322,6 @@ router.use("/balanceimport", require("./routes/api/balanceimport"));
 router.use("/health", require("./routes"));
 router.use("/debtortransaction", require("./routes/api/debtor_transaction"));
 router.use("/creditortransaction", require("./routes/api/creditor_transaction"));
-
 
 router.get("/getUserShop", async (req, res) => {
   //8be917f9e93923fb18a7a1b74716c4c506cc4e97d982840cd26f0d37c60b11d2

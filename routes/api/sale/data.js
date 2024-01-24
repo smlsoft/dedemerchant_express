@@ -10,6 +10,70 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
+const dataresultPage = async (token, search, fromdate, todate, page, pageSize ) => {
+  const client = await provider.connectToMongoDB();
+  var resultSet = { success: false, data: [], total: 0 };
+  try {
+    let db;
+    db = client.db(process.env.MONGODB_DB);
+    let filters = [];
+
+    if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
+      filters.push({
+        docdatetime: {
+          $gte: new Date(fromdate + "T00:00:00Z"),
+        },
+      });
+      filters.push({
+        docdatetime: {
+          $lt: new Date(todate + "T23:59:59Z"),
+        },
+      });
+    }
+
+    if (utils.isNotEmpty(search)) {
+      filters = [];
+      const pattern = new RegExp(search, "i");
+      filters.push({
+        $or: [
+          {
+            docno: { $regex: pattern },
+          },
+          {
+            custname: {
+              $elemMatch: {
+                name: { $regex: pattern },
+              },
+            },
+          },
+        ],
+      });
+    }
+
+    filters.push({
+      shopid: token,
+    });
+
+    const data = db.collection("transactionSaleInvoice");
+
+    const totalCount = await data.countDocuments({ $and: filters });
+
+    const offset = (page - 1) * pageSize;
+
+    const result = await data.aggregate([{ $match: { $and: filters } }, { $sort: { docdatetime: 1 } }, { $skip: offset }, { $limit: pageSize }]).toArray();
+
+    resultSet.success = true;
+    resultSet.data = result;
+    resultSet.total = totalCount;
+    
+    return resultSet;
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+  } finally {
+    await client.close();
+  }
+};
+
 const dataresult = async (token, search, fromdate, todate) => {
   const client = await provider.connectToMongoDB();
   var resultSet = { success: false, data: [] };
@@ -84,7 +148,7 @@ const dataresult = async (token, search, fromdate, todate) => {
   }
 };
 
-const genPDF = async (body, dataprofile) => {
+const genPDF = async (body, dataprofile, showdetail) => {
   var docDefinition = {
     content: [
       {
@@ -126,7 +190,7 @@ const genPDF = async (body, dataprofile) => {
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        headerRows: 2,
+        headerRows: showdetail == 1 ? 2 : 1,
         widths: ["15%", "20%", "10%", "10%", "9%", "9%", "9%", "9%", "9%", "10%"],
         body: body,
       },
@@ -290,15 +354,15 @@ const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
         });
 
         body.push([
-          { text: "", style: "tableCell", alignment: "center",  },
-          { text: "", style: "tableCell",  },
-          { text: "รวม", style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.detailtotalamount), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totaldiscount), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalbeforevat), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalexceptvat), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalvatvalue), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalamount), style: "tableCell", alignment: "right",  },
+          { text: "", style: "tableCell", alignment: "center" },
+          { text: "", style: "tableCell" },
+          { text: "รวม", style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.detailtotalamount), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totaldiscount), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalbeforevat), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalexceptvat), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalvatvalue), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalamount), style: "tableCell", alignment: "right" },
         ]);
       });
 
@@ -318,15 +382,15 @@ const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
         totalTotalamount += ele.totalamount;
       });
       body.push([
-        { text: "", style: "tableCell", alignment: "center",fillColor: "#f5e8c4" },
-        { text: "", style: "tableCell",fillColor: "#f5e8c4" },
-        { text: "รวม", style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalDetailtotalamount), style: "tableCell", alignment: "right",fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(totalTotaldiscount), style: "tableCell", alignment: "right",fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(totalTotalbeforevat), style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalTotalexceptvat), style: "tableCell", alignment: "right",fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(totalTotalvatvalue), style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalTotalamount), style: "tableCell", alignment: "right",fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", alignment: "center", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", fillColor: "#f5e8c4" },
+        { text: "รวม", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalDetailtotalamount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotaldiscount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalbeforevat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalexceptvat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalvatvalue), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalamount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
       ]);
     }
   } else {
@@ -356,19 +420,17 @@ const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
           ]);
         });
     } else {
-      body.push(
-        [
-          { text: "เอกสารวันที่", style: "tableCell", alignment: "left" },
-          { text: "เอกสารเลขที่", style: "tableCell", alignment: "left" },
-          { text: "ลูกหนี้", style: "tableCell", alignment: "left" },
-          { text: "มูลค่าสินค้า", style: "tableCell", alignment: "left" },
-          { text: "มูลค่าส่วนลด", style: "tableCell", alignment: "left" },
-          { text: "หลังหักส่วนลด", style: "tableCell", alignment: "left" },
-          { text: "ยกเว้นภาษี", style: "tableCell", alignment: "left" },
-          { text: "ภาษีมูลค่าเพิ่ม", style: "tableCell", alignment: "left" },
-          { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "left" },
-        ]
-      );
+      body.push([
+        { text: "เอกสารวันที่", style: "tableCell", alignment: "left" },
+        { text: "เอกสารเลขที่", style: "tableCell", alignment: "left" },
+        { text: "ลูกหนี้", style: "tableCell", alignment: "left" },
+        { text: "มูลค่าสินค้า", style: "tableCell", alignment: "left" },
+        { text: "มูลค่าส่วนลด", style: "tableCell", alignment: "left" },
+        { text: "หลังหักส่วนลด", style: "tableCell", alignment: "left" },
+        { text: "ยกเว้นภาษี", style: "tableCell", alignment: "left" },
+        { text: "ภาษีมูลค่าเพิ่ม", style: "tableCell", alignment: "left" },
+        { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "left" },
+      ]);
 
       const result = [];
 
@@ -429,15 +491,15 @@ const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
         });
 
         body.push([
-          { text: "", style: "tableCell", alignment: "center",  },
-          { text: "", style: "tableCell", },
-          { text: "รวม", style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.detailtotalamount), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totaldiscount), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalbeforevat), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalexceptvat), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalvatvalue), style: "tableCell", alignment: "right",  },
-          { text: utils.formatNumber(data.totalamount), style: "tableCell", alignment: "right",  },
+          { text: "", style: "tableCell", alignment: "center" },
+          { text: "", style: "tableCell" },
+          { text: "รวม", style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.detailtotalamount), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totaldiscount), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalbeforevat), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalexceptvat), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalvatvalue), style: "tableCell", alignment: "right" },
+          { text: utils.formatNumber(data.totalamount), style: "tableCell", alignment: "right" },
         ]);
       });
 
@@ -457,15 +519,15 @@ const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
         totalTotalamount += ele.totalamount;
       });
       body.push([
-        { text: "", style: "tableCell", alignment: "center" ,fillColor: "#f5e8c4"},
-        { text: "", style: "tableCell",fillColor: "#f5e8c4" },
-        { text: "รวม", style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalDetailtotalamount), style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalTotaldiscount), style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalTotalbeforevat), style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalTotalexceptvat), style: "tableCell", alignment: "right",fillColor: "#f5e8c4" },
-        { text: utils.formatNumber(totalTotalvatvalue), style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
-        { text: utils.formatNumber(totalTotalamount), style: "tableCell", alignment: "right" ,fillColor: "#f5e8c4"},
+        { text: "", style: "tableCell", alignment: "center", fillColor: "#f5e8c4" },
+        { text: "", style: "tableCell", fillColor: "#f5e8c4" },
+        { text: "รวม", style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalDetailtotalamount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotaldiscount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalbeforevat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalexceptvat), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalvatvalue), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
+        { text: utils.formatNumber(totalTotalamount), style: "tableCell", alignment: "right", fillColor: "#f5e8c4" },
       ]);
     }
   }
@@ -494,7 +556,8 @@ const genDownLoadSaleInvPDF = async (token, search, fromdate, todate, fileName, 
   if (dataset.success) {
     try {
       var body = await genBodyPDF(dataset.data, showdetail, showsumbydate);
-      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
+
+      var pdfDoc = await printer.createPdfKitDocument(await genPDF(body, dataprofile, showdetail), {});
       const tempPath = path.join(os.tmpdir(), fileName);
 
       const writeStream = fs.createWriteStream(tempPath);
@@ -585,4 +648,4 @@ const sendEmail = async (token, emails) => {
   }
 };
 
-module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail, genDownLoadSaleInvPDF };
+module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail, genDownLoadSaleInvPDF,dataresultPage };
