@@ -68,13 +68,13 @@ const dataWeeklySale = async (shopid, fromdate, todate) => {
 
     const groupByDay = await groupByDayAndSum(result.rows);
     const groupedData = {
-      Mon: parseFloat(parseFloat(groupByDay.Monday).toFixed(2)) ?? 0,
-      Tue: parseFloat(parseFloat(groupByDay.Tuesday).toFixed(2)) ?? 0,
-      Wed: parseFloat(parseFloat(groupByDay.Wednesday).toFixed(2)) ?? 0,
-      Thu: parseFloat(parseFloat(groupByDay.Thursday).toFixed(2)) ?? 0,
-      Fri: parseFloat(parseFloat(groupByDay.Friday).toFixed(2)) ?? 0,
-      Sat: parseFloat(parseFloat(groupByDay.Saturday).toFixed(2)) ?? 0,
-      Sun: parseFloat(parseFloat(groupByDay.Sunday).toFixed(2)) ?? 0,
+      Mon: groupByDay.Monday != null ? parseFloat(parseFloat(groupByDay.Monday).toFixed(2)) : 0,
+      Tue: groupByDay.Tuesday != null ? parseFloat(parseFloat(groupByDay.Tuesday).toFixed(2)) : 0, 
+      Wed: groupByDay.Wednesday != null ? parseFloat(parseFloat(groupByDay.Wednesday).toFixed(2)) : 0, 
+      Thu: groupByDay.Thursday != null ? parseFloat(parseFloat(groupByDay.Thursday).toFixed(2)) : 0,
+      Fri: groupByDay.Friday != null ? parseFloat(parseFloat(groupByDay.Friday).toFixed(2)) : 0, 
+      Sat: groupByDay.Saturday != null ? parseFloat(parseFloat(groupByDay.Saturday).toFixed(2)) : 0, 
+      Sun: groupByDay.Sunday != null ? parseFloat(parseFloat(groupByDay.Sunday).toFixed(2)) : 0,
     };
 
     console.log(groupedData);
