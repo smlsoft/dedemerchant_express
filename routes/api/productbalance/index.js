@@ -44,7 +44,7 @@ router.get("/genPDFProductBalance", async (req, res) => {
       search: req.query.search,
     };
 
-    const protocol = "http";
+    const protocol = "https";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");

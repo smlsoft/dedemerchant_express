@@ -49,7 +49,7 @@ router.get("/genPDFStockAdjustment", async (req, res) => {
       todate: req.query.todate,
     };
 
-    const protocol = "http";
+    const protocol = "https";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");
