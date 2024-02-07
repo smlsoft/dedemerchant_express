@@ -2,10 +2,13 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
-const globalservice = require("../../../globalservice");
 const provider = require("../../../provider");
+const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 
 const dataresult = async (token, year, month) => {
   const client = await provider.connectToMongoDB();
@@ -340,6 +343,41 @@ const pdfPreview = async (token, year, month, type, res) => {
   }
 };
 
+const genDownLoadVatPurchasePDF = async (token, year, month, fileName) => {
+
+  console.log("processing");
+  var dataset = await dataresult(token, year, month);
+  var dataprofile = await globalservice.dataShop(token);
+
+  if (dataset.success) {
+    try {
+      var body = await genBodyPDF(dataset.data);
+
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, year, month), {});
+      const tempPath = path.join(os.tmpdir(), fileName);
+
+      const writeStream = fs.createWriteStream(tempPath);
+
+      pdfDoc.pipe(writeStream);
+
+      pdfDoc.end();
+
+      writeStream.on("error", function (err) {
+        console.error("Error writing PDF to file:", err);
+      });
+
+      writeStream.on("finish", function () {
+        console.log(`PDF written to ${tempPath}`);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
+};
+
+
 const pdfDownload = async (token, search, res) => {
   var dataset = await dataresult(token, search);
   var body = await genBodyPDF(dataset.data);
@@ -350,4 +388,4 @@ const pdfDownload = async (token, search, res) => {
   pdfDoc.end();
 };
 
-module.exports = { dataresult, genPDF, pdfPreview, pdfDownload };
+module.exports = { dataresult, genPDF, pdfPreview, pdfDownload , genDownLoadVatPurchasePDF };

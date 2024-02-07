@@ -2,11 +2,13 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
+const provider = require("../../../provider");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
-const provider = require("../../../provider");
 dotenv.config();
-
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 
 const dataresult = async (token, search) => {
   const client = await provider.connectToMongoDB();
@@ -71,7 +73,7 @@ const dataresult = async (token, search) => {
   }
 };
 
-const genPDF = async (body,dataprofile) => {
+const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
@@ -106,7 +108,7 @@ const genPDF = async (body,dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ['10%', '20%', '20%', '30%', '10%', '10%' ],
+        widths: ['10%', '20%', '20%', '30%', '10%', '10%'],
         body: body
       },
       layout: "lightHorizontalLines",
@@ -125,23 +127,23 @@ const genBodyPDF = async (dataset) => {
     { text: "โทรศัพท์", alignment: "center" },
     { text: "ประเภท", alignment: "center" },
   ]),
-  dataset.forEach((ele) => {
-    body.push([
-      { text: ele.code },
-      { text: utils.packName(ele.names) },
-      { text: ele.taxid },
-      {
-        text:
-          ele.addressforbilling.countrycode +
-          ele.addressforbilling.provincecode +
-          ele.addressforbilling.districtcode +
-          ele.addressforbilling.subdistrictcode +
-          ele.addressforbilling.zipcode 
-      },
-      { text: ele.addressforbilling.phoneprimary },
-      { text: (ele.personaltype==1)?'บุคคลธรรมดา':'นิติบุคคล',alignment: "center" },
-    ]);
-  });
+    dataset.forEach((ele) => {
+      body.push([
+        { text: ele.code },
+        { text: utils.packName(ele.names) },
+        { text: ele.taxid },
+        {
+          text:
+            ele.addressforbilling.countrycode +
+            ele.addressforbilling.provincecode +
+            ele.addressforbilling.districtcode +
+            ele.addressforbilling.subdistrictcode +
+            ele.addressforbilling.zipcode
+        },
+        { text: ele.addressforbilling.phoneprimary },
+        { text: (ele.personaltype == 1) ? 'บุคคลธรรมดา' : 'นิติบุคคล', alignment: "center" },
+      ]);
+    });
   return body;
 };
 
@@ -152,14 +154,48 @@ const pdfPreview = async (token, search, res) => {
   var dataprofile = await globalservice.dataShop(token);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
-  }else {
+  } else {
     res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
+
+const genDownLoadDebtorPDF = async (token, search, fileName) => {
+  console.log("processing");
+  var dataset = await dataresult(token, search);
+  var dataprofile = await globalservice.dataShop(token);
+
+  if (dataset.success) {
+    try {
+      var body = await genBodyPDF(dataset.data);
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+
+      const tempPath = path.join(os.tmpdir(), fileName);
+
+      const writeStream = fs.createWriteStream(tempPath);
+
+      pdfDoc.pipe(writeStream);
+
+      pdfDoc.end();
+
+      writeStream.on("error", function (err) {
+        console.error("Error writing PDF to file:", err);
+      });
+
+      writeStream.on("finish", function () {
+        console.log(`PDF written to ${tempPath}`);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
+};
+
 
 const pdfDownload = async (token, search, res) => {
   var dataset = await dataresult(token, search);
@@ -220,4 +256,4 @@ const sendEmail = async (token, emails) => {
   }
 };
 
-module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail };
+module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail, genDownLoadDebtorPDF };

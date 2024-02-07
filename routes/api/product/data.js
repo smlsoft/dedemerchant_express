@@ -6,6 +6,9 @@ const provider = require("../../../provider");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
 dotenv.config();
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 
 const dataresult = async (token, search) => {
   const client = await provider.connectToMongoDB();
@@ -55,7 +58,7 @@ const dataresult = async (token, search) => {
     resultSet.success = true;
     resultSet.data = result;
     const dataset = resultSet;
-    //console.log(dataset);
+    console.log(dataset);
     return dataset;
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
@@ -162,6 +165,39 @@ const pdfPreview = async (token, search, res) => {
   }
 };
 
+const genDownLoadProductPDF = async (token, search, fileName) => {
+  console.log("processing");
+  var dataset = await dataresult(token, search);
+  var dataprofile = await globalservice.dataShop(token);
+
+  if (dataset.success) {
+    try {
+      var body = await genBodyPDF(dataset.data);
+
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+      const tempPath = path.join(os.tmpdir(), fileName);
+
+      const writeStream = fs.createWriteStream(tempPath);
+
+      pdfDoc.pipe(writeStream);
+
+      pdfDoc.end();
+
+      writeStream.on("error", function (err) {
+        console.error("Error writing PDF to file:", err);
+      });
+
+      writeStream.on("finish", function () {
+        console.log(`PDF written to ${tempPath}`);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
+};
+
 const pdfDownload = async (token, search, res) => {
   var dataset = await dataresult(token, search);
   var body = await genBodyPDF(dataset.data);
@@ -221,4 +257,4 @@ const sendEmail = async (token, emails) => {
   }
 };
 
-module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail };
+module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail, genDownLoadProductPDF };

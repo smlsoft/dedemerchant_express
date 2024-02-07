@@ -52,7 +52,7 @@ router.get("/genPDFSale", async (req, res) => {
       showsumbydate: req.query.showsumbydate,
     };
 
-    const protocol = "https";
+    const protocol = "http";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");
