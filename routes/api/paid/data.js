@@ -394,16 +394,15 @@ const pdfPreview = async (shopid, fromdate, todate, printby, showsumbydate, from
   }
 };
 
-const genDownLoadPaidPDF = async (token, search, fromdate, todate, fileName) => {
+const genDownLoadPaidPDF = async (fileName, shopid, fromdate, todate, printby, showsumbydate, fromcustcode, tocustcode, branch, search) => {
   console.log("processing");
-  var dataset = await dataresult(token, search, fromdate, todate);
-  var dataprofile = await globalservice.dataShop(token);
+  var dataset = await dataresult(shopid, fromdate, todate, printby, fromcustcode, tocustcode, branch, search);
+  var dataprofile = await globalservice.dataShop(shopid);
 
   if (dataset.success) {
     try {
-      var body = await genBodyPDF(dataset.data);
-
-      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+      var body = await genBodyPDF(dataset.data, showsumbydate);
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, fromcustcode, tocustcode, branch), {});
       const tempPath = path.join(os.tmpdir(), fileName);
 
       const writeStream = fs.createWriteStream(tempPath);

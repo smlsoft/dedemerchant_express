@@ -14,11 +14,16 @@ queueGenPaidReport.process(async (payload) => {
   logger.info("on process");
 
   data.genDownLoadPaidPDF(
+    payload.data.fileName,
     payload.data.shopid,
-    payload.data.search,
     payload.data.fromdate,
     payload.data.todate,
-    payload.data.fileName,
+    payload.data.printby,
+    payload.data.showsumbydate,
+    payload.data.fromcustcode,
+    payload.data.tocustcode,
+    payload.data.branch,
+    payload.data.search,
   );
 });
 
@@ -43,12 +48,17 @@ router.get("/genPDFPaid", async (req, res) => {
     let payload = {
       fileName: fileName,
       shopid: result.data.shopid,
-      search: req.query.search,
       fromdate: req.query.fromdate,
       todate: req.query.todate,
+      printby: req.query.printby,
+      showsumbydate: req.query.showsumbydate,
+      fromcustcode: req.query.fromcustcode,
+      tocustcode: req.query.tocustcode,
+      branch: req.query.branch,
+      search: req.query.search,
     };
 
-    const protocol = "https";
+    const protocol = "http";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");

@@ -13221,3 +13221,5 @@
 {"level":"error","message":"Redis Client Error","timestamp":"2024-02-16 11:15:29"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-02-16 11:20:30"}
 {"level":"error","message":"Redis Client Error","timestamp":"2024-02-16 11:25:31"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-02-16 11:31:57"}
+{"level":"error","message":"Error during server close:","timestamp":"2024-02-16 11:34:50"}
