@@ -148,7 +148,7 @@ const consumer = kafka.consumer({ groupId: "dedemerchant" });
 
 const app = express();
 
-const server = require("http").createServer(app);
+const server = require("https").createServer(app);
 
 const gracefulShutdown = () => {
   console.log("Starting graceful shutdown...");

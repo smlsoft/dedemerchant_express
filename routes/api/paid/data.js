@@ -186,7 +186,7 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, fromcustcode
         bold: true,
       },
       tableCell: {
-        fontSize: 8,
+        fontSize: 7,
       },
       tableFooter: {
         fontSize: 8,
@@ -312,7 +312,7 @@ function processDataRow(ele, body, subtotals) {
     // Your data row cells here
     { text: `${utils.formateDate(ele.doc_date)} ${ele.doc_time}`, style: "tableCell", alignment: "center" },
     { text: ele.docno, style: "tableCell", alignment: "center" },
-    { text: ele.custcode + " : " + utils.packName(ele.custnames), style: "tableCell", alignment: "left" },
+    { text: utils.packName(ele.custnames), style: "tableCell", alignment: "left" },
     { text: utils.formatNumber(ele.totalvalue), style: "tableCell", alignment: "right" },
     { text: utils.formatNumber(ele.roundamount), style: "tableCell", alignment: "right" },
     { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
