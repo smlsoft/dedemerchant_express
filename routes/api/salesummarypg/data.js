@@ -13,7 +13,7 @@ const dataresult = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `SELECT shopid, sum(totaldiscount) as discount,sum(totalamount) as cash,sum(totalpaycash) as cashierAmount,sum(totalpaytransfer) as totalpaytransfer,sum(totalpaycredit) as totalpaycredit FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} group by shopid`;
+  var query = `SELECT shopid, sum(totaldiscount) as discount,sum(totalamount) as cash,sum(totalpaycash) as cashierAmount,sum(totalpaytransfer) as totalpaytransfer,sum(totalpaycredit) as totalpaycredit FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} and iscancel=true group by shopid`;
   try {
     await pg.connect();
     const result = await pg.query(query);
