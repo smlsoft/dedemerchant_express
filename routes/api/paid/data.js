@@ -9,7 +9,7 @@ dotenv.config();
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocustcode, branch, search) => {
+const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocustcode, branchcode, search) => {
   const pg = await provider.connectPG();
   let where = "WHERE 1=1"; // Default WHERE clause
   var res = { success: false, data: [], msg: "" };
@@ -33,8 +33,8 @@ const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocus
     where += ` AND custcode = '${tocustcode}'`;
   }
 
-  if (utils.isNotEmpty(branch)) {
-    where += ` AND branchcode = '${branch}'`;
+  if (utils.isNotEmpty(branchcode)) {
+    where += ` AND branchcode = '${branchcode}'`;
   }
 
 
@@ -90,7 +90,7 @@ const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocus
   }
 };
 
-const genPDF = async (body, dataprofile, fromdate, todate, printby, fromcustcode, tocustcode, branch) => {
+const genPDF = async (body, dataprofile, fromdate, todate, printby, fromcustcode, tocustcode, branchcode) => {
   var custcodeText = "";
   var branchText = "";
   if (utils.isNotEmpty(fromcustcode) && utils.isNotEmpty(tocustcode)) {
@@ -101,8 +101,8 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, fromcustcode
     custcodeText = `ลูกค้า : ${tocustcode}`;
   }
 
-  if (utils.isNotEmpty(branch)) {
-    branchText = `สาขา : ${branch}`;
+  if (utils.isNotEmpty(branchcode)) {
+    branchText = `สาขา : ${branchcode}`;
   }
 
 
@@ -378,14 +378,14 @@ function addOverallTotalRow(body, totals) {
 }
 
 
-const pdfPreview = async (shopid, fromdate, todate, printby, showsumbydate, fromcustcode, tocustcode, branch, search, res) => {
-  var dataset = await dataresult(shopid, fromdate, todate, printby, fromcustcode, tocustcode, branch, search);
+const pdfPreview = async (shopid, fromdate, todate, printby, showsumbydate, fromcustcode, tocustcode, branchcode, search, res) => {
+  var dataset = await dataresult(shopid, fromdate, todate, printby, fromcustcode, tocustcode, branchcode, search);
   var dataprofile = await globalservice.dataShop(shopid);
   // console.log(dataset);
   // console.log(dataprofile);
   if (dataset.success && dataprofile.success) {
     var body = await genBodyPDF(dataset.data, showsumbydate);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, fromcustcode, tocustcode, branch), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, fromcustcode, tocustcode, branchcode), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -394,15 +394,15 @@ const pdfPreview = async (shopid, fromdate, todate, printby, showsumbydate, from
   }
 };
 
-const genDownLoadPaidPDF = async (fileName, shopid, fromdate, todate, printby, showsumbydate, fromcustcode, tocustcode, branch, search) => {
+const genDownLoadPaidPDF = async (fileName, shopid, fromdate, todate, printby, showsumbydate, fromcustcode, tocustcode, branchcode, search) => {
   console.log("processing");
-  var dataset = await dataresult(shopid, fromdate, todate, printby, fromcustcode, tocustcode, branch, search);
+  var dataset = await dataresult(shopid, fromdate, todate, printby, fromcustcode, tocustcode, branchcode, search);
   var dataprofile = await globalservice.dataShop(shopid);
 
   if (dataset.success) {
     try {
       var body = await genBodyPDF(dataset.data, showsumbydate);
-      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, fromcustcode, tocustcode, branch), {});
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, fromcustcode, tocustcode, branchcode), {});
       const tempPath = path.join(os.tmpdir(), fileName);
 
       const writeStream = fs.createWriteStream(tempPath);

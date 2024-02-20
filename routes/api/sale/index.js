@@ -13,15 +13,21 @@ const queueGenSaleReport = new Queue("dedemerchantSaleInvReport", process.env.RE
 queueGenSaleReport.process(async (payload) => {
   logger.info("on process");
   data.genDownLoadSaleInvPDF(
+    payload.data.fileName,
     payload.data.shopid,
     payload.data.fromdate,
     payload.data.todate,
-    payload.data.fileName,
-    payload.data.showdetail,
     payload.data.branchcode,
+    payload.data.showdetail,
+    payload.data.showsumbydate,
     payload.data.iscancel,
     payload.data.inquirytype,
-    payload.data.ispos
+    payload.data.ispos,
+    payload.data.fromcustcode,
+    payload.data.tocustcode,
+    payload.data.fromsalecode,
+    payload.data.tosalecode,
+    payload.data.printby,
   );
 });
 
@@ -42,17 +48,22 @@ router.get("/genPDFSale", async (req, res) => {
     }
 
     let fileName = `saleinv-${result.data.name}-${utils.formateDateTime(Date.now())}.pdf`;
-  
     let payload = {
       fileName: fileName,
       shopid: result.data.shopid,
       fromdate: req.query.fromdate,
       todate: req.query.todate,
-      showdetail: req.query.showdetail,
       branchcode: req.query.branchcode,
+      showdetail: req.query.showdetail,
+      showsumbydate: req.query.showsumbydate,
       iscancel: req.query.iscancel,
       inquirytype: req.query.inquirytype,
       ispos: req.query.ispos,
+      fromcustcode: req.query.fromcustcode,
+      tocustcode: req.query.tocustcode,
+      fromsalecode: req.query.fromsalecode,
+      tosalecode: req.query.tosalecode,
+      printby: req.query.printby,
     };
 
     const protocol = "https";
@@ -139,7 +150,7 @@ router.get("/", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pagesize) || 10;
 
-    var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.showdetail, req.query.branchcode, req.query.iscancel, req.query.inquirytype, req.query.ispos);
+    var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.showdetail, req.query.showsumbydate, req.query.iscancel, req.query.inquirytype, req.query.ispos, req.query.fromcustcode, req.query.tocustcode, req.query.fromsalecode, req.query.tosalecode, req.query.printby, res);
     res.status(200).json({ success: true, data: dataset.data, msg: "" });
   } catch (err) {
     res.status(500).json({ success: false, data: [], pagination: { perPage: 0, page: 0, total: 0, totalPage: 0 }, msg: err.message });
@@ -152,7 +163,7 @@ router.get("/pdfview", async (req, res) => {
     res.status(401).json({ success: false, msg: "Invalid shop" });
     return;
   }
-  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.showdetail, req.query.branchcode, req.query.iscancel, req.query.inquirytype, req.query.ispos, res);
+  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.showdetail, req.query.showsumbydate, req.query.iscancel, req.query.inquirytype, req.query.ispos, req.query.fromcustcode, req.query.tocustcode, req.query.fromsalecode, req.query.tosalecode, req.query.printby, res);
 });
 
 router.get("/pdfdownload", async (req, res) => {

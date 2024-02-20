@@ -22,7 +22,7 @@ queueGenPaidReport.process(async (payload) => {
     payload.data.showsumbydate,
     payload.data.fromcustcode,
     payload.data.tocustcode,
-    payload.data.branch,
+    payload.data.branchcode,
     payload.data.search,
   );
 });
@@ -54,7 +54,7 @@ router.get("/genPDFPaid", async (req, res) => {
       showsumbydate: req.query.showsumbydate,
       fromcustcode: req.query.fromcustcode,
       tocustcode: req.query.tocustcode,
-      branch: req.query.branch,
+      branchcode: req.query.branchcode,
       search: req.query.search,
     };
 
@@ -132,7 +132,6 @@ router.get("/download-paid/:jobId/:filename", async (req, res) => {
   }
 });
 
-
 router.get("/", async (req, res) => {
   try {
     var result = await globalservice.getUserShop(req.query.token);
@@ -140,7 +139,7 @@ router.get("/", async (req, res) => {
       res.status(401).json({ success: false, msg: "Invalid shop" });
       return;
     }
-    var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.fromcustcode, req.query.tocustcode, req.query.branch, req.query.search);
+    var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.fromcustcode, req.query.tocustcode, req.query.branchcode, req.query.search);
     res.status(200).json({ success: true, data: dataset.data, msg: "" });
   } catch (err) {
     res.status(500).json({ success: false, data: [], msg: err.message });
@@ -153,7 +152,7 @@ router.get("/pdfview", async (req, res) => {
     res.status(401).json({ success: false, msg: "Invalid shop" });
     return;
   }
-  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showsumbydate, req.query.fromcustcode, req.query.tocustcode, req.query.branch, req.query.search, res,);
+  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showsumbydate, req.query.fromcustcode, req.query.tocustcode, req.query.branchcode, req.query.search, res,);
 });
 
 
