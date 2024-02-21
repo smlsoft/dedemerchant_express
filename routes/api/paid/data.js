@@ -11,7 +11,7 @@ const os = require("os");
 const path = require("path");
 const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocustcode, branchcode, search) => {
   const pg = await provider.connectPG();
-  let where = `WHERE shopid =  ${shopid}`;
+  let where = `WHERE shopid =  '${shopid}'`;
   var res = { success: false, data: [], msg: "" };
 
   if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
@@ -72,6 +72,8 @@ const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocus
     ORDER BY 
       docdate, docno
   `;
+
+  console.log(query);
 
 
   try {
@@ -200,7 +202,7 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, fromcustcode
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["8%", "13%", "10%", "7%", "7%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "7%"],
+        widths: ["9%", "13%", "10%", "7%", "7%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "7%"],
         body: body,
 
       },
@@ -372,7 +374,7 @@ function addSubtotalRow(body, date, subtotals) {
 }
 
 function addOverallTotalRow(body, totals) {
-  let borderButtom = [false, false, false, true];
+  let borderButtom = [false, true, false, true];
 
   body.push([
     { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
