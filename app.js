@@ -289,9 +289,10 @@ router.use("/product", require("./routes/api/product"));
 router.use("/balance", require("./routes/api/balance"));
 router.use("/saleinvoice", require("./routes/api/sale"));
 router.use("/salebydate", require("./routes/api/salebydate"));
+router.use("/salebyproduct", require("./routes/api/salebyproduct"));
+router.use("/receivebydate", require("./routes/api/receivebydate"));
 router.use("/productdetail", require("./routes/api/productdetail"));
 router.use("/poscenter", require("./routes/api/posactive"));
-
 router.use("/productbarcode", require("./routes/api/productbarcode_clickhouse"));
 router.use("/debtor", require("./routes/api/debtor"));
 router.use("/creditor", require("./routes/api/creditor"));

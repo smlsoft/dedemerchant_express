@@ -384,10 +384,6 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, showdetai
     custcodeText = ` , พนักงาน : ${tosalecode}`;
   }
 
-  if (utils.isNotEmpty(branchcode)) {
-    branchText = `สาขา : ${branchcode}`;
-  }
-
 
   if (utils.isNotEmpty(inquirytype)) {
     if (inquirytype == 0) {
@@ -576,6 +572,8 @@ const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
     if (!found) {
       found = {
         docdate: dateKey,
+        totalvalue: 0,
+        detailtotaldiscount: 0,
         detailtotalamount: 0,
         totaldiscount: 0,
         totalexceptvat: 0,
@@ -726,10 +724,9 @@ const pdfPreview = async (shopid, fromdate, todate, branchcode, showdetail, show
   }
 };
 
-const genDownLoadSaleInvPDF = async (fileName ,shopid, fromdate, todate, branchcode, showdetail, showsumbydate, iscancel, inquirytype, ispos, fromcustcode, tocustcode, fromsalecode, tosalecode, printby) => {
+const genDownLoadSaleInvPDF = async (fileName, shopid, fromdate, todate, branchcode, showdetail, showsumbydate, iscancel, inquirytype, ispos, fromcustcode, tocustcode, fromsalecode, tosalecode, printby) => {
   console.log("processing");
   var dataset = await dataresult(shopid, fromdate, todate, branchcode, showdetail, showsumbydate, iscancel, inquirytype, ispos, fromcustcode, tocustcode, fromsalecode, tosalecode, printby);
-  var dataprofile = await globalservice.dataShop(shopid);
   var dataprofile = await globalservice.dataShop(shopid);
 
   if (dataset.success) {

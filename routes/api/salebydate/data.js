@@ -5,233 +5,174 @@ var nodemailer = require("nodemailer");
 const provider = require("../../../provider");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
+dotenv.config();
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const dataresult = async (shopid, fromdate, todate, printby, branchcode, inquirytype, ispos) => {
+  const pg = await provider.connectPG();
+  let where = "WHERE 1=1"; // Default WHERE clause
+  var res = { success: false, data: [], msg: "" };
 
-dotenv.config();
+  if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
+    where += ` AND docdate BETWEEN '${fromdate} 00:00:00' AND '${todate} 23:59:59'`;
+  } else if (utils.isNotEmpty(fromdate)) {
+    where += ` AND docdate >= '${fromdate} 00:00:00'`;
+  } else if (utils.isNotEmpty(todate)) {
+    where += ` AND docdate <= '${todate} 23:59:59'`;
+  } else {
+    where += '';
+  }
 
-const salebydate = async (token, search, fromdate, todate) => {
-  const client = await provider.connectToMongoDB();
-  var resultSet = { success: false, data: [] };
+
+  if (utils.isNotEmpty(branchcode)) {
+    where += ` AND branchcode = '${branchcode}'`;
+  }
+
+  if (utils.isNotEmpty(inquirytype)) {
+    where += ` and inquirytype = '${inquirytype}' `;
+  }
+
+  if (utils.isNotEmpty(ispos)) {
+    if (ispos == 1) {
+      where += ` and ispos = true `;
+    } else {
+      where += ` and ispos = false `;
+    }
+  }
+
+
+  var query = `
+    SELECT 
+      date(docdate) AS doc_date
+      ,sum(totalvalue) as total_value
+      ,sum(detailtotaldiscount) as detail_total_discount
+      ,sum(totalexceptvat) as total_except_vat
+      ,round(sum(totalbeforevat),2) as total_before_vat
+      ,round(sum(totalvatvalue),2) as total_vat_value
+      ,sum(detailtotalamount) as detail_total_amount
+      ,sum(totaldiscount) as total_discount
+      ,sum(totalamount) as total_amount
+    FROM 
+    saleinvoice_transaction 
+    ${where}
+    GROUP BY 
+      doc_date
+    ORDER BY 
+      doc_date
+  `;
+
+  console.log(query);
+
+
   try {
-    let db;
-    db = client.db(process.env.MONGODB_DB);
-    let filters = [];
+    await pg.connect();
 
-    if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
-      filters.push({
-        docdatetime: {
-          $gte: new Date(fromdate + "T00:00:00Z"),
-        },
-      });
-      filters.push({
-        docdatetime: {
-          $lt: new Date(todate + "T23:59:59Z"),
-        },
-      });
-    }
-
-    if (utils.isNotEmpty(search)) {
-      filters = [];
-      const pattern = new RegExp(search, "i");
-      filters.push({
-        $or: [
-          {
-            docno: { $regex: pattern },
-          },
-          {
-            custname: {
-              $elemMatch: {
-                name: { $regex: pattern },
-              },
-            },
-          },
-        ],
-      });
-    }
-
-    filters.push({
-      shopid: token,
-    });
-
-    const data = db.collection("transactionSaleInvoice");
-
-    const result = await data
-      .aggregate([
-        {
-          $match: {
-            $and: filters,
-          },
-        },
-        {
-          $sort: {
-            docdatetime: 1,
-          },
-        },
-      ])
-      .toArray();
-    resultSet.success = true;
-
-    const dataset = Array.from(
-      result.reduce((acc, { docdatetime, detailtotalamount, totaldiscount, totalexceptvat, totalbeforevat, totalvatvalue, totalamount }) => {
-        const dateKey = utils.extractDate(docdatetime);
-
-        if (!acc.has(dateKey)) {
-          acc.set(dateKey, {
-            docdatetime: dateKey,
-            detailtotalamount: 0,
-            totaldiscount: 0,
-            totalexceptvat: 0,
-            totalbeforevat: 0,
-            totalvatvalue: 0,
-            totalamount: 0,
-          });
-        }
-
-        acc.get(dateKey).detailtotalamount += detailtotalamount;
-        acc.get(dateKey).totaldiscount += totaldiscount;
-        acc.get(dateKey).totalexceptvat += totalexceptvat;
-        acc.get(dateKey).totalbeforevat += totalbeforevat;
-        acc.get(dateKey).totalvatvalue += totalvatvalue;
-        acc.get(dateKey).totalamount += totalamount;
-
-        return acc;
-      }, new Map())
-    ).map(([_, value]) => value);
-
-    //console.log(dataset);
-    resultSet.data = dataset;
-    return resultSet;
+    const result = await pg.query(query);
+    res.success = true;
+    res.data = result.rows;
+    return res;
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    console.log(error);
+    res.msg = error.message;
+    return res;
   } finally {
-    await client.close();
+    await pg.end();
   }
 };
 
-const receivemoney = async (token, search, fromdate, todate) => {
-  const client = await provider.connectToMongoDB();
-  var resultSet = { success: false, data: [] };
-  try {
-    let db;
-    db = client.db(process.env.MONGODB_DB);
-    let filters = [];
+const genPDF = async (body, dataprofile, fromdate, todate, printby, branchcode, inquirytype, ispos) => {
+  var custcodeText = "";
+  var branchText = "";
+  var inquirytypeText = "";
+  var saleTypeText = "";
 
-    if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
-      filters.push({
-        docdatetime: {
-          $gte: new Date(fromdate + "T00:00:00Z"),
-        },
-      });
-      filters.push({
-        docdatetime: {
-          $lt: new Date(todate + "T23:59:59Z"),
-        },
-      });
-    }
-
-    if (utils.isNotEmpty(search)) {
-      filters = [];
-      const pattern = new RegExp(search, "i");
-      filters.push({
-        $or: [
-          {
-            docno: { $regex: pattern },
-          },
-          {
-            custname: {
-              $elemMatch: {
-                name: { $regex: pattern },
-              },
-            },
-          },
-        ],
-      });
-    }
-
-    filters.push({
-      shopid: token,
-    });
-
-    const data = db.collection("transactionSaleInvoice");
-
-    const result = await data
-      .aggregate([
-        {
-          $match: {
-            $and: filters,
-          },
-        },
-        {
-          $sort: {
-            docdatetime: 1,
-          },
-        },
-      ])
-      .toArray();
-    resultSet.success = true;
-    const aggregatedData = result.reduce((acc, item) => {
-      const date = utils.extractDate(item.docdatetime);
-
-      if (!acc[date]) {
-        acc[date] = {
-          cashAmount: 0,
-          creditAmount: 0,
-          transferAmount: 0,
-          couponAmount: 0,
-          chequeAmount: 0,
-          totalAmount: 0,
-        };
-      }
-
-      // Aggregate the values
-      acc[date].cashAmount += item.paycashamount - item.paycashchange;
-      acc[date].creditAmount += item.sumcreditcard;
-      acc[date].transferAmount += item.summoneytransfer;
-      acc[date].couponAmount += item.sumcoupon;
-      acc[date].chequeAmount += item.sumcheque;
-      acc[date].totalAmount += item.totalamountafterdiscount;
-
-      return acc;
-    }, {});
-
-    resultSet.data = Object.entries(aggregatedData).map(([date, data]) => ({
-      date,
-      data,
-    }));
-
-    // console.log(resultSet.data)
-
-    return resultSet;
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-  } finally {
-    await client.close();
+  if (utils.isNotEmpty(branchcode)) {
+    branchText = ` , สาขา : ${branchcode}`;
   }
-};
 
-const genPDF = async (body, dataprofile, fromdate, todate) => {
+
+  if (utils.isNotEmpty(inquirytype)) {
+    if (inquirytype == 0) {
+      inquirytypeText = ` , ประเภทการขาย : เงินเชื่อ`;
+    } else if (inquirytype == 1) {
+      inquirytypeText = ` , ประเภทการขาย : เงินสด`;
+    } else {
+      inquirytypeText = ` , ประเภทการขาย ${inquirytype}`;
+    }
+  } else {
+    inquirytypeText = ` , ประเภทการขาย : ทั้งหมด`;
+  }
+
+  if (utils.isNotEmpty(ispos)) {
+    if (ispos == 1) {
+      saleTypeText = ` , รายการ  : หน้าร้าน`;
+    } else if (ispos == 0) {
+      saleTypeText = ` , รายการ  : หลังร้าน`;
+    }
+  } else {
+    saleTypeText = ` , รายการ  : ทั้งหมด`;
+  }
+
+
   var docDefinition = {
-    content: [
-      {
-        text: "รายงานยอดขายตามวัน",
-        style: "header",
-        alignment: "center",
-      },
-      {
-        text: dataprofile.data.name1,
-        style: "subheader",
-        alignment: "center",
-      },
-      {
-        text: "วันที่ " + utils.formateDate(fromdate) + " - " + utils.formateDate(todate),
-        style: "subheader",
-        alignment: "center",
-      },
-    ],
+    header: function (currentPage, pageCount, pageSize) {
+      return [
+        {
+          text: dataprofile.data.name1,
+          style: "header",
+          alignment: "center",
+          /// margin: [left, top, right, bottom]
+          margin: [10, 10, 10, 0],
+
+        },
+        {
+          text: "จากวันที่ : " + utils.formateDate(fromdate) + " ถึงวันที่ : " + utils.formateDate(todate) + custcodeText + branchText + inquirytypeText + saleTypeText,
+          style: "subheader",
+          alignment: "center",
+          /// margin: [left, top, right, bottom]
+          margin: [10, 0, 10, 10],
+
+        },
+        {
+          alignment: "justify",
+          columns: [
+            {
+              text: "หัวข้อ : รายงานการขายตามวัน",
+              style: "subheader",
+              alignment: "left",
+              margin: [10, 0, 0, 0],
+            },
+            {
+              text: "หน้า : " + currentPage + "/" + pageCount,
+              style: "subheader",
+              alignment: "right",
+              margin: [0, 0, 10, 0],
+            },
+          ],
+        },
+        {
+          alignment: "justify",
+          columns: [
+            {
+              text: "พิมพ์โดย : " + printby,
+              style: "subheader",
+              alignment: "left",
+              margin: [10, 0, 0, 0],
+            },
+            {
+              text: "วันที่พิมพ์ : " + utils.formateDateTimeNow(new Date()),
+              style: "subheader",
+              alignment: "right",
+              margin: [0, 0, 10, 0],
+            },
+          ],
+        },
+      ];
+    },
+    content: [],
     pageOrientation: "landscape",
-    pageMargins: [10, 10, 10, 10], // [left, top, right, bottom]
+    pageMargins: [10, 80, 10, 10], // [left, top, right, bottom]
     defaultStyle: {
       font: "Sarabun",
       fontSize: 12,
@@ -245,192 +186,152 @@ const genPDF = async (body, dataprofile, fromdate, todate) => {
         margin: [0, 0, 0, 5],
       },
       subheader: {
-        fontSize: 10,
-        bold: false,
-        margin: [0, 0, 0, 10],
-      },
-      tableCell: {
         fontSize: 9,
-      },
-    },
-  };
-  if (body.length > 0) {
-    docDefinition.content.push({
-      style: "tableExample",
-      table: {
-        headerRows: 2,
-        widths: ["14%", "16%", "14%", "14%", "14%", "14%", "14%"],
-        body: body,
-      },
-      layout: "lightHorizontalLines",
-    });
-  }
-  return docDefinition;
-};
-
-const genBodyPDF = async (dataset) => {
-  let body = [];
-  let totaldetailtotalamount = 0;
-  let totaltotaldiscount = 0;
-  let totaltotalexceptvat = 0;
-  let totaltotalbeforevat = 0;
-  let totaltotalvatvalue = 0;
-  let totaltotalamount = 0;
-
-  body.push([
-    { text: "วันที่", style: "tableCell", alignment: "left", bold: true },
-    { text: "รวมมูลค่า", style: "tableCell", alignment: "left", bold: true },
-    { text: "รวมส่วนลดทั้งสิ้น", style: "tableCell", alignment: "left", bold: true },
-    { text: "ยอดยกเว้นภาษี", style: "tableCell", alignment: "left", bold: true },
-    { text: "ยอดก่อนภาษี", style: "tableCell", alignment: "left", bold: true },
-    { text: "ยอดภาษี", style: "tableCell", alignment: "left", bold: true },
-    { text: "มูลค่าสุทธิ", style: "tableCell", alignment: "left", bold: true },
-  ]),
-    dataset.forEach((ele) => {
-      totaldetailtotalamount += ele.detailtotalamount;
-      totaltotaldiscount += ele.totaldiscount;
-      totaltotalexceptvat += ele.totalexceptvat;
-      totaltotalbeforevat += ele.totalbeforevat;
-      totaltotalvatvalue += ele.totalvatvalue;
-      totaltotalamount += ele.totalamount;
-
-      body.push([
-        { text: utils.formateDate(ele.docdatetime), style: "tableCell", alignment: "left" },
-        { text: utils.formatNumber(ele.detailtotalamount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.totaldiscount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.totalexceptvat), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.totalbeforevat), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.totalvatvalue), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.totalamount), style: "tableCell", alignment: "right" },
-      ]);
-    });
-
-  body.push([
-    { text: "รวม", style: "tableCell", alignment: "left", bold: true },
-    { text: utils.formatNumber(totaldetailtotalamount), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totaltotaldiscount), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totaltotalexceptvat), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totaltotalbeforevat), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totaltotalvatvalue), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totaltotalamount), style: "tableCell", alignment: "right", bold: true },
-  ]);
-
-  return body;
-};
-
-const genPDFReceivemoney = async (body, dataprofile, fromdate, todate) => {
-  var docDefinition = {
-    content: [
-      {
-        text: "รายงานรับเงินตามวันที่",
-        style: "header",
-        alignment: "center",
-      },
-      {
-        text: dataprofile.data.name1,
-        style: "subheader",
-        alignment: "center",
-      },
-      {
-        text: "วันที่ " + utils.formateDate(fromdate) + " - " + utils.formateDate(todate),
-        style: "subheader",
-        alignment: "center",
-      },
-    ],
-    pageOrientation: "landscape",
-    pageMargins: [10, 10, 10, 10], // [left, top, right, bottom]
-    defaultStyle: {
-      font: "Sarabun",
-      fontSize: 12,
-      columnGap: 20,
-      color: "#000",
-    },
-    styles: {
-      header: {
-        fontSize: 13,
         bold: true,
-        margin: [0, 0, 0, 5],
-      },
-      subheader: {
-        fontSize: 10,
-        bold: false,
         margin: [0, 0, 0, 10],
       },
+      tableHeader: {
+        fontSize: 8,
+        bold: true,
+      },
       tableCell: {
-        fontSize: 9,
+        fontSize: 7,
+      },
+      tableFooter: {
+        fontSize: 8,
+        bold: true,
       },
     },
   };
+
   if (body.length > 0) {
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        headerRows: 2,
-        widths: ["14%", "14%", "14%", "14%", "14%", "14%", "14%"],
+        headerRows: 1,
+        widths: ["11%", "11%", "12%", "11%", "11%", "11%", "11%", "11%", "11%"],
         body: body,
+
       },
-      layout: "lightHorizontalLines",
+      layout: {
+        hLineWidth: function (i, node) {
+          if (i === 0) return 1;
+          if (i === 1) return 1;
+          if (i === body.length - 1) return 1;
+          if (i === body.length) return 1;
+          return null;
+        },
+        vLineWidth: function (i, node) {
+          return i === 0 || i === node.table.widths.length ? 0 : 0;
+          return null;
+        },
+
+      },
     });
   }
   return docDefinition;
 };
 
-const genBodyPDFReceivemoney = async (dataset) => {
+const genBodyPDF = async (dataset, showsumbydate) => {
   let body = [];
-  let totalcashAmount = 0;
-  let totalcreditAmount = 0;
-  let totaltransferAmount = 0;
-  let totalcouponAmount = 0;
-  let totalchequeAmount = 0;
-  let totaltotalAmount = 0;
+  let mainSumTotal = resetSubtotals();
 
+  // Define the header row for the table
   body.push([
-    { text: "วันที่", style: "tableCell", alignment: "left", bold: true },
-    { text: "เงินสด", style: "tableCell", alignment: "left", bold: true },
-    { text: "เครดิต", style: "tableCell", alignment: "left", bold: true },
-    { text: "เงินโอน", style: "tableCell", alignment: "left", bold: true },
-    { text: "คูปอง", style: "tableCell", alignment: "left", bold: true },
-    { text: "เช็ค", style: "tableCell", alignment: "left", bold: true },
-    { text: "รวมเงินทั้งสิน", style: "tableCell", alignment: "left", bold: true },
-  ]),
-    dataset.forEach((ele) => {
-      totalcashAmount += ele.data.cashAmount;
-      totalcreditAmount += ele.data.creditAmount;
-      totaltransferAmount += ele.data.transferAmount;
-      totalcouponAmount += ele.data.couponAmount;
-      totalchequeAmount += ele.data.chequeAmount;
-      totaltotalAmount += ele.data.totalAmount;
+    { text: "วันที่", style: "tableHeader", alignment: "center" },
+    { text: "มูลค่าสินค้า", style: "tableHeader", alignment: "left" },
+    { text: "มูลค่าส่วนลดก่อนชำระเงิน", style: "tableHeader", alignment: "center" },
+    { text: "มูลค่ายกเว้นภาษี", style: "tableHeader", alignment: "center" },
+    { text: "มูลค่าก่อนภาษี", style: "tableHeader", alignment: "center" },
+    { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "center" },
+    { text: "มูลค่าหลังหักส่วนลด", style: "tableHeader", alignment: "center" },
+    { text: "มูลค่าส่วนลดท้ายบิล", style: "tableHeader", alignment: "center" },
+    { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "center" },
 
-      body.push([
-        { text: utils.formateDate(ele.date), style: "tableCell", alignment: "left" },
-        { text: utils.formatNumber(ele.data.cashAmount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.data.creditAmount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.data.transferAmount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.data.couponAmount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.data.chequeAmount), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.data.totalAmount), style: "tableCell", alignment: "right" },
-      ]);
-    });
-
-  body.push([
-    { text: "รวม", style: "tableCell", alignment: "left", bold: true },
-    { text: utils.formatNumber(totalcashAmount), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totalcreditAmount), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totaltransferAmount), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totalcouponAmount), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totalchequeAmount), style: "tableCell", alignment: "right", bold: true },
-    { text: utils.formatNumber(totaltotalAmount), style: "tableCell", alignment: "right", bold: true },
   ]);
+
+  // Iterate through each dataset entry
+  dataset.forEach((ele, index) => {
+
+
+    // Process the current row
+    processDataRow(ele, body,);
+
+    // add main sum total
+    mainSumTotal.totalValue += parseFloat(ele.total_value);
+    mainSumTotal.detailTotalDiscount += parseFloat(ele.detail_total_discount);
+    mainSumTotal.totalExceptVat += parseFloat(ele.total_except_vat);
+    mainSumTotal.totalBeforeVat += parseFloat(ele.total_before_vat);
+    mainSumTotal.totalVatValue += parseFloat(ele.total_vat_value);
+    mainSumTotal.detailTotalAmount += parseFloat(ele.detail_total_amount);
+    mainSumTotal.totalDiscount += parseFloat(ele.total_discount);
+    mainSumTotal.totalAmount += parseFloat(ele.total_amount);
+
+  });
+
+  // Add overall totals row at the end
+  addOverallTotalRow(body, mainSumTotal);
 
   return body;
 };
 
-const pdfPreview = async (token, search, fromdate, todate, res) => {
-  var dataset = await salebydate(token, search, fromdate, todate);
-  var dataprofile = await globalservice.dataShop(token);
-  if (dataset.success) {
+function resetSubtotals() {
+  return {
+    totalValue: 0,
+    detailTotalDiscount: 0,
+    totalExceptVat: 0,
+    totalBeforeVat: 0,
+    totalVatValue: 0,
+    detailTotalAmount: 0,
+    totalDiscount: 0,
+    totalAmount: 0,
+
+  };
+}
+
+function processDataRow(ele, body) {
+  // Add data row to body
+  body.push([
+    // Your data row cells here
+    { text: `${utils.formateDate(ele.doc_date)}`, style: "tableCell", alignment: "left" },
+    { text: utils.formatNumber(ele.total_value), style: "tableCell", alignment: "right" },
+    { text: utils.formatNumber(ele.detail_total_discount), style: "tableCell", alignment: "right" },
+    { text: utils.formatNumber(ele.total_except_vat), style: "tableCell", alignment: "right" },
+    { text: utils.formatNumber(ele.total_before_vat), style: "tableCell", alignment: "right" },
+    { text: utils.formatNumber(ele.total_vat_value), style: "tableCell", alignment: "right" },
+    { text: utils.formatNumber(ele.detail_total_amount), style: "tableCell", alignment: "right" },
+    { text: utils.formatNumber(ele.total_discount), style: "tableCell", alignment: "right" },
+    { text: utils.formatNumber(ele.total_amount), style: "tableCell", alignment: "right" },
+
+  ]);
+
+
+}
+
+
+function addOverallTotalRow(body, totals) {
+  body.push([
+    { text: "รวม", style: "tableFooter", alignment: "left" },
+    { text: utils.formatNumber(totals.totalValue), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(totals.detailTotalDiscount), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(totals.totalExceptVat), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(totals.totalBeforeVat), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(totals.totalVatValue), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(totals.detailTotalAmount), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(totals.totalDiscount), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(totals.totalAmount), style: "tableFooter", alignment: "right" },
+
+  ]);
+}
+
+const pdfPreview = async (shopid, fromdate, todate, printby, branchcode, inquirytype, ispos, res) => {
+  var dataset = await dataresult(shopid, fromdate, todate, printby, branchcode, inquirytype, ispos);
+  var dataprofile = await globalservice.dataShop(shopid);
+  // console.log(dataset);
+  // console.log(dataprofile);
+  if (dataset.success && dataprofile.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, branchcode, inquirytype, ispos), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -439,29 +340,15 @@ const pdfPreview = async (token, search, fromdate, todate, res) => {
   }
 };
 
-const pdfPreviewReceivemoney = async (token, search, fromdate, todate, res) => {
-  var dataset = await receivemoney(token, search, fromdate, todate);
-  var dataprofile = await globalservice.dataShop(token);
-  if (dataset.success) {
-    var body = await genBodyPDFReceivemoney(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDFReceivemoney(body, dataprofile, fromdate, todate), {});
-    res.setHeader("Content-Type", "application/pdf");
-    pdfDoc.pipe(res);
-    pdfDoc.end();
-  } else {
-    res.status(500).json({ success: false, data: [], msg: "no shop data" });
-  }
-};
-
-const genDownLoadSaleByDatePDF = async (token, search, fromdate, todate, fileName) => {
+const genDownLoadSaleByDatePDF = async (fileName, shopid, fromdate, todate, printby, branchcode, inquirytype, ispos) => {
   console.log("processing");
-  var dataset = await salebydate(token, search, fromdate, todate);
-  var dataprofile = await globalservice.dataShop(token);
-  //console.log(dataset)
+  var dataset = await dataresult(shopid, fromdate, todate, printby, branchcode, inquirytype, ispos);
+  var dataprofile = await globalservice.dataShop(shopid);
+
   if (dataset.success) {
     try {
       var body = await genBodyPDF(dataset.data);
-      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, branchcode, inquirytype, ispos), {});
       const tempPath = path.join(os.tmpdir(), fileName);
 
       const writeStream = fs.createWriteStream(tempPath);
@@ -485,56 +372,6 @@ const genDownLoadSaleByDatePDF = async (token, search, fromdate, todate, fileNam
   }
 };
 
-const genDownLoadReceiveByDatePDF = async (token, search, fromdate, todate, fileName) => {
-  console.log("processing");
-  var dataset = await receivemoney(token, search, fromdate, todate);
-  var dataprofile = await globalservice.dataShop(token);
-  //console.log(dataset)
-  if (dataset.success) {
-    try {
-      var body = await genBodyPDFReceivemoney(dataset.data);
-      var pdfDoc = printer.createPdfKitDocument(await genPDFReceivemoney(body, dataprofile, fromdate, todate), {});
-      const tempPath = path.join(os.tmpdir(), fileName);
 
-      const writeStream = fs.createWriteStream(tempPath);
 
-      pdfDoc.pipe(writeStream);
-
-      pdfDoc.end();
-
-      writeStream.on("error", function (err) {
-        console.error("Error writing PDF to file:", err);
-      });
-
-      writeStream.on("finish", function () {
-        console.log(`PDF written to ${tempPath}`);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  } else {
-    res.status(500).json({ success: false, data: [], msg: "no shop data" });
-  }
-};
-
-const pdfDownload = async (token, search, fromdate, todate, res) => {
-  var dataset = await salebydate(token, search, fromdate, todate);
-  var dataprofile = await globalservice.dataShop(token);
-
-  if (dataset.success) {
-    var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate), {});
-
-    // Generate a filename using fromdate and todate
-    const filename = `sale_by_date_${fromdate}-${todate}.pdf`;
-
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-    pdfDoc.pipe(res);
-    pdfDoc.end();
-  } else {
-    res.status(500).json({ success: false, data: [], msg: "no shop data" });
-  }
-};
-
-module.exports = { salebydate, genPDF, pdfPreview, pdfDownload, receivemoney, pdfPreviewReceivemoney, genDownLoadSaleByDatePDF, genDownLoadReceiveByDatePDF };
+module.exports = { dataresult, genPDF, pdfPreview, genDownLoadSaleByDatePDF };
