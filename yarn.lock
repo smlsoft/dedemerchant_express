@@ -107,14 +107,14 @@
     "brfs" "^2.0.2"
     "unicode-trie" "^2.0.0"
 
-"@foliojs-fork/pdfkit@^0.13.0":
-  "integrity" "sha512-YXeG1fml9k97YNC9K8e292Pj2JzGt9uOIiBFuQFxHsdQ45BlxW+JU3RQK6JAvXU7kjhjP8rCcYvpk36JLD33sQ=="
-  "resolved" "https://registry.npmjs.org/@foliojs-fork/pdfkit/-/pdfkit-0.13.0.tgz"
-  "version" "0.13.0"
+"@foliojs-fork/pdfkit@^0.14.0":
+  "integrity" "sha512-nMOiQAv6id89MT3tVTCgc7HxD5ZMANwio2o5yvs5sexQkC0KI3BLaLakpsrHmFfeGFAhqPmZATZGbJGXTUebpg=="
+  "resolved" "https://registry.npmjs.org/@foliojs-fork/pdfkit/-/pdfkit-0.14.0.tgz"
+  "version" "0.14.0"
   dependencies:
     "@foliojs-fork/fontkit" "^1.9.1"
     "@foliojs-fork/linebreak" "^1.1.1"
-    "crypto-js" "^4.0.0"
+    "crypto-js" "^4.2.0"
     "png-js" "^1.0.0"
 
 "@foliojs-fork/restructure@^2.0.2":
@@ -786,7 +786,7 @@
   dependencies:
     "luxon" "^3.2.1"
 
-"crypto-js@^4.0.0":
+"crypto-js@^4.0.0", "crypto-js@^4.2.0":
   "integrity" "sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q=="
   "resolved" "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz"
   "version" "4.2.0"
@@ -840,16 +840,16 @@
     "ms" "2.0.0"
 
 "deep-equal@^1.0.0":
-  "integrity" "sha512-yd9c5AdiqVcR+JjcwUQb9DkhJc8ngNr0MahEBGvDiJw8puWab2yZlh+nkasOnZP+EGTAP6rRp2JzJhJZzvNF8g=="
-  "resolved" "https://registry.npmjs.org/deep-equal/-/deep-equal-1.1.1.tgz"
-  "version" "1.1.1"
+  "integrity" "sha512-5tdhKF6DbU7iIzrIOa1AOUt39ZRm13cmL1cGEh//aqR8x9+tNfbywRf0n5FD/18OKMdo7DNEtrX2t22ZAkI+eg=="
+  "resolved" "https://registry.npmjs.org/deep-equal/-/deep-equal-1.1.2.tgz"
+  "version" "1.1.2"
   dependencies:
-    "is-arguments" "^1.0.4"
-    "is-date-object" "^1.0.1"
-    "is-regex" "^1.0.4"
-    "object-is" "^1.0.1"
+    "is-arguments" "^1.1.1"
+    "is-date-object" "^1.0.5"
+    "is-regex" "^1.1.4"
+    "object-is" "^1.1.5"
     "object-keys" "^1.1.1"
-    "regexp.prototype.flags" "^1.2.0"
+    "regexp.prototype.flags" "^1.5.1"
 
 "deep-equal@^2.0.5":
   "integrity" "sha512-xjVyBf0w5vH0I42jdAZzOKVldmPgSulmiyPRywoyq7HXC9qdgo17kxJE+rdnif5Tz6+pIrpJI8dCpMNLIGkUiA=="
@@ -1057,6 +1057,17 @@
   optionalDependencies:
     "source-map" "~0.6.1"
 
+"escodegen@^2.1.0":
+  "integrity" "sha512-2NlIDTwUWJN0mRPQOdtQBzbUHvdGY2P1VXSyU83Q3xKxM7WHX2Ql8dKq782Q9TgQUNOLEzEYu9bzLNj1q88I5w=="
+  "resolved" "https://registry.npmjs.org/escodegen/-/escodegen-2.1.0.tgz"
+  "version" "2.1.0"
+  dependencies:
+    "esprima" "^4.0.1"
+    "estraverse" "^5.2.0"
+    "esutils" "^2.0.2"
+  optionalDependencies:
+    "source-map" "~0.6.1"
+
 "escodegen@~1.2.0":
   "integrity" "sha512-yLy3Cc+zAC0WSmoT2fig3J87TpQ8UaZGx8ahCAs9FL8qNbyV7CVyPKS74DG4bsHiL5ew9sxdYx131OkBQMFnvA=="
   "resolved" "https://registry.npmjs.org/escodegen/-/escodegen-1.2.0.tgz"
@@ -1082,6 +1093,11 @@
   "integrity" "sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw=="
   "resolved" "https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz"
   "version" "4.3.0"
+
+"estraverse@^5.2.0":
+  "integrity" "sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA=="
+  "resolved" "https://registry.npmjs.org/estraverse/-/estraverse-5.3.0.tgz"
+  "version" "5.3.0"
 
 "estraverse@~1.5.0":
   "integrity" "sha512-FpCjJDfmo3vsc/1zKSeqR5k42tcIhxFIlvq+h9j0fO2q/h2uLKyweq7rYJ+0CoVvrGQOxIS5wyBrW/+vF58BUQ=="
@@ -1616,7 +1632,7 @@
   "resolved" "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-1.9.1.tgz"
   "version" "1.9.1"
 
-"is-arguments@^1.0.4", "is-arguments@^1.1.1":
+"is-arguments@^1.1.1":
   "integrity" "sha512-8Q7EARjzEnKpt/PCD7e1cgUS0a6X8u5tdSiMqXhojOdoV9TsMsiO+9VLC5vAmO8N7/GmXn7yjR8qnA6bVAEzfA=="
   "resolved" "https://registry.npmjs.org/is-arguments/-/is-arguments-1.1.1.tgz"
   "version" "1.1.1"
@@ -1672,7 +1688,7 @@
   dependencies:
     "hasown" "^2.0.0"
 
-"is-date-object@^1.0.1", "is-date-object@^1.0.5":
+"is-date-object@^1.0.5":
   "integrity" "sha512-9YQaSxsAiSwcvS33MBk3wTCVnWK+HhF8VZR2jRxehM16QcVOdHqPn4VPHmRK4lSr38n9JriurInLcP90xsYNfQ=="
   "resolved" "https://registry.npmjs.org/is-date-object/-/is-date-object-1.0.5.tgz"
   "version" "1.0.5"
@@ -1708,7 +1724,7 @@
   "resolved" "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz"
   "version" "7.0.0"
 
-"is-regex@^1.0.4", "is-regex@^1.1.4":
+"is-regex@^1.1.4":
   "integrity" "sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg=="
   "resolved" "https://registry.npmjs.org/is-regex/-/is-regex-1.1.4.tgz"
   "version" "1.1.4"
@@ -2156,7 +2172,7 @@
   "resolved" "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.1.tgz"
   "version" "1.13.1"
 
-"object-is@^1.0.1", "object-is@^1.1.5":
+"object-is@^1.1.5":
   "integrity" "sha512-3cyDsyHgtmi7I7DfSSI2LDp6SK2lwvtbg0p0R1e0RvTqF5ceGx+K2dfSjm1bKDMVCFEDAQvy+o8c6a7VujOddw=="
   "resolved" "https://registry.npmjs.org/object-is/-/object-is-1.1.5.tgz"
   "version" "1.1.5"
@@ -2277,13 +2293,13 @@
     "linebreak" "^1.0.2"
     "png-js" "^1.0.0"
 
-"pdfmake@^0.2.7":
-  "integrity" "sha512-ClLpgx30H5G3EDvRW1MrA1Xih6YxEaSgIVFrOyBMgAAt62V+hxsyWAi6JNP7u1Fc5JKYAbpb4RRVw8Rhvmz5cQ=="
-  "resolved" "https://registry.npmjs.org/pdfmake/-/pdfmake-0.2.7.tgz"
-  "version" "0.2.7"
+"pdfmake@^0.2.9":
+  "integrity" "sha512-LAtYwlR8cCQqbxESK2d50DYaVAzAC9Id9NjilRte6Tb9pyHUB+Z50nhD0imuBL0eDyXQKvEYSNjo3P5AOc2ZCg=="
+  "resolved" "https://registry.npmjs.org/pdfmake/-/pdfmake-0.2.9.tgz"
+  "version" "0.2.9"
   dependencies:
     "@foliojs-fork/linebreak" "^1.1.1"
-    "@foliojs-fork/pdfkit" "^0.13.0"
+    "@foliojs-fork/pdfkit" "^0.14.0"
     "iconv-lite" "^0.6.3"
     "xmldoc" "^1.1.2"
 
@@ -2586,7 +2602,7 @@
     "@redis/search" "1.1.5"
     "@redis/time-series" "1.0.5"
 
-"regexp.prototype.flags@^1.2.0", "regexp.prototype.flags@^1.5.0":
+"regexp.prototype.flags@^1.5.0", "regexp.prototype.flags@^1.5.1":
   "integrity" "sha512-sy6TXMN+hnP/wMy+ISxg3krXx7BAtWVO4UouuCN/ziM9UEne0euamVNafDfvC83bRNr95y0V5iijeDQFUNpvrg=="
   "resolved" "https://registry.npmjs.org/regexp.prototype.flags/-/regexp.prototype.flags-1.5.1.tgz"
   "version" "1.5.1"
@@ -2955,11 +2971,11 @@
   "version" "2.1.0"
 
 "static-eval@^2.0.5":
-  "integrity" "sha512-agtxZ/kWSsCkI5E4QifRwsaPs0P0JmZV6dkLz6ILYfFYQGn+5plctanRN+IC8dJRiFkyXHrwEE3W9Wmx67uDbw=="
-  "resolved" "https://registry.npmjs.org/static-eval/-/static-eval-2.1.0.tgz"
-  "version" "2.1.0"
+  "integrity" "sha512-MgWpQ/ZjGieSVB3eOJVs4OA2LT/q1vx98KPCTTQPzq/aLr0YUXTsgryTXr4SLfR0ZfUUCiedM9n/ABeDIyy4mA=="
+  "resolved" "https://registry.npmjs.org/static-eval/-/static-eval-2.1.1.tgz"
+  "version" "2.1.1"
   dependencies:
-    "escodegen" "^1.11.1"
+    "escodegen" "^2.1.0"
 
 "static-module@^3.0.2":
   "integrity" "sha512-gb0v0rrgpBkifXCa3yZXxqVmXDVE+ETXj6YlC/jt5VzOnGXR2C15+++eXuMDUYsePnbhf+lwW0pE1UXyOLtGCw=="

@@ -11,7 +11,7 @@ const os = require("os");
 const path = require("path");
 const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocustcode, branchcode, search) => {
   const pg = await provider.connectPG();
-  let where = "WHERE 1=1"; // Default WHERE clause
+  let where = `WHERE shopid =  ${shopid}`;
   var res = { success: false, data: [], msg: "" };
 
   if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
@@ -68,7 +68,7 @@ const dataresult = async (shopid, fromdate, todate, printby, fromcustcode, tocus
       branchnames
     FROM 
       payment_transaction 
-    ${where}
+    ${where} 
     ORDER BY 
       docdate, docno
   `;
@@ -200,22 +200,27 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, fromcustcode
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ["10%", "10%", "11%", "7%", "7%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "7%"],
+        widths: ["8%", "13%", "10%", "7%", "7%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "6%", "7%"],
         body: body,
 
       },
       layout: {
-        hLineWidth: function (i, node) {
-          if (i === 0) return 1;
-          if (i === 1) return 1;
-          if (i === body.length - 1) return 1;
-          if (i === body.length) return 1;
-          return null;
-        },
-        vLineWidth: function (i, node) {
-          return i === 0 || i === node.table.widths.length ? 0 : 0;
-          return null;
-        },
+        defaultBorder: false,
+        // hLineWidth: function (i, node) {
+        //   if (i === 0) return 1;
+        //   if (i === 1) return 1;
+        //   if (i === body.length - 1) return 1;
+        //   if (i === body.length) return 1;
+
+        //   if (i > 0 && node.table.body[i - 1][0] && node.table.body[i - 1][0].text) {
+        //     if (node.table.body[i - 1][0].text.includes("ยอดรวมวันที่ ")) return 1;
+        //   }
+        //   return null;
+        // },
+        // vLineWidth: function (i, node) {
+        //   return i === 0 || i === node.table.widths.length ? 0 : 0;
+        //   return null;
+        // },
 
       },
     });
@@ -229,22 +234,24 @@ const genBodyPDF = async (dataset, showsumbydate) => {
   let currentSubtotals = resetSubtotals();
   let mainSumTotal = resetSubtotals();
 
+  let borderTopAndButtom = [false, true, false, true];
+
   // Define the header row for the table
   body.push([
-    { text: "เอกสารวันที่/เวลา", style: "tableHeader", alignment: "center" },
-    { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left" },
-    { text: "ลูกหนี้", style: "tableHeader", alignment: "center" },
-    { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "center" },
-    { text: "ปัดเศษ", style: "tableHeader", alignment: "center" },
-    { text: "รวมมูลค่า", style: "tableHeader", alignment: "center" },
-    { text: "เงินสด", style: "tableHeader", alignment: "center" },
-    { text: "เงินโอน", style: "tableHeader", alignment: "center" },
-    { text: "บัตรเครดิต", style: "tableHeader", alignment: "center" },
-    { text: "เช็ค", style: "tableHeader", alignment: "center" },
-    { text: "คูปอง", style: "tableHeader", alignment: "center" },
-    { text: "คิวอาร์โค้ด", style: "tableHeader", alignment: "center" },
-    { text: "เครดิต", style: "tableHeader", alignment: "center" },
-    { text: "รวมยอดเงิน", style: "tableHeader", alignment: "center" },
+    { text: "เอกสารวันที่/เวลา", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderTopAndButtom },
+    { text: "ลูกหนี้", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "ปัดเศษ", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "รวมมูลค่า", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "เงินสด", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "เงินโอน", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "บัตรเครดิต", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "เช็ค", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "คูปอง", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "คิวอาร์โค้ด", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "เครดิต", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
+    { text: "รวมยอดเงิน", style: "tableHeader", alignment: "center", border: borderTopAndButtom },
   ]);
 
   // Iterate through each dataset entry
@@ -311,7 +318,7 @@ function processDataRow(ele, body, subtotals) {
   body.push([
     // Your data row cells here
     { text: `${utils.formateDate(ele.doc_date)} ${ele.doc_time}`, style: "tableCell", alignment: "center" },
-    { text: ele.docno, style: "tableCell", alignment: "center" },
+    { text: ele.docno, style: "tableCell", alignment: "left" },
     { text: utils.packName(ele.custnames), style: "tableCell", alignment: "left" },
     { text: utils.formatNumber(ele.totalvalue), style: "tableCell", alignment: "right" },
     { text: utils.formatNumber(ele.roundamount), style: "tableCell", alignment: "right" },
@@ -343,37 +350,45 @@ function processDataRow(ele, body, subtotals) {
 
 
 function addSubtotalRow(body, date, subtotals) {
+  let borderButtom = [false, false, false, true];
+
   body.push([
-    { text: `ยอดรวมวันที่ ${date}`, colSpan: 3, style: "tableFooter", alignment: "right" }, {}, {},
-    { text: utils.formatNumber(subtotals.totalValue), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.roundAmount), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.totalAmount), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.payCashAmount), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.sumMoneyTransfer), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.sumCreditCard), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.sumCheque), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.sumCoupon), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.sumQrcode), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.sumCredit), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(subtotals.totalPayment), style: "tableFooter", alignment: "right" },
+    { text: "", style: "tableFooter", alignment: "left" },
+    { text: `ยอดรวมวันที่ ${date}`, style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: utils.formatNumber(subtotals.totalValue), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.roundAmount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.totalAmount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.payCashAmount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.sumMoneyTransfer), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.sumCreditCard), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.sumCheque), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.sumCoupon), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.sumQrcode), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.sumCredit), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.totalPayment), style: "tableFooter", alignment: "right", border: borderButtom },
 
   ]);
 }
 
 function addOverallTotalRow(body, totals) {
+  let borderButtom = [false, false, false, true];
+
   body.push([
-    { text: "รวม", style: "tableFooter", alignment: "right", colSpan: 3 }, {}, {},
-    { text: utils.formatNumber(totals.totalAmount), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.roundAmount), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.totalValue), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.payCashAmount), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.sumMoneyTransfer), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.sumCreditCard), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.sumCheque), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.sumCoupon), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.sumQrcode), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.sumCredit), style: "tableFooter", alignment: "right" },
-    { text: utils.formatNumber(totals.totalPayment), style: "tableFooter", alignment: "right" },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "รวม", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: utils.formatNumber(totals.totalAmount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.roundAmount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.totalValue), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.payCashAmount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.sumMoneyTransfer), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.sumCreditCard), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.sumCheque), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.sumCoupon), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.sumQrcode), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.sumCredit), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.totalPayment), style: "tableFooter", alignment: "right", border: borderButtom },
   ]);
 }
 

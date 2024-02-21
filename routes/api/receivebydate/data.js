@@ -11,7 +11,7 @@ const os = require("os");
 const path = require("path");
 const dataresult = async (shopid, fromdate, todate, printby, branchcode) => {
   const pg = await provider.connectPG();
-  let where = "WHERE 1=1"; // Default WHERE clause
+  let where = `WHERE shopid =  ${shopid}`;
   var res = { success: false, data: [], msg: "" };
 
   if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {

@@ -9,6 +9,7 @@ dotenv.config();
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const { underline } = require("pdfkit");
 
 const dataresultPage = async (token, search, fromdate, todate, page, pageSize) => {
   const client = await provider.connectToMongoDB();
@@ -92,31 +93,6 @@ const dataresult = async (shopid, fromdate, todate, branchcode, printby) => {
 
 
   var query = `
-  SELECT
-  ((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7')::date)::text  AS docdate 
-  ,TO_CHAR((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7') + interval '7 hours', 'HH24:MI') AS doc_time
-  ,st.docno
-  ,creditorcode
-  ,creditornames
-  ,totalvalue
-  ,coalesce(detailtotaldiscount,0) as detailtotaldiscount 
-  ,totalexceptvat
-  ,round(totalbeforevat,2) as totalbeforevat
-  ,round(totalvatvalue,2) as totalvatvalue
-  ,coalesce(detailtotalamount,0) as detailtotalamount
-  ,coalesce(totaldiscount,0) as totaldiscount
-  ,coalesce(totalamount,0) as totalamount 
-  ,salecode
-  ,salename
-  ,inquirytype
-  ,iscancel 
-  ,ispos
-  from saleinvoice_transaction st
-  where st.shopid = '${shopid}' ${where}
-  order by docdate,docno `;
-
-  if (1 == 1) {
-    query = `
     SELECT
     ((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7')::date)::text  AS docdate
     ,TO_CHAR((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7') + interval '7 hours', 'HH24:MI') AS doc_time
@@ -147,7 +123,6 @@ const dataresult = async (shopid, fromdate, todate, branchcode, printby) => {
     from saleinvoice_transaction st left join saleinvoice_transaction_detail std on std.shopid = st.shopid and std.docno = st.docno 
     where st.shopid = '${shopid}' ${where}
     order by st.docdate,docno`;
-  }
 
   console.log(query);
 
@@ -239,7 +214,7 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, printby) 
           alignment: "justify",
           columns: [
             {
-              text: "หัวข้อ : รายงานการขาย",
+              text: "หัวข้อ : รายงานการขาย ตามสินค้า",
               style: "subheader",
               alignment: "left",
               margin: [10, 0, 0, 0],
@@ -313,22 +288,29 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, printby) 
       style: "tableExample",
       table: {
         headerRows: 2,
-        widths: ["9%", "10%", "13%", "8%", "10%", "8%", "8%", "7%", "7%", "7%", "7%", "6%"],
+        widths: ["10%", "12%", "15%", "9%", "9%", "9%", "9%", "9%", "9%", "9%"],
         body: body,
       },
       layout: {
-        hLineWidth: function (i, node) {
-          if (i === 0) return 1;
-          if (i === 1) return 0;
-          if (i === 2) return 1;
-          if (i === body.length - 1) return 1;
-          if (i === body.length) return 1;
-          return null;
-        },
-        vLineWidth: function (i, node) {
-          return i === 0 || i === node.table.widths.length ? 0 : 0;
-          return null;
-        },
+        defaultBorder: false,
+        // hLineWidth: function (i, node) {
+        //   if (i === 0) return 2;
+        //   if (i === 1) return 0;
+        //   if (i === 2) return 2;
+        //   if (i === body.length - 1) return 2;
+        //   if (i === body.length) return 2;
+
+        //   if (i > 0 && node.table.body[i - 1][1] && node.table.body[i - 1][1].text) {
+        //     if (node.table.body[i - 1][1].text.includes("รวม ")) return 1;
+        //   }
+
+
+        //   return null;
+        // },
+        // vLineWidth: function (i, node) {
+        //   return i === 0 || i === node.table.widths.length ? 0 : 0;
+        //   return null;
+        // },
 
       },
     });
@@ -338,42 +320,40 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, printby) 
 
 const genBodyPDF = async (dataset) => {
   let body = [];
+  let borderTop = [false, true, false, false];
+  let borderButtom = [false, false, false, true];
 
   body.push(
     [
-      { text: "เอกสารวันที่/เวลา", style: "tableHeader", alignment: "left" },
-      { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left" },
-      { text: "ลูกหนี้", style: "tableHeader", alignment: "left" },
-      { text: "มูลค่าสินค้า", style: "tableHeader", alignment: "left" },
-      { text: "ส่วนลดก่อนชำระเงิน", style: "tableHeader", alignment: "left" },
-      { text: "ยกเว้นภาษี", style: "tableHeader", alignment: "left" },
-      { text: "ก่อนภาษี", style: "tableHeader", alignment: "left" },
-      { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "left" },
-      { text: "หลังหักส่วนลด", style: "tableHeader", alignment: "left" },
-      { text: "ส่วนลดท้ายบิล", style: "tableHeader", alignment: "left" },
-      { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "left" },
-      { text: "พนักงานขาย", style: "tableHeader", alignment: "left" },
+      { text: "บาร์โค้ด", style: "tableHeader", alignment: "center", border: borderTop },
+      { text: "ชื่อสินค้า", style: "tableHeader", alignment: "center", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
+      { text: "", style: "tableHeader", alignment: "left", border: borderTop },
     ],
     [
-      { text: "", style: "tableHeader", alignment: "left" },
-      { text: "บาร์โค้ด", style: "tableHeader", alignment: "left" },
-      { text: "ชื่อสินค้า", style: "tableHeader", alignment: "left" },
-      { text: "", style: "tableHeader", alignment: "left" },
-      { text: "หน่วยนับ", style: "tableHeader", alignment: "left" },
-      { text: "คลัง", style: "tableHeader", alignment: "left" },
-      { text: "พื้นที่เก็บ", style: "tableHeader", alignment: "left" },
-      { text: "จำนวน", style: "tableHeader", alignment: "left" },
-      { text: "ราคา", style: "tableHeader", alignment: "left" },
-      { text: "ส่วนลด", style: "tableHeader", alignment: "left" },
-      { text: "รวมมูลค่า", style: "tableHeader", alignment: "left" },
-      { text: "", style: "tableHeader", alignment: "left" },
+      { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
+      { text: "เอกสารวันที่", style: "tableHeader", alignment: "left", border: borderButtom },
+      { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderButtom },
+      { text: "หน่วยนับ", style: "tableHeader", alignment: "left", border: borderButtom },
+      { text: "จำนวน", style: "tableHeader", alignment: "right", border: borderButtom },
+      { text: "ราคา", style: "tableHeader", alignment: "right", border: borderButtom },
+      { text: "มูลค่าส่วนลด", style: "tableHeader", alignment: "right", border: borderButtom },
+      { text: "มูลค่าก่อนภาษี", style: "tableHeader", alignment: "right", border: borderButtom },
+      { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "right", border: borderButtom },
+      { text: "ร่วมมูลค่า", style: "tableHeader", alignment: "right", border: borderButtom },
 
     ]
   );
 
   const result = [];
 
-  console.log(dataset)
+  // console.log(dataset)
   await dataset.forEach((entry) => {
     const dateKey = utils.extractDate(entry.docdate);
     let found = result.find((item) => item.docdate === dateKey);
@@ -426,16 +406,15 @@ const genBodyPDF = async (dataset) => {
       body.push([
         { text: `${utils.formateDate(ele.docdate)} ${ele.doctime}`, style: "tableCellHeader", alignment: "left" },
         { text: ele.docno, style: "tableCellHeader" },
-        { text: utils.packName(ele.creditornames), style: "tableCellHeader", alignment: "left" },
-        { text: utils.formatNumber(ele.totalvalue), style: "tableCellHeader", alignment: "right" },
-        { text: utils.formatNumber(ele.detailtotaldiscount), style: "tableCellHeader", alignment: "right" },
-        { text: utils.formatNumber(ele.totalexceptvat), style: "tableCellHeader", alignment: "right" },
-        { text: utils.formatNumber(ele.totalbeforevat), style: "tableCellHeader", alignment: "right" },
-        { text: utils.formatNumber(ele.totalvatvalue), style: "tableCellHeader", alignment: "right" },
-        { text: utils.formatNumber(ele.detailtotalamount), style: "tableCellHeader", alignment: "right" },
-        { text: utils.formatNumber(ele.totaldiscount), style: "tableCellHeader", alignment: "right" },
-        { text: utils.formatNumber(ele.totalamount), style: "tableCellHeader", alignment: "right" },
-        { text: ele.salename, style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+        { text: "", style: "tableCellHeader", alignment: "left" },
+
       ]);
 
 
@@ -451,8 +430,6 @@ const genBodyPDF = async (dataset) => {
           { text: utils.packName(detail.locationnames), style: "tableCell", alignment: "left" },
           { text: utils.formatNumber(detail.qty), style: "tableCell", alignment: "right" },
           { text: utils.formatNumber(detail.price), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(detail.discountamount), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(detail.sumamount), style: "tableCell", alignment: "right" },
           { text: '', style: "tableCell" },
 
         ]);
@@ -461,18 +438,16 @@ const genBodyPDF = async (dataset) => {
 
 
     body.push([
-      { text: "", style: "tableFooter", alignment: "center", fillColor: "#E2DDDD" },
-      { text: `รวม ${utils.formateDate(data.docdate)}`, style: "tableFooter", alignment: "left", fillColor: "#E2DDDD" },
-      { text: "", style: "tableFooter", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.totalvalue), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.detailtotaldiscount), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.totalexceptvat), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.totalbeforevat), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.totalvatvalue), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.detailtotalamount), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.totaldiscount), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: utils.formatNumber(data.totalamount), style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
-      { text: '', style: "tableFooter", alignment: "right", fillColor: "#E2DDDD" },
+      { text: "", style: "tableFooter", alignment: "center", fillColor: "#fff", border: [false, false, false, false] },
+      { text: `รวม ${utils.formateDate(data.docdate)}`, style: "tableFooter", alignment: "left", fillColor: "#fff", border: borderButtom },
+      { text: "", style: "tableFooter", fillColor: "#fff", border: borderButtom },
+      { text: utils.formatNumber(data.totalvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+      { text: utils.formatNumber(data.detailtotaldiscount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+      { text: utils.formatNumber(data.totalexceptvat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+      { text: utils.formatNumber(data.totalbeforevat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+      { text: utils.formatNumber(data.totalvatvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+      { text: utils.formatNumber(data.detailtotalamount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+      { text: '', style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
     ]);
   });
 
@@ -499,18 +474,16 @@ const genBodyPDF = async (dataset) => {
 
   });
   body.push([
-    { text: "", style: "tableFooter", alignment: "center", fillColor: "#EBE7E7" },
-    { text: "รวม", style: "tableFooter", alignment: "left", fillColor: "#EBE7E7" },
-    { text: "", style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumTotalvalue), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumDetailtotaldiscount), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumTotalexceptvat), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumTotalbeforevat), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumTotalvatvalue), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumDetailtotalamount), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumTotaldiscount), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: utils.formatNumber(sumTotalamount), style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
-    { text: '', style: "tableFooter", alignment: "right", fillColor: "#EBE7E7" },
+    { text: "", style: "tableFooter", alignment: "center", fillColor: "#fff", border: borderButtom },
+    { text: "รวม", style: "tableFooter", alignment: "left", fillColor: "#fff", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+    { text: utils.formatNumber(sumTotalvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+    { text: utils.formatNumber(sumDetailtotaldiscount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+    { text: utils.formatNumber(sumTotalexceptvat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+    { text: utils.formatNumber(sumTotalbeforevat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+    { text: utils.formatNumber(sumTotalvatvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+    { text: utils.formatNumber(sumTotalamount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
+    { text: '', style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
   ]);
 
   return body;
