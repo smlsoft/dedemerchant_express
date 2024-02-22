@@ -19,6 +19,10 @@ queueGenSaleByProductReport.process(async (payload) => {
     payload.data.todate,
     payload.data.branchcode,
     payload.data.printby,
+    payload.data.frombarcode,
+    payload.data.tobarcode,
+    payload.data.fromgroup,
+    payload.data.togroup
   );
 });
 
@@ -46,6 +50,10 @@ router.get("/genPDFSaleByProduct", async (req, res) => {
       todate: req.query.todate,
       branchcode: req.query.branchcode,
       printby: req.query.printby,
+      frombarcode: req.query.frombarcode,
+      tobarcode: req.query.tobarcode,
+      fromgroup: req.query.fromgroup,
+      togroup: req.query.togroup,
     };
 
     const protocol = "https";
@@ -132,7 +140,7 @@ router.get("/", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pagesize) || 10;
 
-    var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.printby, res);
+    var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.printby, req.query.frombarcode, req.query.tobarcode, req.query.fromgroup, req.query.togroup, res);
     res.status(200).json({ success: true, data: dataset.data, msg: "" });
   } catch (err) {
     res.status(500).json({ success: false, data: [], pagination: { perPage: 0, page: 0, total: 0, totalPage: 0 }, msg: err.message });
@@ -145,7 +153,7 @@ router.get("/pdfview", async (req, res) => {
     res.status(401).json({ success: false, msg: "Invalid shop" });
     return;
   }
-  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.printby, res);
+  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.printby, req.query.frombarcode, req.query.tobarcode, req.query.fromgroup, req.query.togroup, res);
 });
 
 router.get("/pdfdownload", async (req, res) => {

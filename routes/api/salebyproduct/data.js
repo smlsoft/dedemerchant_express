@@ -10,6 +10,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { underline } = require("pdfkit");
+const { Double } = require("mongodb");
 
 const dataresultPage = async (token, search, fromdate, todate, page, pageSize) => {
   const client = await provider.connectToMongoDB();
@@ -75,101 +76,93 @@ const dataresultPage = async (token, search, fromdate, todate, page, pageSize) =
   }
 };
 
-const dataresult = async (shopid, fromdate, todate, branchcode, printby) => {
+const dataresult = async (shopid, fromdate, todate, branchcode, printby, frombarcode, tobarcode, fromgroup, togroup) => {
   const pg = await provider.connectPG();
   var where = "";
 
   if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
-    where += ` and date(st.docdate) between '${fromdate}' and '${todate}' `;
+    where += ` and date(docdate) between '${fromdate}' and '${todate}' `;
   } else if (utils.isNotEmpty(fromdate)) {
-    where += ` and date(st.docdate) >= '${fromdate}' `;
+    where += ` and date(docdate) >= '${fromdate}' `;
   } else if (utils.isNotEmpty(todate)) {
-    where += ` and date(st.docdate) <= '${todate}' `;
+    where += ` and date(docdate) <= '${todate}' `;
   }
 
   if (utils.isNotEmpty(branchcode)) {
     where += ` and branchcode = '${branchcode}' `;
   }
 
+  if (utils.isNotEmpty(frombarcode) && utils.isNotEmpty(tobarcode)) {
+    where += ` and barcode between '${frombarcode}' and '${tobarcode}' `;
+  } else if (utils.isNotEmpty(frombarcode)) {
+    where += ` and barcode = '${frombarcode}' `;
+  } else if (utils.isNotEmpty(tobarcode)) {
+    where += ` and barcode = '${tobarcode}' `;
+  }
+
+  if (utils.isNotEmpty(fromgroup) && utils.isNotEmpty(togroup)) {
+    where += ` and groupcode between '${fromgroup}' and '${togroup}' `;
+  } else if (utils.isNotEmpty(fromgroup)) {
+    where += ` and groupcode = '${fromgroup}' `;
+  } else if (utils.isNotEmpty(togroup)) {
+    where += ` and groupcode = '${togroup}' `;
+  }
+
 
   var query = `
-    SELECT
-    ((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7')::date)::text  AS docdate
-    ,TO_CHAR((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7') + interval '7 hours', 'HH24:MI') AS doc_time
-    ,st.docno
-    ,creditorcode
-    ,creditornames
-    ,totalvalue
-    ,coalesce(detailtotaldiscount,0) as detailtotaldiscount
-    ,totalexceptvat
-    ,round(totalbeforevat,2) as totalbeforevat
-    ,round(totalvatvalue,2) as totalvatvalue
-    ,coalesce(detailtotalamount,0) as detailtotalamount
-    ,coalesce(totaldiscount,0) as totaldiscount
-    ,coalesce(totalamount,0) as totalamount 
-    ,salecode
-    ,salename
-    ,barcode
-    ,itemnames
-    ,unitnames
-    ,whnames
-    ,locationnames
-    ,qty,price
-    ,discountamount
-    ,sumamount
-    ,inquirytype
-    ,iscancel 
-    ,ispos
-    from saleinvoice_transaction st left join saleinvoice_transaction_detail std on std.shopid = st.shopid and std.docno = st.docno 
-    where st.shopid = '${shopid}' ${where}
-    order by st.docdate,docno`;
+  SELECT 
+    barcode,itemnames
+    ,date(docdate) as docdate,docno,unitnames
+    ,qty,price,discountamount,sumamountexcludevat,totalvaluevat,sumamount,groupcode
+    FROM saleinvoice_transaction_detail
+    WHERE shopid = '${shopid}' ${where}
+    ORDER BY barcode,docdate,docno
+    `;
 
-  console.log(query);
 
   try {
     await pg.connect();
     const result = await pg.query(query);
 
     const resultGroup = result.rows.reduce((acc, item) => {
-      let entry = acc.find((e) => e.docno === item.docno);
+      let entry = acc.find((e) => e.barcode === item.barcode);
       if (!entry) {
         entry = {
-          docdate: item.docdate,
-          doc_time: item.doc_time,
-          docno: item.docno,
-          creditorcode: item.creditorcode,
-          creditornames: item.creditornames,
-          totalvalue: item.totalvalue,
-          detailtotaldiscount: item.detailtotaldiscount,
-          totalexceptvat: item.totalexceptvat,
-          totalbeforevat: item.totalbeforevat,
-          totalvatvalue: item.totalvatvalue,
-          detailtotalamount: item.detailtotalamount,
-          totaldiscount: item.totaldiscount,
-          totalamount: item.totalamount,
-          salename: item.salename,
+          barcode: item.barcode,
+          itemnames: item.itemnames,
+          totalqty: 0,
+          totalamount: 0,
+          totaldiscount: 0,
+          totalvalue: 0,
+          detailtotaldiscount: 0,
+          totalexceptvat: 0,
+          totalbeforevat: 0,
+          totalvatvalue: 0,
+          totalamount: 0,
           details: [],
         };
         acc.push(entry);
       }
 
       entry.details.push({
-        barcode: item.barcode,
-        itemnames: item.itemnames,
+        docdate: item.docdate,
+        docno: item.docno,
         unitnames: item.unitnames,
-        whnames: item.whnames,
-        locationnames: item.locationnames,
         qty: item.qty,
         price: item.price,
         discountamount: item.discountamount,
+        sumamountexcludevat: item.sumamountexcludevat,
+        totalvaluevat: item.totalvaluevat,
         sumamount: item.sumamount,
       });
+
+      // console.log(entry.details);
 
       return acc;
     }, []);
 
     var res = { success: true, data: resultGroup, msg: "success" };
-    //console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.log(error);
@@ -181,14 +174,30 @@ const dataresult = async (shopid, fromdate, todate, branchcode, printby) => {
 
 
 
-const genPDF = async (body, dataprofile, fromdate, todate, branchcode, printby) => {
-  var custcodeText = "";
+const genPDF = async (body, dataprofile, fromdate, todate, branchcode, printby , frombarcode , tobarcode , fromgroup , togroup) => {
   var branchText = "";
-
+  var barcodeText = "";
+  var groupText = "";
 
 
   if (utils.isNotEmpty(branchcode)) {
-    branchText = `สาขา : ${branchcode}`;
+    branchText = ` , สาขา : ${branchcode}`;
+  }
+
+  if (utils.isNotEmpty(frombarcode) && utils.isNotEmpty(tobarcode)) {
+    barcodeText = ` , บาร์โค้ด : ${frombarcode} ถึง ${tobarcode}`;
+  } else if (utils.isNotEmpty(frombarcode)) {
+    barcodeText = ` , บาร์โค้ด : ${frombarcode}`;
+  } else if (utils.isNotEmpty(tobarcode)) {
+    barcodeText = ` , บาร์โค้ด : ${tobarcode}`;
+  }
+
+  if (utils.isNotEmpty(fromgroup) && utils.isNotEmpty(togroup)) {
+    groupText = ` , กลุ่มสินค้า : ${fromgroup} ถึง ${togroup}`;
+  } else if (utils.isNotEmpty(fromgroup)) {
+    groupText = ` , กลุ่มสินค้า : ${fromgroup}`;
+  } else if (utils.isNotEmpty(togroup)) {
+    groupText = ` , กลุ่มสินค้า : ${togroup}`;
   }
 
   var docDefinition = {
@@ -203,7 +212,7 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, printby) 
 
         },
         {
-          text: "จากวันที่ : " + utils.formateDate(fromdate) + " ถึงวันที่ : " + utils.formateDate(todate) + custcodeText + branchText,
+          text: "จากวันที่ : " + utils.formateDate(fromdate) + " ถึงวันที่ : " + utils.formateDate(todate) + branchText + barcodeText + groupText,
           style: "subheader",
           alignment: "center",
           /// margin: [left, top, right, bottom]
@@ -288,7 +297,7 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, printby) 
       style: "tableExample",
       table: {
         headerRows: 2,
-        widths: ["10%", "12%", "15%", "9%", "9%", "9%", "9%", "9%", "9%", "9%"],
+        widths: ["8%", "16%", "13%", "9%", "9%", "9%", "9%", "9%", "9%", "9%"],
         body: body,
       },
       layout: {
@@ -323,6 +332,11 @@ const genBodyPDF = async (dataset) => {
   let borderTop = [false, true, false, false];
   let borderButtom = [false, false, false, true];
 
+  let currentBarcode = "";
+  let currentSubtotals = resetSubtotals();
+  let mainSumTotal = resetSubtotals();
+
+  // Define the header row for the table
   body.push(
     [
       { text: "บาร์โค้ด", style: "tableHeader", alignment: "center", border: borderTop },
@@ -337,163 +351,148 @@ const genBodyPDF = async (dataset) => {
       { text: "", style: "tableHeader", alignment: "left", border: borderTop },
     ],
     [
-      { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "เอกสารวันที่", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "หน่วยนับ", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "จำนวน", style: "tableHeader", alignment: "right", border: borderButtom },
-      { text: "ราคา", style: "tableHeader", alignment: "right", border: borderButtom },
-      { text: "มูลค่าส่วนลด", style: "tableHeader", alignment: "right", border: borderButtom },
-      { text: "มูลค่าก่อนภาษี", style: "tableHeader", alignment: "right", border: borderButtom },
-      { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "right", border: borderButtom },
-      { text: "ร่วมมูลค่า", style: "tableHeader", alignment: "right", border: borderButtom },
+      { text: "", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "เอกสารวันที่", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "เอกสารเลขที่", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "หน่วยนับ", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "จำนวน", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "ราคา", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "มูลค่าส่วนลด", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "มูลค่าก่อนภาษี", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "center", border: borderButtom },
+      { text: "รวมมูลค่า", style: "tableHeader", alignment: "center", border: borderButtom },
 
     ]
   );
 
-  const result = [];
 
-  // console.log(dataset)
-  await dataset.forEach((entry) => {
-    const dateKey = utils.extractDate(entry.docdate);
-    let found = result.find((item) => item.docdate === dateKey);
-
-    if (!found) {
-      found = {
-        docdate: dateKey,
-        detailtotalamount: 0,
-        totaldiscount: 0,
-        totalexceptvat: 0,
-        totalbeforevat: 0,
-        totalvatvalue: 0,
-        totalamount: 0,
-        details: [],
-      };
-      result.push(found);
+  // Iterate through each dataset entry
+  dataset.forEach((ele, index) => {
+    if (currentBarcode && currentBarcode !== ele.barcode) {
+      currentSubtotals = resetSubtotals(); // Reset subtotals for the new barcode
     }
-    // console.log("found", found);
-    found.totalvalue += parseFloat(entry.totalvalue || 0);
-    found.detailtotaldiscount += parseFloat(entry.detailtotaldiscount || 0);
-    found.totalexceptvat += parseFloat(entry.totalexceptvat || 0);
-    found.totalbeforevat += parseFloat(entry.totalbeforevat || 0);
-    found.totalvatvalue += parseFloat(entry.totalvatvalue || 0);
-    found.detailtotalamount += parseFloat(entry.detailtotalamount || 0);
-    found.totaldiscount += parseFloat(entry.totaldiscount || 0);
-    found.totalamount += parseFloat(entry.totalamount || 0);
 
+    currentBarcode = ele.barcode;
 
-    found.details.push({
-      docdate: entry.docdate,
-      doctime: entry.doc_time,
-      docno: entry.docno,
-      creditorcode: entry.creditorcode,
-      creditornames: entry.creditornames,
-      totalvalue: entry.totalvalue,
-      detailtotaldiscount: entry.detailtotaldiscount,
-      totalexceptvat: entry.totalexceptvat,
-      totalbeforevat: entry.totalbeforevat,
-      totalvatvalue: entry.totalvatvalue,
-      detailtotalamount: entry.detailtotalamount,
-      totaldiscount: entry.totaldiscount,
-      totalamount: entry.totalamount,
-      details: entry.details,
-      salename: entry.salename,
-    });
-  });
+    // Process the current row
+    processDataRow(ele, body, currentSubtotals);
 
-  result.forEach((data) => {
-    data.details.forEach((ele) => {
-      body.push([
-        { text: `${utils.formateDate(ele.docdate)} ${ele.doctime}`, style: "tableCellHeader", alignment: "left" },
-        { text: ele.docno, style: "tableCellHeader" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-        { text: "", style: "tableCellHeader", alignment: "left" },
-
-      ]);
-
-
-      ele.details.forEach((detail) => {
-        // console.log(detail);
-        body.push([
-          { text: '', style: "tableCell" },
-          { text: detail.barcode, style: "tableCell" },
-          { text: utils.packName(detail.itemnames), style: "tableCell", alignment: "left" },
-          { text: '', style: "tableCell" },
-          { text: utils.packName(detail.unitnames), style: "tableCell", alignment: "left" },
-          { text: utils.packName(detail.whnames), style: "tableCell", alignment: "left" },
-          { text: utils.packName(detail.locationnames), style: "tableCell", alignment: "left" },
-          { text: utils.formatNumber(detail.qty), style: "tableCell", alignment: "right" },
-          { text: utils.formatNumber(detail.price), style: "tableCell", alignment: "right" },
-          { text: '', style: "tableCell" },
-
-        ]);
-      });
+    ele.details.forEach((detail) => {
+      // add main sum total
+      mainSumTotal.totalqty += parseFloat(detail.qty);
+      mainSumTotal.detailtotaldiscount += parseFloat(detail.discountamount);
+      mainSumTotal.totalexceptvat += parseFloat(detail.sumamountexcludevat);
+      mainSumTotal.totalvatvalue += parseFloat(detail.totalvaluevat);
+      mainSumTotal.totalamount += parseFloat(detail.sumamount);
     });
 
-
-    body.push([
-      { text: "", style: "tableFooter", alignment: "center", fillColor: "#fff", border: [false, false, false, false] },
-      { text: `รวม ${utils.formateDate(data.docdate)}`, style: "tableFooter", alignment: "left", fillColor: "#fff", border: borderButtom },
-      { text: "", style: "tableFooter", fillColor: "#fff", border: borderButtom },
-      { text: utils.formatNumber(data.totalvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-      { text: utils.formatNumber(data.detailtotaldiscount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-      { text: utils.formatNumber(data.totalexceptvat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-      { text: utils.formatNumber(data.totalbeforevat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-      { text: utils.formatNumber(data.totalvatvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-      { text: utils.formatNumber(data.detailtotalamount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-      { text: '', style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    ]);
   });
 
-  var sumTotalvalue = 0;
-  var sumDetailtotaldiscount = 0;
-  var sumTotalexceptvat = 0;
-  var sumTotalbeforevat = 0;
-  var sumTotalvatvalue = 0;
-  var sumDetailtotalamount = 0;
-  var sumTotaldiscount = 0;
-  var sumTotalamount = 0;
-
-
-
-  dataset.forEach((ele) => {
-    sumTotalvalue += parseFloat(ele.totalvalue);
-    sumDetailtotaldiscount += parseFloat(ele.detailtotaldiscount);
-    sumTotalexceptvat += parseFloat(ele.totalexceptvat);
-    sumTotalbeforevat += parseFloat(ele.totalbeforevat);
-    sumTotalvatvalue += parseFloat(ele.totalvatvalue);
-    sumDetailtotalamount += parseFloat(ele.detailtotalamount);
-    sumTotaldiscount += parseFloat(ele.totaldiscount);
-    sumTotalamount += parseFloat(ele.totalamount);
-
-  });
-  body.push([
-    { text: "", style: "tableFooter", alignment: "center", fillColor: "#fff", border: borderButtom },
-    { text: "รวม", style: "tableFooter", alignment: "left", fillColor: "#fff", border: borderButtom },
-    { text: "", style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    { text: utils.formatNumber(sumTotalvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    { text: utils.formatNumber(sumDetailtotaldiscount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    { text: utils.formatNumber(sumTotalexceptvat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    { text: utils.formatNumber(sumTotalbeforevat), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    { text: utils.formatNumber(sumTotalvatvalue), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    { text: utils.formatNumber(sumTotalamount), style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-    { text: '', style: "tableFooter", alignment: "right", fillColor: "#fff", border: borderButtom },
-  ]);
+  // Add overall totals row at the end
+  addOverallTotalRow(body, mainSumTotal);
 
   return body;
 };
-const pdfPreview = async (shopid, fromdate, todate, branchcode, printby, res) => {
-  var dataset = await dataresult(shopid, fromdate, todate, branchcode, printby);
+function resetSubtotals() {
+  return {
+    totalqty: 0,
+    detailtotaldiscount: 0,
+    totalexceptvat: 0,
+    totalvatvalue: 0,
+    totalamount: 0,
+  };
+}
+
+function processDataRow(ele, body, subtotals) {
+
+  // Add data row to body
+  body.push([
+    // Your data row cells here
+    { text: ele.barcode, style: "tableCellHeader", alignment: "left" },
+    { text: utils.packName(ele.itemnames), style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+    { text: "", style: "tableCellHeader", alignment: "left" },
+
+  ]);
+
+  /// Add data row details to body
+  ele.details.forEach((detail) => {
+    body.push([
+      // Your data row cells here
+      { text: "", style: "tableCell", alignment: "center" },
+      { text: utils.formateDate(detail.docdate), style: "tableCell", alignment: "left" },
+      { text: detail.docno, style: "tableCell", alignment: "left" },
+      { text: utils.packName(detail.unitnames), style: "tableCell", alignment: "left" },
+      { text: utils.formatNumber(detail.qty), style: "tableCell", alignment: "right" },
+      { text: utils.formatNumber(detail.price), style: "tableCell", alignment: "right" },
+      { text: utils.formatNumber(detail.discountamount), style: "tableCell", alignment: "right" },
+      { text: utils.formatNumber(detail.sumamountexcludevat), style: "tableCell", alignment: "right" },
+      { text: utils.formatNumber(detail.totalvaluevat), style: "tableCell", alignment: "right" },
+      { text: utils.formatNumber(detail.sumamount), style: "tableCell", alignment: "right" },
+    ]);
+    // Update subtotals 
+    subtotals.totalqty += parseFloat(detail.qty);
+    subtotals.detailtotaldiscount += parseFloat(detail.discountamount);
+    subtotals.totalexceptvat += parseFloat(detail.sumamountexcludevat);
+    subtotals.totalvatvalue += parseFloat(detail.totalvaluevat);
+    subtotals.totalamount += parseFloat(detail.sumamount);
+
+  });
+
+  addSubtotalRow(body, ele.itemnames, subtotals);
+
+}
+
+
+
+function addSubtotalRow(body, itemnames, subtotals) {
+  let borderButtom = [false, false, false, true];
+
+  body.push([
+    { text: "", style: "tableFooter", alignment: "left" },
+    { text: `รวม ${utils.packName(itemnames)}`, style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: utils.formatNumber(subtotals.totalqty), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: utils.formatNumber(subtotals.detailtotaldiscount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.totalexceptvat), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.totalvatvalue), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(subtotals.totalamount), style: "tableFooter", alignment: "right", border: borderButtom },
+
+  ]);
+}
+
+function addOverallTotalRow(body, totals) {
+  let borderButtom = [false, true, false, true];
+
+  body.push([
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "รวม", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: utils.formatNumber(totals.totalqty), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: "", style: "tableFooter", alignment: "left", border: borderButtom },
+    { text: utils.formatNumber(totals.detailtotaldiscount), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.totalexceptvat), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.totalvatvalue), style: "tableFooter", alignment: "right", border: borderButtom },
+    { text: utils.formatNumber(totals.totalamount), style: "tableFooter", alignment: "right", border: borderButtom },
+
+  ]);
+}
+
+const pdfPreview = async (shopid, fromdate, todate, branchcode, printby, frombarcode, tobarcode, fromgroup, togroup, res) => {
+  var dataset = await dataresult(shopid, fromdate, todate, branchcode, printby, frombarcode, tobarcode, fromgroup, togroup);
   var dataprofile = await globalservice.dataShop(shopid);
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, branchcode, printby), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, branchcode, printby, frombarcode, tobarcode, fromgroup, togroup), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -502,16 +501,16 @@ const pdfPreview = async (shopid, fromdate, todate, branchcode, printby, res) =>
   }
 };
 
-const genDownLoadSaleByProductPDF = async (fileName, shopid, fromdate, todate, branchcode, printby) => {
+const genDownLoadSaleByProductPDF = async (fileName, shopid, fromdate, todate, branchcode, printby, frombarcode, tobarcode, fromgroup, togroup) => {
   console.log("processing");
-  var dataset = await dataresult(shopid, fromdate, todate, branchcode, printby);
+  var dataset = await dataresult(shopid, fromdate, todate, branchcode, printby, frombarcode, tobarcode, fromgroup, togroup);
   var dataprofile = await globalservice.dataShop(shopid);
 
   if (dataset.success) {
     try {
       var body = await genBodyPDF(dataset.data);
 
-      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, branchcode, printby), {});
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, branchcode, printby, frombarcode, tobarcode, fromgroup, togroup), {});
       const tempPath = path.join(os.tmpdir(), fileName);
 
       const writeStream = fs.createWriteStream(tempPath);
