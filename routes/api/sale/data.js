@@ -133,7 +133,7 @@ const dataresult = async (shopid, fromdate, todate, branchcode, showdetail, show
   var query = `
   SELECT
   ((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7')::date)::text  AS docdate 
-  ,TO_CHAR((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7') + interval '7 hours', 'HH24:MI') AS doc_time
+  ,TO_CHAR((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7'), 'HH24:MI') AS doc_time
   ,st.docno
   ,creditorcode
   ,creditornames
@@ -158,7 +158,7 @@ const dataresult = async (shopid, fromdate, todate, branchcode, showdetail, show
     query = `
     SELECT
     ((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7')::date)::text  AS docdate
-    ,TO_CHAR((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7') + interval '7 hours', 'HH24:MI') AS doc_time
+    ,TO_CHAR((st.docdate AT TIME ZONE 'UTC' AT TIME ZONE '+7'), 'HH24:MI') AS doc_time
     ,st.docno
     ,creditorcode
     ,creditornames
