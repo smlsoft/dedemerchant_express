@@ -50,7 +50,7 @@ const dataWeeklySale = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `SELECT docdate::date,sum(totalamount) as totalamount FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} and iscancel=true group by shopid,docdate order by docdate asc
+  var query = `SELECT docdate::date,sum(totalamount) as totalamount FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} and iscancel=false group by shopid,docdate order by docdate asc
   `;
   try {
     await pg.connect();
