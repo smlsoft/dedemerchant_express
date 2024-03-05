@@ -33,7 +33,7 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
 
   var query = `
   select std.barcode,date(st.docdate) as doc_date,st.transflag as trans_flag,std.docno
-  ,std.wh_code,std.location_code,std.unitcode as unitname --std.unitnames[0]->>'name' AS unit_name
+  ,std.wh_code,std.location_code,std.unitcode as unitname 
   ,case when std.calcflag = 1 then std.qty else 0 end as qty_in
   ,case when std.calcflag = 1 then std.averagecost else 0 end as average_cost_in
   ,case when std.calcflag = 1 then std.sumamount else 0 end as balance_in

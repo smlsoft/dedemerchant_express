@@ -503,7 +503,7 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, showdetai
     docDefinition.content.push({
       style: "tableExample",
       table: {
-        headerRows: 2,
+        headerRows: (showdetail == 1) ? 2 : 1,
         widths: ["9%", "10%", "13%", "8%", "10%", "8%", "8%", "7%", "7%", "7%", "7%", "7%"],
         body: body,
       },
@@ -536,39 +536,60 @@ const genPDF = async (body, dataprofile, fromdate, todate, branchcode, showdetai
 const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
   let body = [];
   let borderTop = [false, true, false, false];
+  let borderTopButtom = [false, true, false, true];
   let borderButtom = [false, false, false, true];
+  if (showdetail == 1) {
+    body.push(
+      [
+        { text: "เอกสารวันที่/เวลา", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "ลูกหนี้", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "มูลค่าสินค้า", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "ส่วนลดก่อนชำระเงิน", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "ยกเว้นภาษี", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "ก่อนภาษี", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "หลังหักส่วนลด", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "ส่วนลดท้ายบิล", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "พนักงานขาย", style: "tableHeader", alignment: "left", border: borderTop },
+      ],
+      [
+        { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "บาร์โค้ด", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "ชื่อสินค้า", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "หน่วยนับ", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "คลัง", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "พื้นที่เก็บ", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "จำนวน", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "ราคา", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "ส่วนลด", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "รวมมูลค่า", style: "tableHeader", alignment: "left", border: borderButtom },
+        { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
 
-  body.push(
-    [
-      { text: "เอกสารวันที่/เวลา", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "ลูกหนี้", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "มูลค่าสินค้า", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "ส่วนลดก่อนชำระเงิน", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "ยกเว้นภาษี", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "ก่อนภาษี", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "หลังหักส่วนลด", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "ส่วนลดท้ายบิล", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "left", border: borderTop },
-      { text: "พนักงานขาย", style: "tableHeader", alignment: "left", border: borderTop },
-    ],
-    [
-      { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "บาร์โค้ด", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "ชื่อสินค้า", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "หน่วยนับ", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "คลัง", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "พื้นที่เก็บ", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "จำนวน", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "ราคา", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "ส่วนลด", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "รวมมูลค่า", style: "tableHeader", alignment: "left", border: borderButtom },
-      { text: "", style: "tableHeader", alignment: "left", border: borderButtom },
+      ]
+    );
+  } else {
+    body.push(
+      [
+        { text: "เอกสารวันที่/เวลา", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ลูกหนี้", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "มูลค่าสินค้า", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ส่วนลดก่อนชำระเงิน", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ยกเว้นภาษี", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ก่อนภาษี", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "หลังหักส่วนลด", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ส่วนลดท้ายบิล", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "พนักงานขาย", style: "tableHeader", alignment: "left", border: borderTopButtom },
+      ]
+    );
+  }
 
-    ]
-  );
+
 
   const result = [];
 
