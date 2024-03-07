@@ -66,7 +66,7 @@ router.get("/genPDFSale", async (req, res) => {
       printby: req.query.printby,
     };
 
-    const protocol = "http";
+    const protocol = "https";
     const host = req.get("host"); // Includes hostname and port
     const originalUrl = req.originalUrl;
     const parts = originalUrl.split("/");
