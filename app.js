@@ -313,7 +313,6 @@ router.use("/getpay", require("./routes/api/getpay"));
 router.use("/salesummary", require("./routes/api/salesummary"));
 router.use("/salesummarypg", require("./routes/api/salesummarypg"));
 router.use("/salesummarymg", require("./routes/api/salesummarymg"));
-router.use("/productbalance", require("./routes/api/productbalance"));
 router.use("/bestseller", require("./routes/api/bestseller"));
 router.use("/vatsale", require("./routes/api/vat_sale"));
 router.use("/vatpurchase", require("./routes/api/vat_purchase"));

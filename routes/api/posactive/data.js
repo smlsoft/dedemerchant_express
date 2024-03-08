@@ -24,8 +24,8 @@ const dataresult = async (pin) => {
   return dataset;
 };
 
-const setActivePos = async (pin, shopid, token, deviceid, actoken, isdev) => {
-  const query = `select pincode,status,shipid,token,deviceid,access_token,isdev from poscenter.pinlist  where pincode = '${pin}'`;
+const setActivePos = async (pin, shopid, token, deviceid, actoken, isdev, apikey) => {
+  const query = `select pincode,status,shipid,token,deviceid,access_token,isdev,apikey from poscenter.pinlist  where pincode = '${pin}'`;
   var result = { success: false, msg: "" };
   try {
     const resultSet = await client.query({
@@ -35,7 +35,7 @@ const setActivePos = async (pin, shopid, token, deviceid, actoken, isdev) => {
     const dataset = await resultSet.json();
 
     if (dataset.length > 0) {
-      const activeQuery = `ALTER TABLE poscenter.pinlist UPDATE status=1,shipid='${shopid}',token='${token}',access_token='${actoken}',deviceid='${deviceid}',isdev='${isdev}' where pincode = '${pin}'`;
+      const activeQuery = `ALTER TABLE poscenter.pinlist UPDATE status=1,shipid='${shopid}',token='${token}',access_token='${actoken}',deviceid='${deviceid}',isdev='${isdev}',apikey='${apikey}' where pincode = '${pin}'`;
 
       await client.exec({ query: activeQuery });
 
@@ -87,5 +87,33 @@ const deletePos = async (pin, shopid) => {
   return result;
 };
 
+/// GET APIKEY FROM poscenter.pinlist  WHERE pincode = '${pin}' and shipid='${shopid}
+const getApikey = async (pin, shopid) => {
+  const query = `select pincode,status,shipid,apikey from poscenter.pinlist  where pincode = '${pin}' and shipid='${shopid}'`;
+  var result = { success: false, msg: "" };
+  try {
+    const resultSet = await client.query({
+      query: query,
+      format: "JSONEachRow",
+    });
+    const dataset = await resultSet.json();
 
-module.exports = { dataresult, setActivePos, deletePos };
+    if (dataset.length > 0) {
+      result.msg = "APIKEY Get successful"
+      result.success = true;
+      result.data = dataset;
+    } else {
+      result.msg = "Pin Number not found"
+      result.false = true;
+    }
+  } catch (error) {
+    console.error(error);
+    result.success = false;
+    result.msg = error.message;
+  }
+  await client.close();
+  return result;
+};
+
+
+module.exports = { dataresult, setActivePos, deletePos ,getApikey};
