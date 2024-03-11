@@ -19,7 +19,6 @@ queueGenMovementReport.process(async (payload) => {
     payload.data.fromdate,
     payload.data.todate,
     payload.data.printby,
-    payload.data.showcost,
     payload.data.barcode,
   );
 });
@@ -48,7 +47,6 @@ router.get("/genPDFMovement", async (req, res) => {
       fromdate: req.query.fromdate,
       todate: req.query.todate,
       printby: req.query.printby,
-      showcost: req.query.showcost,
       barcode: req.query.barcode,
     }
 
@@ -138,7 +136,7 @@ router.get(
     }
 
     try {
-      var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showcost, req.query.barcode, res);
+      var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.barcode, res);
       res.status(200).json({ success: true, data: dataset });
     } catch (err) {
       res.status(500).json({ success: false, data: [], msg: err.message });
@@ -153,7 +151,7 @@ router.get("/pdfview", async (req, res) => {
     return;
   }
   console.log(result.data.shopid);
-  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showcost, req.query.barcode, res);
+  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.barcode, res);
 });
 
 module.exports = router;

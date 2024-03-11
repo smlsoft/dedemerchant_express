@@ -9,6 +9,7 @@ dotenv.config();
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const { Double } = require("mongodb");
 
 const dataresult = async (shopid, fromdate, todate, barcode) => {
   const pg = await provider.connectPG();
@@ -32,19 +33,40 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
 
 
   var query = `
-  select std.barcode,date(st.docdate) as doc_date,st.transflag as trans_flag,std.docno
-  ,std.wh_code,std.location_code,std.unitcode as unitname 
-  ,case when std.calcflag = 1 then std.qty else 0 end as qty_in
-  ,case when std.calcflag = 1 then std.averagecost else 0 end as average_cost_in
-  ,case when std.calcflag = 1 then std.sumamount else 0 end as balance_in
-  ,case when std.calcflag = -1 then std.qty else 0 end as qty_out
-  ,case when std.calcflag = -1 then std.averagecost else 0 end as average_cost_out
-  ,case when std.calcflag = -1 then std.sumofcost else 0 end as balance_out
-  ,0 as balance_qty,0 as average_cost,0 as balance_amount
-  from stock_transaction_detail as std
-  left join stock_transaction as st on st.shopid = std.shopid and st.docno = std.docno
-  ${where}
-  order by std.barcode,std.wh_code,std.location_code,st.docdate
+      select barcode,case when sort = 1 then null else doc_date end as doc_date
+      ,case when sort = 1 then null else trans_flag end as trans_flag
+      ,docno,wh_code,location_code,unit_name,qty_in,qty_out,balance_qty
+      from(select * 
+      from(select 1 as sort,std.barcode,date('1900-01-01') as doc_date,0 as trans_flag,'ยกมา' as docno
+      ,'' as wh_code,'' as location_code
+      ,'' AS unit_name
+      ,0 as qty_in
+      ,0 as qty_out
+      ,round(coalesce(sum(std.qty*std.calcflag),0),2) as balance_qty
+      from stock_transaction_detail as std
+      left join stock_transaction as st on st.shopid = std.shopid and st.docno = std.docno
+      left join productbarcode as pd on pd.shopid = std.shopid and pd.barcode = std.barcode
+      ${where}
+      group by std.barcode
+      order by std.barcode
+      ) as temp1
+
+      union all
+
+      select *
+      from(select 2 as sort,std.barcode,date(st.docdate) as doc_date,st.transflag as trans_flag,std.docno
+      ,std.wh_code,std.location_code
+      ,pd.unitnames[0]->>'name' AS unit_name
+      ,case when std.calcflag = 1 then round(coalesce(std.qty,0),2) else 0 end as qty_in
+      ,case when std.calcflag = -1 then round(coalesce(std.qty,0),2) else 0 end as qty_out
+      ,0 as balance_qty
+      from stock_transaction_detail as std
+      left join stock_transaction as st on st.shopid = std.shopid and st.docno = std.docno
+      left join productbarcode as pd on pd.shopid = std.shopid and pd.barcode = std.barcode
+      ${where}
+      order by std.barcode,st.docdate
+      ) as temp2
+      ) as final_table
   `;
 
   console.log(query);
@@ -67,139 +89,69 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
 };
 
 
-const genBodyPDF = async (dataset, showcost) => {
+const genBodyPDF = async (dataset) => {
   let body = [];
 
   let sum_qty_in = 0;
   let sum_qty_out = 0;
-  let sum_balance_in = 0;
-  let sum_balance_out = 0;
+  let sum_balance_amount = 0;
 
-  /// 0 ไม่แสดงต้นทุน
-  /// 1 แสดงต้นทุน
-  if (showcost == 0) {
-    body.push([
-      { text: "เอกสารวันที่", style: "tableHeader", alignment: "center" },
-      { text: "ประเภทเอกสาร", style: "tableHeader", alignment: "center" },
-      { text: "เลขที่เอกสาร", style: "tableHeader", alignment: "center" },
-      { text: "คลัง", style: "tableHeader", alignment: "center" },
-      { text: "พื้นที่เก็บ", style: "tableHeader", alignment: "center" },
-      { text: "หน่วยนับ", style: "tableHeader", alignment: "center" },
-      { text: "จำนวนเพิ่ม", style: "tableHeader", alignment: "center" },
-      { text: "จำนวนลด", style: "tableHeader", alignment: "center" },
-      { text: "ยอดคงเหลือ", style: "tableHeader", alignment: "center" },
-    ]);
 
-    dataset.forEach((ele, index) => {
-      body.push([
-        { text: utils.formateDate(ele.doc_date), style: "tableCell", alignment: "left" },
-        { text: utils.getNameByTransflag(ele.trans_flag), style: "tableCell", alignment: "left" },
-        { text: ele.docno, style: "tableCell", alignment: "left" },
-        { text: ele.wh_code, style: "tableCell", alignment: "left" },
-        { text: ele.location_code, style: "tableCell", alignment: "left" },
-        { text: ele.unitname, style: "tableCell", alignment: "left" },
-        { text: utils.formatNumber(ele.qty_in), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.qty_out), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.balance_qty), style: "tableCell", alignment: "right" },
-      ]);
+  body.push([
+    { text: "เอกสารวันที่", style: "tableHeader", alignment: "center" },
+    { text: "ประเภทเอกสาร", style: "tableHeader", alignment: "center" },
+    { text: "เลขที่เอกสาร", style: "tableHeader", alignment: "center" },
+    { text: "คลัง", style: "tableHeader", alignment: "center" },
+    { text: "พื้นที่เก็บ", style: "tableHeader", alignment: "center" },
+    { text: "หน่วยนับ", style: "tableHeader", alignment: "center" },
+    { text: "จำนวนเพิ่ม", style: "tableHeader", alignment: "center" },
+    { text: "จำนวนลด", style: "tableHeader", alignment: "center" },
+    { text: "ยอดคงเหลือ", style: "tableHeader", alignment: "center" },
+  ]);
 
-      sum_qty_in += parseFloat(ele.qty_in);
-      sum_qty_out += parseFloat(ele.qty_out);
-
-    });
+  dataset.forEach((ele, index) => {
+    sum_balance_amount = (index == 0) ? ele.balance_qty : (parseFloat(sum_balance_amount) + parseFloat(dataset[index].qty_in)) - parseFloat(dataset[index].qty_out);
 
     body.push([
-      { text: "รวม", style: "tableFooter", alignment: "left", colSpan: 6 },
-      {},
-      {},
-      {},
-      {},
-      {},
-      { text: utils.formatNumber(sum_qty_in), style: "tableFooter", alignment: "right" },
-      { text: utils.formatNumber(sum_qty_out), style: "tableFooter", alignment: "right" },
-      {},
+      { text: (index != 0) ? utils.formateDate(ele.doc_date) : "", style: "tableCell", alignment: "left" },
+      { text: (index != 0) ? utils.getNameByTransflag(ele.trans_flag) : "", style: "tableCell", alignment: "left" },
+      { text: ele.docno, style: "tableCell", alignment: "left", style: (index != 0) ? "tableCell" : "tableHeader" },
+      { text: ele.wh_code, style: "tableCell", alignment: "left" },
+      { text: ele.location_code, style: "tableCell", alignment: "left" },
+      { text: ele.unitname, style: "tableCell", alignment: "left" },
+      { text: utils.formatNumber(ele.qty_in), style: "tableCell", alignment: "right" },
+      { text: utils.formatNumber(ele.qty_out), style: "tableCell", alignment: "right" },
+      { text: (index == 0) ? utils.formatNumber(ele.balance_qty) : utils.formatNumber(sum_balance_amount), style: (index != 0) ? "tableCell" : "tableHeader", alignment: "right" },
     ]);
 
-  } else if (showcost == 1) {
-    body.push([
-      { text: "เอกสารวันที่", style: "tableHeader", alignment: "center" },
-      { text: "ประเภทเอกสาร", style: "tableHeader", alignment: "center" },
-      { text: "เลขที่เอกสาร", style: "tableHeader", alignment: "center" },
-      { text: "คลัง", style: "tableHeader", alignment: "center" },
-      { text: "พื้นที่เก็บ", style: "tableHeader", alignment: "center" },
-      { text: "หน่วยนับ", style: "tableHeader", alignment: "center" },
-      { text: "จำนวนเพิ่ม", style: "tableHeader", alignment: "center" },
-      { text: "ต้นทุนเพิ่ม", style: "tableHeader", alignment: "center" },
-      { text: "มูลค่าเพิ่ม", style: "tableHeader", alignment: "center" },
-      { text: "จำนวนลด", style: "tableHeader", alignment: "center" },
-      { text: "ต้นทุนลด", style: "tableHeader", alignment: "center" },
-      { text: "มูลค่าลด", style: "tableHeader", alignment: "center" },
-      { text: "จำนวนคงเหลือ", style: "tableHeader", alignment: "center" },
-      { text: "ต้นทุนคงเหลือ", style: "tableHeader", alignment: "center" },
-      { text: "มูลค่าคงเหลือ", style: "tableHeader", alignment: "center" },
-    ]);
+    sum_qty_in += parseFloat(ele.qty_in);
+    sum_qty_out += parseFloat(ele.qty_out);
 
-    dataset.forEach((ele, index) => {
-      body.push([
-        { text: utils.formateDate(ele.doc_date), style: "tableCell", alignment: "left" },
-        { text: utils.getNameByTransflag(ele.trans_flag), style: "tableCell", alignment: "left" },
-        { text: ele.docno, style: "tableCell", alignment: "left" },
-        { text: ele.wh_code, style: "tableCell", alignment: "left" },
-        { text: ele.location_code, style: "tableCell", alignment: "left" },
-        { text: ele.unitname, style: "tableCell", alignment: "left" },
-        { text: utils.formatNumber(ele.qty_in), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.average_cost_in), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.balance_in), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.qty_out), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.average_cost_out), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.balance_out), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.balance_qty), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.average_cost), style: "tableCell", alignment: "right" },
-        { text: utils.formatNumber(ele.balance_amount), style: "tableCell", alignment: "right" },
-      ]);
+  });
 
-      sum_qty_in += parseFloat(ele.qty_in);
-      sum_qty_out += parseFloat(ele.qty_out);
-      sum_balance_in += parseFloat(ele.balance_in);
-      sum_balance_out += parseFloat(ele.balance_out);
-
-    });
-
-    body.push([
-      { text: "รวม", style: "tableFooter", alignment: "left", colSpan: 6 },
-      {},
-      {},
-      {},
-      {},
-      {},
-      { text: utils.formatNumber(sum_qty_in), style: "tableFooter", alignment: "right" },
-      {},
-      { text: utils.formatNumber(sum_balance_in), style: "tableFooter", alignment: "right" },
-      { text: utils.formatNumber(sum_qty_out), style: "tableFooter", alignment: "right" },
-      {},
-      { text: utils.formatNumber(sum_balance_out), style: "tableFooter", alignment: "right" },
-      {},
-      {},
-      {},
+  body.push([
+    { text: "รวม", style: "tableFooter", alignment: "left", colSpan: 6 },
+    {},
+    {},
+    {},
+    {},
+    {},
+    { text: utils.formatNumber(sum_qty_in), style: "tableFooter", alignment: "right" },
+    { text: utils.formatNumber(sum_qty_out), style: "tableFooter", alignment: "right" },
+    {},
+  ]);
 
 
-    ]);
-
-  }
 
   return body;
 };
 
-const genPDF = async (body, dataprofile, fromdate, todate, printby, showcost, barcode) => {
+const genPDF = async (body, dataprofile, fromdate, todate, printby, barcode) => {
   var barcodeText = "";
   let tableWidths = [];
 
-  if (showcost == 0) {
-    tableWidths = ["10%", "15%", "15%", "10%", "10%", "10%", "10%", "10%", "10%"];
-  } else if (showcost == 1) {
-    tableWidths = ["6%", "8%", "9%", "5%", "5%", "5%", "6%", "6%", "7%", "7%", "7%", "7%", "8%", "7%", "7%"];
 
-  }
+  tableWidths = ["10%", "15%", "15%", "10%", "10%", "10%", "10%", "10%", "10%"];
 
   if (utils.isNotEmpty(barcode)) {
     barcodeText = " , รหัสสินค้า : " + barcode;
@@ -324,15 +276,15 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, showcost, ba
 };
 
 
-const genDownLoadMovementPDF = async (fileName, shopid, fromdate, todate, printby, showcost, barcode) => {
+const genDownLoadMovementPDF = async (fileName, shopid, fromdate, todate, printby, barcode) => {
   console.log("processing");
   var dataset = await dataresult(shopid, fromdate, todate, barcode);
   var dataprofile = await globalservice.dataShop(shopid);
 
   if (dataset.success) {
     try {
-      var body = await genBodyPDF(dataset.data, showcost);
-      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, showcost, barcode), {});
+      var body = await genBodyPDF(dataset.data);
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, barcode), {});
       const tempPath = path.join(os.tmpdir(), fileName);
 
       const writeStream = fs.createWriteStream(tempPath);
@@ -356,14 +308,14 @@ const genDownLoadMovementPDF = async (fileName, shopid, fromdate, todate, printb
   }
 };
 
-const pdfPreview = async (shopid, fromdate, todate, printby, showcost, barcode, res) => {
+const pdfPreview = async (shopid, fromdate, todate, printby, barcode, res) => {
   var dataset = await dataresult(shopid, fromdate, todate, barcode);
   var dataprofile = await globalservice.dataShop(shopid);
   // console.log(dataprofile);
   console.log(dataset);
   if (dataset.success && dataprofile.success) {
-    var body = await genBodyPDF(dataset.data, showcost);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, showcost, barcode), {});
+    var body = await genBodyPDF(dataset.data);
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, barcode), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
@@ -372,4 +324,4 @@ const pdfPreview = async (shopid, fromdate, todate, printby, showcost, barcode, 
   }
 };
 
-module.exports = { dataresult, pdfPreview ,genDownLoadMovementPDF};
+module.exports = { dataresult, pdfPreview, genDownLoadMovementPDF };

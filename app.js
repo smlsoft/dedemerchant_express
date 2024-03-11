@@ -308,6 +308,7 @@ router.use("/stockadjustment", require("./routes/api/stock_adjustment"));
 router.use("/paid", require("./routes/api/paid"));
 router.use("/pay", require("./routes/api/pay"));
 router.use("/movement", require("./routes/api/movement"));
+router.use("/stockcard", require("./routes/api/stock_card"));
 router.use("/getpaid", require("./routes/api/getpaid"));
 router.use("/getpay", require("./routes/api/getpay"));
 router.use("/salesummary", require("./routes/api/salesummary"));
