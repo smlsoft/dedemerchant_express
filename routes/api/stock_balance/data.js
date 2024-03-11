@@ -26,23 +26,22 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
   }
 
   if (utils.isNotEmpty(barcode)) {
-    where += ` AND std.barcode = '${barcode}'`;
+    where += ` AND pd.mainbarcoderef = '${barcode}'`;
 
   }
 
-
   var query = `
-  select DISTINCT ON (std.barcode)
-  std.barcode,pd.names AS item_name
-  ,std.wh_code,std.location_code,pd.unitnames AS unit_name
-  ,round(coalesce(std.balanceqty,0),2) as balance_qty
-  ,round(coalesce(std.balanceaverage,0),2) as average_cost
-  ,round(coalesce(std.balanceamount,0),2) as balance_amount
-  from stock_transaction_detail as std
-  left join stock_transaction as st on st.shopid = std.shopid and st.docno = std.docno
-  left join productbarcode as pd on pd.shopid = std.shopid and pd.barcode = std.barcode
-  ${where}
-  order by std.barcode,st.docdate desc
+      select DISTINCT ON (pd.mainbarcoderef)
+      pd.mainbarcoderef as barcode,pd.names AS item_name
+      ,std.wh_code,std.location_code,pd.unitnames AS unit_name
+      ,round(coalesce(std.balanceqty,0),2) as balance_qty
+      ,round(coalesce(std.balanceaverage,0),2) as average_cost
+      ,round(coalesce(std.balanceamount,0),2) as balance_amount
+      from stock_transaction_detail as std
+      left join stock_transaction as st on st.shopid = std.shopid and st.docno = std.docno
+      left join productbarcode as pd on pd.shopid = std.shopid and pd.barcode = std.barcode
+      ${where}
+      order by pd.mainbarcoderef,st.docdate desc
   `;
 
   console.log(query);
