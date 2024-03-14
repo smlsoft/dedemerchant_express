@@ -9,9 +9,9 @@ dotenv.config();
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const dataresult = async (shopid, fromdate, todate, printby, branchcode, inquirytype, ispos) => {
+const dataresult = async (shopid, fromdate, todate, branchcode, inquirytype, ispos) => {
   const pg = await provider.connectPG();
-  let where = `WHERE shopid =  '${shopid}'`;
+  let where = `WHERE shopid =  '${shopid}' AND iscancel = 'false'`;
   var res = { success: false, data: [], msg: "" };
 
   if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
@@ -33,10 +33,12 @@ const dataresult = async (shopid, fromdate, todate, printby, branchcode, inquiry
     where += ` and inquirytype = '${inquirytype}' `;
   }
 
+  console.log("ispos : " + ispos);
+
   if (utils.isNotEmpty(ispos)) {
     if (ispos == 1) {
       where += ` and ispos = true `;
-    } else {
+    } else if (ispos == 0) {
       where += ` and ispos = false `;
     }
   }
@@ -325,7 +327,7 @@ function addOverallTotalRow(body, totals) {
 }
 
 const pdfPreview = async (shopid, fromdate, todate, printby, branchcode, inquirytype, ispos, res) => {
-  var dataset = await dataresult(shopid, fromdate, todate, printby, branchcode, inquirytype, ispos);
+  var dataset = await dataresult(shopid, fromdate, todate, branchcode, inquirytype, ispos);
   var dataprofile = await globalservice.dataShop(shopid);
   // console.log(dataset);
   // console.log(dataprofile);
@@ -342,7 +344,7 @@ const pdfPreview = async (shopid, fromdate, todate, printby, branchcode, inquiry
 
 const genDownLoadSaleByDatePDF = async (fileName, shopid, fromdate, todate, printby, branchcode, inquirytype, ispos) => {
   console.log("processing");
-  var dataset = await dataresult(shopid, fromdate, todate, printby, branchcode, inquirytype, ispos);
+  var dataset = await dataresult(shopid, fromdate, todate, branchcode, inquirytype, ispos);
   var dataprofile = await globalservice.dataShop(shopid);
 
   if (dataset.success) {

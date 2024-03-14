@@ -19,7 +19,7 @@ queueGenSaleByDateReport.process(async (payload) => {
     payload.data.fromdate,
     payload.data.todate,
     payload.data.branchcode,
-    payload.data.iscancel,
+    payload.data.ispos,
     payload.data.inquirytype,
     payload.data.printby,
 
@@ -50,7 +50,7 @@ router.get("/genPDFSaleByDate", async (req, res) => {
       fromdate: req.query.fromdate,
       todate: req.query.todate,
       branchcode: req.query.branchcode,
-      iscancel: req.query.iscancel,
+      ispos: req.query.ispos,
       inquirytype: req.query.inquirytype,
       printby: req.query.printby,
     };
