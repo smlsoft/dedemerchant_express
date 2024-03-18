@@ -16,15 +16,6 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
   let where = `WHERE std.shopid =  '${shopid}'`;
   var res = { success: false, data: [], msg: "" };
 
-  if (utils.isNotEmpty(fromdate) && utils.isNotEmpty(todate)) {
-    where += ` AND st.docdate BETWEEN '${fromdate} 00:00:00' AND '${todate} 23:59:59'`;
-  } else if (utils.isNotEmpty(fromdate)) {
-    where += ` AND st.docdate >= '${fromdate} 00:00:00'`;
-  } else if (utils.isNotEmpty(todate)) {
-    where += ` AND st.docdate <= '${todate} 23:59:59'`;
-  } else {
-    where += '';
-  }
 
   if (utils.isNotEmpty(barcode)) {
     where += ` AND std.barcode = '${barcode}'`;
@@ -47,6 +38,7 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
       left join stock_transaction as st on st.shopid = std.shopid and st.docno = std.docno
       left join productbarcode as pd on pd.shopid = std.shopid and pd.barcode = std.barcode
       ${where}
+      and st.docdate < '${fromdate} 00:00:00'
       group by std.barcode
       order by std.barcode
       ) as temp1
@@ -64,6 +56,7 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
       left join stock_transaction as st on st.shopid = std.shopid and st.docno = std.docno
       left join productbarcode as pd on pd.shopid = std.shopid and pd.barcode = std.barcode
       ${where}
+      and st.docdate between '${fromdate} 00:00:00' and '${todate} 23:59:59'
       order by std.barcode,st.docdate
       ) as temp2
       ) as final_table
