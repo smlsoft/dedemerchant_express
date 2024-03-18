@@ -14,11 +14,18 @@ queueGenPurchaseReport.process(async (payload) => {
   logger.info("on process");
 
   data.genDownLoadPurchasePDF(
+    payload.data.fileName,
     payload.data.shopid,
-    payload.data.search,
     payload.data.fromdate,
     payload.data.todate,
-    payload.data.fileName,
+    payload.data.branchcode,
+    payload.data.showdetail,
+    payload.data.showsumbydate,
+    payload.data.iscancel,
+    payload.data.inquirytype,
+    payload.data.fromcustcode,
+    payload.data.tocustcode,
+    payload.data.printby,
   );
 });
 
@@ -43,9 +50,16 @@ router.get("/genPDFPurchase", async (req, res) => {
     let payload = {
       fileName: fileName,
       shopid: result.data.shopid,
-      search: req.query.search,
       fromdate: req.query.fromdate,
       todate: req.query.todate,
+      branchcode: req.query.branchcode,
+      showdetail: req.query.showdetail,
+      showsumbydate: req.query.showsumbydate,
+      iscancel: req.query.iscancel,
+      inquirytype: req.query.inquirytype,
+      fromcustcode: req.query.fromcustcode,
+      tocustcode: req.query.tocustcode,
+      printby: req.query.printby,
     };
 
     const protocol = "https";
@@ -129,7 +143,7 @@ router.get("/", async (req, res) => {
       res.status(401).json({ success: false, msg: "Invalid shop" });
       return;
     }
-    var dataset = await data.dataresult(result.data.shopid, req.query.search);
+    var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.showdetail, req.query.showsumbydate, req.query.iscancel, req.query.inquirytype, req.query.fromcustcode, req.query.tocustcode, req.query.printby, res);
     res.status(200).json({ success: true, data: dataset.data, msg: "" });
   } catch (err) {
     res.status(500).json({ success: false, data: [], msg: err.message });
@@ -142,7 +156,7 @@ router.get("/pdfview", async (req, res) => {
     res.status(401).json({ success: false, msg: "Invalid shop" });
     return;
   }
-  data.pdfPreview(result.data.shopid, req.query.search, req.query.fromdate, req.query.todate, res);
+  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.branchcode, req.query.showdetail, req.query.showsumbydate, req.query.iscancel, req.query.inquirytype, req.query.fromcustcode, req.query.tocustcode, req.query.printby, res);
 });
 
 router.get("/pdfdownload", async (req, res) => {
