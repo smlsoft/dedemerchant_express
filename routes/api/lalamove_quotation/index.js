@@ -3,15 +3,21 @@ const router = express.Router();
 const utils = require("../../../utils");
 const axios = require("axios");
 const CryptoJS = require("crypto-js");
-
 router.get(
   "/",
   utils.catchAsync(async (req, res) => {
-    if (req.query.slat === undefined || req.query.slng === undefined || req.query.clat === undefined || req.query.clng === undefined) {
+    res.status(200).json({ success: true, data: [] });
+  }));
+
+router.post(
+  "/",
+  utils.catchAsync(async (req, res) => {
+    console.log(req.body)
+    if (req.body.slat === undefined || req.body.slng === undefined || req.body.clat === undefined || req.body.clng === undefined || req.body.apikey === undefined || req.body.secret === undefined) {
       res.status(400).json({ success: false, data: [], msg: "Invalid request" });
     } else {
-      const API_KEY = req.query.apikey;
-      const SECRET = req.query.secret ;
+      const API_KEY = req.body.apikey;
+      const SECRET = req.body.secret ;
 
       axios.defaults.baseURL = "https://rest.sandbox.lalamove.com"; 
       const time = new Date().getTime().toString();
@@ -27,15 +33,15 @@ router.get(
           stops: [
             {
               coordinates: {
-                lat: req.query.slat,
-                lng: req.query.slng,
+                lat: req.body.slat,
+                lng: req.body.slng,
               },
               address: "Shop",
             },
             {
               coordinates: {
-                lat: req.query.clat,
-                lng: req.query.clng,
+                lat: req.body.clat,
+                lng: req.body.clng,
               },
               address: "Customer",
             },
