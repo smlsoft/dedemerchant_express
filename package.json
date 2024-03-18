@@ -21,6 +21,7 @@
     "kafkajs": "^2.2.4",
     "lightship": "^8.0.2",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.45",
     "mongodb": "^5.0.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",

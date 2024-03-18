@@ -139,9 +139,9 @@
   dependencies:
     "sparse-bitfield" "^3.0.3"
 
-"@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.2":
-  "integrity" "sha512-lwriRAHm1Yg4iDf23Oxm9n/t5Zpw1lVnxYU3HnJPTi2lJRkKTrps1KVgvL6m7WvmhYVt/FIsssWay+k45QHeuw=="
-  "resolved" "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-darwin-x64/-/msgpackr-extract-darwin-x64-3.0.2.tgz"
+"@msgpackr-extract/msgpackr-extract-win32-x64@3.0.2":
+  "integrity" "sha512-O+6Gs8UeDbyFpbSh2CPEz/UOrrdWPTBYNblZK5CxxLisYt4kGX3Sc+czffFonyjiGSq3jWLwJS/CCJc7tBr4sQ=="
+  "resolved" "https://registry.npmjs.org/@msgpackr-extract/msgpackr-extract-win32-x64/-/msgpackr-extract-win32-x64-3.0.2.tgz"
   "version" "3.0.2"
 
 "@pdf-lib/standard-fonts@^1.0.0":
@@ -1404,11 +1404,6 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-"fsevents@~2.3.2":
-  "integrity" "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
-  "version" "2.3.3"
-
 "function-bind@^1.1.2":
   "integrity" "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
@@ -2020,6 +2015,13 @@
   "version" "0.5.6"
   dependencies:
     "minimist" "^1.2.6"
+
+"moment-timezone@^0.5.45":
+  "integrity" "sha512-HIWmqA86KcmCAhnMAN0wuDOARV/525R2+lOLotuGFzn4HO+FH+/645z2wx0Dt3iDv6/p61SIvKnDstISainhLQ=="
+  "resolved" "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.45.tgz"
+  "version" "0.5.45"
+  dependencies:
+    "moment" "^2.29.4"
 
 "moment@^2.29.4":
   "integrity" "sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w=="
