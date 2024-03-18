@@ -97,7 +97,7 @@ const getUserShop = async (token) => {
   try {
     if (redisClient.isReady) {
       var cacheResults = await redisClient.HGETALL(`auth-${token}`);
-      console.log(cacheResults);
+     // console.log(cacheResults);
       if (cacheResults.shopid != undefined && cacheResults.shopid != null && cacheResults.shopid != "undefined") {
         isCached = true;
         results.success = true;

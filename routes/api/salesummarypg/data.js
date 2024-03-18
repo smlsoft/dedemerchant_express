@@ -13,7 +13,7 @@ const dataresult = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `SELECT shopid, sum(totaldiscount) as discount,sum(totalamount) as cash,sum(totalpaycash) as cashierAmount,sum(totalpaytransfer) as totalpaytransfer,sum(totalpaycredit) as totalpaycredit FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} group by shopid`;
+  var query = `SELECT shopid, sum(totaldiscount) as discount,sum(totalamount) as cash,sum(totalpaycash) as cashierAmount,sum(totalpaytransfer) as totalpaytransfer,sum(totalpaycredit) as totalpaycredit FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} and iscancel=true group by shopid`;
   try {
     await pg.connect();
     const result = await pg.query(query);
@@ -50,7 +50,7 @@ const dataWeeklySale = async (shopid, fromdate, todate) => {
     where += `and docdate <= '${todate} 23:59:59' `;
   }
 
-  var query = `SELECT docdate::date,sum(totalamount) as totalamount FROM public.saleinvoice_transaction where shopid='${shopid}' ${where}  group by shopid,docdate order by docdate asc
+  var query = `SELECT docdate::date,sum(totalamount) as totalamount FROM public.saleinvoice_transaction where shopid='${shopid}' ${where} and iscancel=false group by shopid,docdate order by docdate asc
   `;
   try {
     await pg.connect();
@@ -68,13 +68,13 @@ const dataWeeklySale = async (shopid, fromdate, todate) => {
 
     const groupByDay = await groupByDayAndSum(result.rows);
     const groupedData = {
-      Mon: groupByDay.Monday ?? 0,
-      Tue: groupByDay.Tuesday ?? 0,
-      Wed: groupByDay.Wednesday ?? 0,
-      Thu: groupByDay.Thursday ?? 0,
-      Fri: groupByDay.Friday ?? 0,
-      Sat: groupByDay.Saturday ?? 0,
-      Sun: groupByDay.Sunday ?? 0,
+      Mon: groupByDay.Monday != null ? parseFloat(parseFloat(groupByDay.Monday).toFixed(2)) : 0,
+      Tue: groupByDay.Tuesday != null ? parseFloat(parseFloat(groupByDay.Tuesday).toFixed(2)) : 0, 
+      Wed: groupByDay.Wednesday != null ? parseFloat(parseFloat(groupByDay.Wednesday).toFixed(2)) : 0, 
+      Thu: groupByDay.Thursday != null ? parseFloat(parseFloat(groupByDay.Thursday).toFixed(2)) : 0,
+      Fri: groupByDay.Friday != null ? parseFloat(parseFloat(groupByDay.Friday).toFixed(2)) : 0, 
+      Sat: groupByDay.Saturday != null ? parseFloat(parseFloat(groupByDay.Saturday).toFixed(2)) : 0, 
+      Sun: groupByDay.Sunday != null ? parseFloat(parseFloat(groupByDay.Sunday).toFixed(2)) : 0,
     };
 
     console.log(groupedData);

@@ -2,10 +2,13 @@ const utils = require("../../../utils");
 
 const printer = require("../../../pdfprinter");
 var nodemailer = require("nodemailer");
+const provider = require("../../../provider");
 const globalservice = require("../../../globalservice");
 const dotenv = require("dotenv");
-const provider = require("../../../provider");
 dotenv.config();
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 
 
 const dataresult = async (token, search) => {
@@ -16,13 +19,13 @@ const dataresult = async (token, search) => {
     db = client.db(process.env.MONGODB_DB);
     let filters = [];
 
-  
+
     if (utils.isNotEmpty(search)) {
       filters = [];
       const pattern = new RegExp(search, "i");
       filters.push({
         $or: [
-      
+
           {
             bankcode: { $regex: pattern },
           },
@@ -50,7 +53,7 @@ const dataresult = async (token, search) => {
     filters.push({
       shopid: token,
     });
-   
+
     const data = db.collection("bookBank");
 
     const result = await data
@@ -74,7 +77,7 @@ const dataresult = async (token, search) => {
   }
 };
 
-const genPDF = async (body,dataprofile) => {
+const genPDF = async (body, dataprofile) => {
   var docDefinition = {
     content: [
       {
@@ -109,7 +112,7 @@ const genPDF = async (body,dataprofile) => {
       style: "tableExample",
       table: {
         headerRows: 1,
-        widths: ['20%', '35%', '20%', '25%' ],
+        widths: ['20%', '35%', '20%', '25%'],
         body: body
       },
       layout: "lightHorizontalLines",
@@ -127,14 +130,14 @@ const genBodyPDF = async (dataset) => {
     { text: "หมายเลขสมุดบัญชี", alignment: "center" },
     { text: "ชื่อเจ้าของบัญชี", alignment: "center" },
   ]),
-  dataset.forEach((ele) => {
-    body.push([
-      { text: ele.passbook,alignment: "center"  },
-      { text: utils.packName(ele.banknames) },
-      { text: ele.bankcode, alignment: "center" },
-      { text: utils.packName(ele.names) }
-    ]);
-  });
+    dataset.forEach((ele) => {
+      body.push([
+        { text: ele.passbook, alignment: "center" },
+        { text: utils.packName(ele.banknames) },
+        { text: ele.bankcode, alignment: "center" },
+        { text: utils.packName(ele.names) }
+      ]);
+    });
   return body;
 };
 
@@ -143,14 +146,47 @@ const genBodyPDF = async (dataset) => {
 const pdfPreview = async (token, search, res) => {
   var dataset = await dataresult(token, search);
   var dataprofile = await globalservice.dataShop(token);
-  
+
   if (dataset.success) {
     var body = await genBodyPDF(dataset.data);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body ,dataprofile), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();
-  }else {
+  } else {
+    res.status(500).json({ success: false, data: [], msg: "no shop data" });
+  }
+};
+
+const genDownLoadBookBankPDF = async (token, search, fileName) => {
+  console.log("processing");
+  var dataset = await dataresult(token, search);
+  var dataprofile = await globalservice.dataShop(token);
+
+  if (dataset.success) {
+    try {
+      var body = await genBodyPDF(dataset.data);
+
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile), {});
+      const tempPath = path.join(os.tmpdir(), fileName);
+
+      const writeStream = fs.createWriteStream(tempPath);
+
+      pdfDoc.pipe(writeStream);
+
+      pdfDoc.end();
+
+      writeStream.on("error", function (err) {
+        console.error("Error writing PDF to file:", err);
+      });
+
+      writeStream.on("finish", function () {
+        console.log(`PDF written to ${tempPath}`);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
     res.status(500).json({ success: false, data: [], msg: "no shop data" });
   }
 };
@@ -214,4 +250,4 @@ const sendEmail = async (token, emails) => {
   }
 };
 
-module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail };
+module.exports = { dataresult, genPDF, pdfPreview, pdfDownload, sendEmail , genDownLoadBookBankPDF };

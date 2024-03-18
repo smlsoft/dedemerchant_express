@@ -1,7 +1,7 @@
 const Numeral = require("numeral");
 const formatNumber = (val, digit = 0) => {
   if (val == 0) {
-    return "0.00";
+    return "";
   } else if (val < 0) {
     return Numeral(val).format("-0,0.00");
   } else {
@@ -35,7 +35,19 @@ const formateDate = (datetime) => {
 
   return formattedDate;
 };
+const formateDateTime = (datetime) => {
+  let date = new Date(datetime);
+  // console.log("utcDate",utcDate)
+  // let date = new Date(utcDate.toLocaleString());
+  // console.log("date",date)
+  let day = String(date.getDate()).padStart(2, "0");
+  let month = String(date.getMonth() + 1).padStart(2, "0"); // January is 0
+  let year = date.getFullYear();
 
+  let formattedDate = day + month + year + date.getHours() + date.getMinutes() + date.getSeconds();
+
+  return formattedDate;
+};
 const packName = (names) => {
   var result = "";
   if (names != null) {
@@ -61,4 +73,56 @@ const isNotEmpty = (data) => {
   return result;
 };
 
-module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate };
+const getNameByTransflag = (transflag) => {
+  var result = "";
+  switch (transflag) {
+    case 12:
+      result = "ซื้อสินค้า";
+      break;
+    case 16:
+      result = "ส่งคืนสินค้า";
+      break;
+    case 44:
+      result = "ขายสินค้า";
+      break;
+    case 48:
+      result = "รับคืนสินค้า";
+      break;
+    case 56:
+      result = "เบิกสินค้า";
+      break;
+    case 58:
+      result = "รับคืนจากการเบิก";
+      break;
+    case 60:
+      result = "รับสินค้า";
+      break;
+    case 66:
+      result = "ปรับปรุงสต็อก";
+      break;
+    case 72:
+      result = "โอนสินค้า";
+      break;
+    default:
+      result = "Unknow";
+      break;
+  }
+  return result;
+};
+
+const currentTimeStamp = (date) => {
+  const unixTimestamp = Math.floor(date / 1000);
+  return unixTimestamp.toString();
+};
+
+function formateDateTimeNow(date) {
+  let day = ("0" + date.getDate()).slice(-2);
+  let month = ("0" + (date.getMonth() + 1)).slice(-2);
+  let year = date.getFullYear();
+  let hours = ("0" + date.getHours()).slice(-2);
+  let minutes = ("0" + date.getMinutes()).slice(-2);
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+module.exports = { formatNumber, formateDate, packName, isNotEmpty, catchAsync, extractDate, getNameByTransflag, currentTimeStamp, formateDateTime, formateDateTimeNow };

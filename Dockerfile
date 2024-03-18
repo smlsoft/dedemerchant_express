@@ -7,7 +7,7 @@ ENV COMMIT_ID=${COMMIT_ID}
 COPY . .
 # FROM node:lts-slim
 
-
+RUN mkdir -p /node-express/tmp && chown -R node:node /node-express/tmp
 
 # COPY --from=build /home/node/app/dist /home/node/app/package.json /home/node/app/package-lock.json ./
 RUN npm ci --production
