@@ -325,6 +325,7 @@ router.use("/debtortransaction", require("./routes/api/debtor_transaction"));
 router.use("/creditortransaction", require("./routes/api/creditor_transaction"));
 router.use("/stockbalance", require("./routes/api/stock_balance"));
 router.use("/lalamovequotation", require("./routes/api/lalamove_quotation"));
+router.use("/direction", require("./routes/api/direction_duration"));
 router.get("/getUserShop", async (req, res) => {
   //8be917f9e93923fb18a7a1b74716c4c506cc4e97d982840cd26f0d37c60b11d2
   //3e1a8e2e1f37054603176b88c1be8e4b4f33024a01fb91422059e33d0c8e65b7
