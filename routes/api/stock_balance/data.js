@@ -169,7 +169,7 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, showcost, ba
 
         },
         {
-          text: "จากวันที่ : " + utils.formateDate(fromdate) + " ถึงวันที่ : " + utils.formateDate(todate) + barcodeText,
+          text: "ณ วันที่ : " + utils.formateDate(todate) + barcodeText,
           style: "subheader",
           alignment: "center",
           /// margin: [left, top, right, bottom]
