@@ -21,13 +21,10 @@ router.get(
         const distance = route.legs[0].distance.value;
         const startLocation = route.legs[0].start_location;
         const endLocation = route.legs[0].end_location;
-
         const polyline = route.overview_polyline.points;
-
         const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=600x300&path=enc:${polyline}&markers=color:green|label:S|${startLocation.lat},${startLocation.lng}&markers=color:red|label:E|${endLocation.lat},${endLocation.lng}&key=${key}`;
         const responseImg = await axios.get(staticMapUrl, { responseType: "arraybuffer" });
         const base64Image = Buffer.from(responseImg.data, "binary").toString("base64");
-
         res.status(200).json({
           duration,
           distance: `${distance} meters`,
