@@ -22,7 +22,8 @@ router.post(
       req.body.clat === undefined ||
       req.body.clng === undefined ||
       req.body.apikey === undefined ||
-      req.body.secret === undefined
+      req.body.secret === undefined ||
+      req.body.type === undefined 
     ) {
       res.status(400).json({ success: false, data: [], msg: "Invalid request" });
     } else {
@@ -35,7 +36,7 @@ router.post(
       const method = "POST";
       const path = "/v3/quotations";
       var data = {
-        serviceType: "MOTORCYCLE",
+        serviceType: req.body.type,
         specialRequests: [],
         language: "th_TH",
         stops: [
