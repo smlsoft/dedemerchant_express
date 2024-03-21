@@ -20,7 +20,8 @@ queueGenStockBalanceReport.process(async (payload) => {
     payload.data.todate,
     payload.data.printby,
     payload.data.showcost,
-    payload.data.barcode,
+    payload.data.frombarcode,
+    payload.data.tobarcode,
   );
 });
 
@@ -49,7 +50,8 @@ router.get("/genPDFStockBalance", async (req, res) => {
       todate: req.query.todate,
       printby: req.query.printby,
       showcost: req.query.showcost,
-      barcode: req.query.barcode,
+      frombarcode: req.query.frombarcode,
+      tobarcode: req.query.tobarcode,
     }
 
     const protocol = "https";
@@ -138,7 +140,7 @@ router.get(
     }
 
     try {
-      var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showcost, req.query.barcode, res);
+      var dataset = await data.dataresult(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showcost, req.query.frombarcode, req.query.tobarcode, res);
       res.status(200).json({ success: true, data: dataset });
     } catch (err) {
       res.status(500).json({ success: false, data: [], msg: err.message });
@@ -153,7 +155,7 @@ router.get("/pdfview", async (req, res) => {
     return;
   }
   console.log(result.data.shopid);
-  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showcost, req.query.barcode, res);
+  data.pdfPreview(result.data.shopid, req.query.fromdate, req.query.todate, req.query.printby, req.query.showcost, req.query.frombarcode, req.query.tobarcode, res);
 });
 
 module.exports = router;

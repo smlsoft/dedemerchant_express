@@ -10,7 +10,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-const dataresult = async (shopid, fromdate, todate, barcode) => {
+const dataresult = async (shopid, fromdate, todate, frombarcode, tobarcode) => {
   const pg = await provider.connectPG();
   let where = `WHERE std.shopid =  '${shopid}'`;
   var res = { success: false, data: [], msg: "" };
@@ -25,9 +25,13 @@ const dataresult = async (shopid, fromdate, todate, barcode) => {
     where += '';
   }
 
-  if (utils.isNotEmpty(barcode)) {
-    where += ` AND pd.mainbarcoderef = '${barcode}'`;
 
+  if (utils.isNotEmpty(frombarcode) && utils.isNotEmpty(tobarcode)) {
+    where += ` and pd.mainbarcoderef between '${frombarcode}' and '${tobarcode}' `;
+  } else if (utils.isNotEmpty(frombarcode)) {
+    where += ` and pd.mainbarcoderef = '${frombarcode}' `;
+  } else if (utils.isNotEmpty(tobarcode)) {
+    where += ` and pd.mainbarcoderef = '${tobarcode}' `;
   }
 
   var query = `
@@ -141,7 +145,7 @@ const genBodyPDF = async (dataset, showcost) => {
   return body;
 };
 
-const genPDF = async (body, dataprofile, fromdate, todate, printby, showcost, barcode) => {
+const genPDF = async (body, dataprofile, fromdate, todate, printby, showcost, frombarcode, tobarcode) => {
   var barcodeText = "";
   let tableWidths = [];
 
@@ -152,10 +156,14 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, showcost, ba
 
   }
 
-  if (utils.isNotEmpty(barcode)) {
-    barcodeText = " , รหัสสินค้า : " + barcode;
-
+  if (utils.isNotEmpty(frombarcode) && utils.isNotEmpty(tobarcode)) {
+    barcodeText = ` , บาร์โค้ด : ${frombarcode} ถึง ${tobarcode}`;
+  } else if (utils.isNotEmpty(frombarcode)) {
+    barcodeText = ` , บาร์โค้ด : ${frombarcode}`;
+  } else if (utils.isNotEmpty(tobarcode)) {
+    barcodeText = ` , บาร์โค้ด : ${tobarcode}`;
   }
+
 
   var docDefinition = {
     header: function (currentPage, pageCount, pageSize) {
@@ -275,15 +283,15 @@ const genPDF = async (body, dataprofile, fromdate, todate, printby, showcost, ba
 };
 
 
-const genDownLoadStockBalancePDF = async (fileName, shopid, fromdate, todate, printby, showcost, barcode) => {
+const genDownLoadStockBalancePDF = async (fileName, shopid, fromdate, todate, printby, showcost, frombarcode, tobarcode) => {
   console.log("processing");
-  var dataset = await dataresult(shopid, fromdate, todate, barcode);
+  var dataset = await dataresult(shopid, fromdate, todate, frombarcode, tobarcode);
   var dataprofile = await globalservice.dataShop(shopid);
 
   if (dataset.success) {
     try {
       var body = await genBodyPDF(dataset.data, showcost);
-      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, showcost, barcode), {});
+      var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, showcost, frombarcode, tobarcode), {});
       const tempPath = path.join(os.tmpdir(), fileName);
 
       const writeStream = fs.createWriteStream(tempPath);
@@ -307,14 +315,14 @@ const genDownLoadStockBalancePDF = async (fileName, shopid, fromdate, todate, pr
   }
 };
 
-const pdfPreview = async (shopid, fromdate, todate, printby, showcost, barcode, res) => {
-  var dataset = await dataresult(shopid, fromdate, todate, barcode);
+const pdfPreview = async (shopid, fromdate, todate, printby, showcost, frombarcode, tobarcode, res) => {
+  var dataset = await dataresult(shopid, fromdate, todate, frombarcode, tobarcode);
   var dataprofile = await globalservice.dataShop(shopid);
   // console.log(dataprofile);
   console.log(dataset);
   if (dataset.success && dataprofile.success) {
     var body = await genBodyPDF(dataset.data, showcost);
-    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, showcost, barcode), {});
+    var pdfDoc = printer.createPdfKitDocument(await genPDF(body, dataprofile, fromdate, todate, printby, showcost, frombarcode, tobarcode), {});
     res.setHeader("Content-Type", "application/pdf");
     pdfDoc.pipe(res);
     pdfDoc.end();

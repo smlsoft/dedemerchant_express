@@ -103,6 +103,9 @@ const getNameByTransflag = (transflag) => {
     case 72:
       result = "โอนสินค้า";
       break;
+    case 54:
+      result = "ยกมา";
+      break;
     default:
       result = "Unknow";
       break;
