@@ -102,19 +102,19 @@ const genBodyPDF = async (dataset) => {
     { text: "ยอดคงเหลือ", style: "tableHeader", alignment: "center" },
   ]);
 
-  dataset.forEach((ele, index) => {
-    sum_balance_amount = (index == 0) ? ele.balance_qty : (parseFloat(sum_balance_amount) + parseFloat(dataset[index].qty_in)) - parseFloat(dataset[index].qty_out);
+  dataset.forEach((ele , index) => {
+    sum_balance_amount = (ele.docno === "ยกมา") ? ele.balance_qty : (parseFloat(sum_balance_amount) + parseFloat(dataset[index].qty_in)) - parseFloat(dataset[index].qty_out);
 
     body.push([
-      { text: (index != 0) ? utils.formateDate(ele.doc_date) : "", style: "tableCell", alignment: "left" },
-      { text: (index != 0) ? utils.getNameByTransflag(ele.trans_flag) : "", style: "tableCell", alignment: "left" },
-      { text: ele.docno, style: "tableCell", alignment: "left", style: (index != 0) ? "tableCell" : "tableHeader" },
+      { text: (ele.docno !== "ยกมา") ? utils.formateDate(ele.doc_date) : "", style: "tableCell", alignment: "left" },
+      { text: (ele.docno !== "ยกมา") ? utils.getNameByTransflag(ele.trans_flag) : "", style: "tableCell", alignment: "left" },
+      { text: ele.docno, style: "tableCell", alignment: "left", style: (ele.docno !== "ยกมา") ? "tableCell" : "tableHeader" },
       { text: ele.wh_code, style: "tableCell", alignment: "left" },
       { text: ele.location_code, style: "tableCell", alignment: "left" },
       { text: ele.unitname, style: "tableCell", alignment: "left" },
       { text: utils.formatNumber(ele.qty_in), style: "tableCell", alignment: "right" },
       { text: utils.formatNumber(ele.qty_out), style: "tableCell", alignment: "right" },
-      { text: (index == 0) ? utils.formatNumber(ele.balance_qty) : utils.formatNumber(sum_balance_amount), style: (index != 0) ? "tableCell" : "tableHeader", alignment: "right" },
+      { text: (ele.docno === "ยกมา") ? utils.formatNumber(ele.balance_qty) : utils.formatNumber(sum_balance_amount), style: (ele.docno !== "ยกมา") ? "tableCell" : "tableHeader", alignment: "right" },
     ]);
 
     sum_qty_in += parseFloat(ele.qty_in);

@@ -425,16 +425,16 @@ const genBodyPDF = async (dataset, showdetail, showsumbydate) => {
   } else {
     body.push(
       [
-        { text: "เอกสารวันที่", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "เวลา", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "เจ้าหนี้", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "มูลค่าสินค้า", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "มูลค่ายกเว้นภาษี", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "มูลค่าก่อนภาษี", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "ส่วนลดท้ายบิล", style: "tableHeader", alignment: "left", border: borderTop },
-        { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "left", border: borderTop },
+        { text: "เอกสารวันที่", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "เวลา", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "เอกสารเลขที่", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "เจ้าหนี้", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "มูลค่าสินค้า", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "มูลค่ายกเว้นภาษี", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "มูลค่าก่อนภาษี", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ภาษีมูลค่าเพิ่ม", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "ส่วนลดท้ายบิล", style: "tableHeader", alignment: "left", border: borderTopButtom },
+        { text: "มูลค่าสุทธิ", style: "tableHeader", alignment: "left", border: borderTopButtom },
       ]
     );
   }
