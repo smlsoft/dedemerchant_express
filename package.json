@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --max-old-space-size=4096 app --host 0.0.0.0",
     "dev": "nodemon --max-old-space-size=4096 app --host 0.0.0.0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll --coverage"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +39,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^2.0.20"
   }
 }

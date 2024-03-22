@@ -3,3 +3,4 @@
 ca-certificate.crt
 ./log/*
 .env
+/coverage
